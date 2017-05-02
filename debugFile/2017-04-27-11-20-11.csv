@@ -1,0 +1,11 @@
+Date Time, pm2.5 sensor is On, Temperature, Humidity, Baseline, tVOC, CO2e, CPU Frequency, CPU Usage, Light, Charging, Electricity, Capacity (%), Wi-Fi Status
+2017-04-27-11-20-11, Off, 0.00, 0, 0x, 0, 0, 1.008G, 6.2, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-12, Off, 0.00, 0, 0x, 0, 0, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-13, Off, 28.00, 32, 0x, 3.01, 480, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-14, Off, 28.00, 32, 0x, 0.08, 510, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-15, Off, 27.00, 32, 0x, 0.07, 630, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-16, Off, 27.00, 32, 0x, 0.09, 800, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-17, Off, 27.00, 32, 0x, 0.11, 740, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-18, Off, 27.00, 32, 0x, 0.12, 720, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-19, Off, 26.00, 33, 0x, 0.13, 830, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
+2017-04-27-11-20-20, Off, 26.00, 34, 0x, 0.15, 850, 1.008G, 0, 34, Charging, 2.88993e+29, 100, Disconnect
