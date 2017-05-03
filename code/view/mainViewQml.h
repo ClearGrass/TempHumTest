@@ -138,7 +138,7 @@ public slots:
     QString slot_getFre();
     void slot_pmOn();
     void slot_pmOff();
-    QString slot_getBaseLine();
+    QString  slot_getBaseLine();
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 signals:
@@ -239,6 +239,7 @@ private:
 
     QString get_englishDate(QDate date);                                //获取英文时间
     QString get_wifiStatus();
+    void read_baseline();
 private:
     HistoryPage *historyPage;                                           //历史页面实例
 
@@ -303,7 +304,7 @@ private:
     bool pm25IsOn;
     int lightValue;
     DriverPM25 *driverPM25;                                             // PM2.5传感器类
-
+    QString baseline;
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 

@@ -82,29 +82,29 @@ void DriverTvocCo2e::start()
     int i = 0;
     iaq_init();
 
-    // 此时的时间戳
-    time_t nowTimestamp = QDateTime::currentDateTime().toTime_t();
+//    // 此时的时间戳
+//    time_t nowTimestamp = QDateTime::currentDateTime().toTime_t();
 
-    // 获取当前的baseline
-    if(load_baseline_from_disk(baseline, timestamp) && ((nowTimestamp - timestamp) < BASELINE_VALID_S))
-    {
-        for(; i < 3; ++i)
-        {
-            // 设置当前的baseline
-            set_baseline(baseline);
-            if(get_baseline() == baseline)
-            {
-                break;
-            }
-        }
-        timerStore->start();
-    }
-    else
-    {
-        // clean
-        timerClean->start();
-        timerOperation->start();
-    }
+//    // 获取当前的baseline
+//    if(load_baseline_from_disk(baseline, timestamp) && ((nowTimestamp - timestamp) < BASELINE_VALID_S))
+//    {
+//        for(; i < 3; ++i)
+//        {
+//            // 设置当前的baseline
+//            set_baseline(baseline);
+//            if(get_baseline() == baseline)
+//            {
+//                break;
+//            }
+//        }
+//        timerStore->start();
+//    }
+//    else
+//    {
+//        // clean
+//        timerClean->start();
+//        timerOperation->start();
+//    }
 }
 
 /*******************************************************************************
@@ -265,6 +265,7 @@ void DriverTvocCo2e::iaq_init()
 *******************************************************************************/
 void DriverTvocCo2e::set_baseline(QString baseline)
 {
+    return ;
     QFile file(FILE_IAQ_BASELINE);
 
     if(file.open(QFile::WriteOnly))

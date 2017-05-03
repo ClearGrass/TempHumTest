@@ -131,7 +131,7 @@ Rectangle {
         battery.currentelectricity =  MainViewProperty.slot_getBatteryCurrentelectricity()
 
         battery.timestring = MainViewProperty.slot_getBatteryTime()
-
+        battery.baselineValue = "baseline:" + MainViewProperty.slot_getBaseLine()
     }
 
 }

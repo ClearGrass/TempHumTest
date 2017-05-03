@@ -7,8 +7,9 @@ Item {
     property string chargingImageSource: "qrc:/resource/images/test/charging.png"
     property string timeImageSource: "qrc:/resource/images/test/time.png"
     property string timestring: "00:00:00"
+    property string baselineValue: "0x000000"
     property string powerColor: "#ffffff"
-    property int timeImageLeftmargin: 450
+    property int timeImageLeftmargin: 400
     property bool isCharging: true
     property string  currentelectricity : ""
     property int levelWidth: 20
@@ -24,7 +25,7 @@ Item {
         id: power
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: 30
+        anchors.leftMargin: 10
         source: backgroundSource
 
         Rectangle{
@@ -60,7 +61,7 @@ Item {
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: percenetText.right
-        anchors.leftMargin: 59
+        anchors.leftMargin: 30
         visible: isCharging
 
     }
@@ -105,6 +106,24 @@ Item {
         anchors.left: timeImage.right
         anchors.leftMargin: 10
     }
+
+    Text
+    {
+        id: baselineText
+        text: baselineValue
+        color: "#ffffff"
+
+        //字体
+        font.family: "DINCondensedC"
+        font.pixelSize: 30
+
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 3
+        anchors.right:  parent.right
+        anchors.rightMargin: 5
+    }
+
+
 
 
 }

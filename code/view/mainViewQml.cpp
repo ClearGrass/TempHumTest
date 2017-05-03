@@ -15,7 +15,7 @@ MainViewQML::MainViewQML(QWidget *parent)
     //    resize(HORIZONTAL_WIDTH,HORIZONTAL_HEIGHT);
     filePath = "./debugFile/123.cxv";
     wifiStatus = "Disconnect";
-
+    baseline = "0x000000";
     //初始化界面信息
     init();
 
@@ -592,6 +592,7 @@ void MainViewQML::slot_setCO2eValue(const float newValue)
 
 void MainViewQML::slot_settVOCValue(const float newValue)
 {
+    read_baseline();
     ftVOCValue = newValue;
     emit signal_tVOCValueChanged();
 }
@@ -1350,6 +1351,25 @@ QString MainViewQML::get_wifiStatus()
     return wifiStatus == "Disconnect" ? wifiStatus : "Connect";
 }
 
+void MainViewQML::read_baseline()
+{
+    QFile file("/sys/devices/platform/sun5i-i2c.2/i2c-2/2-0058/iaq_baseline");
+    QString strFile;
+
+    // 以只读方式打开文件成功 或者 文件有内容
+    if (file.open(QFile::ReadOnly) && (file.size() != 0))
+    {
+        QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
+        QTextStream stream(&file);
+
+        // 取得 温度值
+        strFile     = stream.readAll();
+
+        file.close();
+    }
+    baseline = "0x" + strFile.trimmed();
+}
+
 
 /*******************************************************************************
 * Author        :   虎正玺@2016-10-28
@@ -1630,22 +1650,6 @@ void MainViewQML::slot_pmOff()
 
 QString MainViewQML::slot_getBaseLine()
 {
-    QFile file("/sys/devices/platform/sun5i-i2c.2/i2c-2/2-0058/iaq_baseline");
-    QString strFile;
-
-    // 以只读方式打开文件成功 或者 文件有内容
-    if (file.open(QFile::ReadOnly) && (file.size() != 0))
-    {
-        QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
-        QTextStream stream(&file);
-
-        // 取得 温度值
-        strFile     = stream.readAll();
-
-        file.close();
-    }
-
-    QString baseline = "0x" + strFile.trimmed();
     return baseline;
 }
 
