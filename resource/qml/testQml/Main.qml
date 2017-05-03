@@ -41,19 +41,19 @@ Rectangle {
                 maintext: pmisOn ? "PM2.5 On" : "PM2.5 Off"
                 onClick:
                 {
-                   if(pmisOn)
-                   {
-                       pmisOn = false
-                       MainViewProperty.slot_pmOff()
-                       pm25.maintext = "PM2.5 Off"
-                   }
-                   else
-                   {
-                       pmisOn = true
-                       MainViewProperty.slot_pmOn()
-                       pm25.maintext = "PM2.5 On"
+                    if(pmisOn)
+                    {
+                        pmisOn = false
+                        MainViewProperty.slot_pmOff()
+                        pm25.maintext = "PM2.5 Off"
+                    }
+                    else
+                    {
+                        pmisOn = true
+                        MainViewProperty.slot_pmOn()
+                        pm25.maintext = "PM2.5 On"
 
-                   }
+                    }
                 }
 
             }
@@ -68,15 +68,15 @@ Rectangle {
                 }
             }
 
-//            BaseButton{
-//                id:screen
-//                logoSource:"qrc:/resource/images/test/screen.png"
-//                maintext: "Screen Off"
-//                subText: "00:00:00"
-//                onClick: {
-//                    MainViewProperty.slot_screenOff();
-//                }
-//            }
+            //            BaseButton{
+            //                id:screen
+            //                logoSource:"qrc:/resource/images/test/screen.png"
+            //                maintext: "Screen Off"
+            //                subText: "00:00:00"
+            //                onClick: {
+            //                    MainViewProperty.slot_screenOff();
+            //                }
+            //            }
         }
 
     }
@@ -89,11 +89,11 @@ Rectangle {
         target:MainViewProperty
         onSignal_pmDetected:
         {
-//            pm25.stop_ani()
+            //            pm25.stop_ani()
         }
         onSignal_startPmAnimation:
         {
-//            pm25.start_ani()
+            //            pm25.start_ani()
         }
         onSignal_wifiIntensity:
         {
@@ -129,9 +129,27 @@ Rectangle {
 
         }
         battery.currentelectricity =  MainViewProperty.slot_getBatteryCurrentelectricity()
-
-        battery.timestring = MainViewProperty.slot_getBatteryTime()
+        set_curTime()
+        //        battery.timestring = MainViewProperty.slot_getBatteryTime()
         battery.baselineValue = "baseline:" + MainViewProperty.slot_getBaseLine()
+    }
+
+    function set_curTime()
+    {
+        var d = new Date();
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+        var seconds=d.getSeconds()
+        if(seconds < 10)
+        {
+            seconds = "0" + seconds.toString()
+        }
+        if(minutes < 10)
+        {
+            minutes = "0" + minutes.toString()
+        }
+
+        battery.timestring = hours.toString() + ":" +minutes.toString() + ":" +seconds.toString()
     }
 
 }
