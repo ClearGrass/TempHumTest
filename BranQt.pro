@@ -59,14 +59,14 @@ DEFINES += QML
 
 #条件编译
 if(contains(DEFINES, Bran_R8)){
-    LIBS        += -L../BranQt/lib_R8 -lwifimg
-    LIBS        += -L../BranQt/lib_R8 -lwilddog
-    LIBS        += -L../BranQt/lib_R8 -lqrencode
+    LIBS        += -L../TempHumTest/lib_R8 -lwifimg
+    LIBS        += -L../TempHumTest/lib_R8 -lwilddog
+    LIBS        += -L../TempHumTest/lib_R8 -lqrencode
 }else{
 
 # 增加野狗库
-    LIBS        += -L../BranQt/lib -lwilddog
-    LIBS        += -L../BranQt/lib -lqrencode
+    LIBS        += -L../TempHumTest/lib -lwilddog
+    LIBS        += -L../TempHumTest/lib -lqrencode
 }
 
 SOURCES += \
