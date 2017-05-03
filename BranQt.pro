@@ -49,7 +49,7 @@ lupdate_only{
 
 TARGET      = BranQt4
 TEMPLATE    = app
-DESTDIR     += ../BranQt
+DESTDIR     += ../TempHumTest
 
 CONFIG      +=  qaxcontainer
 
