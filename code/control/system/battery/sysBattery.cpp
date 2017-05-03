@@ -150,12 +150,12 @@ void SysBattery::slot_refresh_battery()
     power.timeStamp = QDateTime::currentDateTime().toTime_t();
     emit signal_sync_power(power);
 
-    // 当电池电量小于我们限定最低电量时，发送关机信号
-    if((battery.capacity <= BATTERY_LOWEST_CAPACITY) && (battery.status != CHARGING))
-    {
-        // 发送关机信号
-        emit signal_device_powerOff();
-    }
+//    // 当电池电量小于我们限定最低电量时，发送关机信号
+//    if((battery.capacity <= BATTERY_LOWEST_CAPACITY) && (battery.status != CHARGING))
+//    {
+//        // 发送关机信号
+//        emit signal_device_powerOff();
+//    }
 #else
     Power power;
     battery.isExist = true;
