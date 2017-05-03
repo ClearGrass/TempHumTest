@@ -1517,11 +1517,6 @@ void MainViewQML::slot_setLightValue(int value)
         value = 100;
     }
     lightValue = value;
-    if(lightValue >96)
-    {
-        lightValue = 96;
-    }
-
 
     sysControl->set_value(LIGHT_VALUE,QString::number(lightValue));
 
