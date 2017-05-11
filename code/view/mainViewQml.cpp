@@ -173,6 +173,7 @@ void MainViewQML::connect_init()
     connect(this, SIGNAL(signal_pmOff()), driverPM25, SLOT(stop_sampling()));
 
     connect(modeSwitchTimer, SIGNAL(timeout()), this, SLOT(slot_modeSwitch()));
+    emit signal_change_fre(false);
 
 }
 
@@ -1673,6 +1674,9 @@ void MainViewQML::slot_modeSwitch()
         slot_setCpuUsage0();
 
         modeSwitchTimer->stop();
+        slot_set120M();
+        slot_setLightValue(0);
+        slot_pmOff();
     }
     switch (modeIndex) {
     //基态
@@ -1681,7 +1685,7 @@ void MainViewQML::slot_modeSwitch()
         break;
     case 1://CPU高频
         slot_setLightValue(0);
-        slot_set120M();
+        slot_set1G();
         slot_setCpuUsage0();
         break;
 
@@ -1689,13 +1693,13 @@ void MainViewQML::slot_modeSwitch()
     case 2://亮度最高
         slot_setLightValue(100);
         slot_setCpuUsage0();
-        slot_set120M();
+        slot_set1G();
         break;
 
 
     case 3://CPU满载
         slot_setLightValue(100);
-        slot_set120M();
+        slot_set1G();
         slot_setCpuUseage100();
         break;
     default:
