@@ -12,52 +12,41 @@ MainControl::MainControl(QObject *parent)
     system_init();
     data_init();
 
-    // 判断此时的系统语言是否初始化，若已初始化
-    if(sysControl->is_languageInit())
+
+    widget_init();
+    // 则开始判定是否在底座上
+    if((sysControl->is_chargingByAC()) || ("true" == fileConfig->get_value(SYS_ENTER)))
     {
-        widget_init();
-        // 则开始判定是否在底座上
-        if((sysControl->is_chargingByAC()) || ("true" == fileConfig->get_value(SYS_ENTER)))
+        if("true" == fileConfig->get_value(SYS_ENTER))
         {
-            if("true" == fileConfig->get_value(SYS_ENTER))
-            {
-                fileConfig->set_value(SYS_ENTER, "false");
-            }
-
-            // 若在底座上，直接显示出主界面，数据采集开始
-            dataAirControl->start();
-            sysWiFi->start();
-            pageMainProxy->show();
-            gCurrent_pageIndex = PAGE_MAIN;
+            fileConfig->set_value(SYS_ENTER, "false");
         }
-        else
-        {
-            gCurrent_pageIndex = PAGE_POWER_ON;
-            pagePowerOn = new PagePowerOn();
-            timerPowerOff->start();
-            timerScreenOff->start();
 
-            //加载QML对象到当前场景中
-            pagePowerOnProxy = mainScene->addWidget(qobject_cast<QWidget *>(pagePowerOn));
-            pagePowerOnProxy->setZValue(0);
-            connect(pagePowerOn, SIGNAL(signal_system_start()), this, SLOT(slot_enter_system()));
-            connect(pagePowerOn, SIGNAL(signal_device_powerOff()), this, SLOT(slot_device_powerOff()));
-            connect(pagePowerOn, SIGNAL(signal_device_powerOff()), sysControl, SLOT(slot_device_powerOff()));
-        }
+        // 若在底座上，直接显示出主界面，数据采集开始
+        dataAirControl->start();
+        sysWiFi->start();
+        pageMainProxy->show();
+        gCurrent_pageIndex = PAGE_MAIN;
     }
     else
     {
-        sysWiFi->start();
-        gCurrent_pageIndex = PAGE_WIZARD;
-        // 若此时的语言未被初始化，则显示该向导页面
-        pageWizard = new SetupWizard();
-        pageWizardProxy = mainScene->addWidget(pageWizard);
-        pageWizardProxy->setZValue(0);
-        connect(pageWizard, SIGNAL(signal_wizard_finish()), this, SLOT(slot_init_system()));
+        gCurrent_pageIndex = PAGE_POWER_ON;
+        pagePowerOn = new PagePowerOn();
+        timerPowerOff->start();
+        timerScreenOff->start();
+
+        //加载QML对象到当前场景中
+        pagePowerOnProxy = mainScene->addWidget(qobject_cast<QWidget *>(pagePowerOn));
+        pagePowerOnProxy->setZValue(0);
+        connect(pagePowerOn, SIGNAL(signal_system_start()), this, SLOT(slot_enter_system()));
+        connect(pagePowerOn, SIGNAL(signal_device_powerOff()), this, SLOT(slot_device_powerOff()));
+        connect(pagePowerOn, SIGNAL(signal_device_powerOff()), sysControl, SLOT(slot_device_powerOff()));
     }
 
+
+
     //为场景对象添加事件过滤
-    mainScene->installEventFilter(this);
+    //    mainScene->installEventFilter(this);
     this->show();
 }
 
@@ -161,7 +150,7 @@ void MainControl::widget_init()
     connect(mainViewQml, SIGNAL(signal_horizonScreen()), pagePowerOff, SLOT(slot_changeHorizonScreen()));
     connect(mainViewQml, SIGNAL(signal_vertialScreen()), pagePowerOff, SLOT(slot_changevertialScreen()));
 
-//    connect(mainViewQml, SIGNAL(signal_setMatrix(QMatrix,DIRECTION)), this, SLOT(slot_setMatrix(QMatrix, DIRECTION)));
+    //    connect(mainViewQml, SIGNAL(signal_setMatrix(QMatrix,DIRECTION)), this, SLOT(slot_setMatrix(QMatrix, DIRECTION)));
 
 
     connect(pagePowerOff, SIGNAL(signal_device_powerOff()), sysControl, SLOT(slot_device_powerOff()));
@@ -225,7 +214,7 @@ void MainControl::system_init()
     connect(sysControl, SIGNAL(signal_net_connected()), serverControl, SLOT(slot_net_connected()));
     connect(sysControl, SIGNAL(signal_net_disconnect()), serverControl, SLOT(slot_net_disconnect()));
     connect(sysControl, SIGNAL(signal_battery_charging(bool)),dataAirControl, SLOT(slot_battery_charging(bool)));
-//    connect(wilddogControl, SIGNAL(signal_verify_net()), sysWiFi, SLOT(slot_net_abnormal()));
+    //    connect(wilddogControl, SIGNAL(signal_verify_net()), sysWiFi, SLOT(slot_net_abnormal()));
     connect(sysControl, SIGNAL(signal_power_off()), this, SLOT(slot_device_powerOff()));
     connect(this, SIGNAL(signal_interface_operations()), sysControl, SLOT(slot_interface_operations()));
     connect(sysControl, SIGNAL(signal_screen_on()), this, SLOT(slot_screen_on()));
@@ -236,14 +225,14 @@ void MainControl::system_init()
 
     // 基本系统开始运行
     sysControl->start();
-//    funcFirmware->start();
-//    funcCity->start();
-//    funcWeather->start();
-//    funcApp->start();
-//    database->start();
-//    serverControl->start();
-//    wilddogControl->start();
-//    debugControl->start();
+    //    funcFirmware->start();
+    //    funcCity->start();
+    //    funcWeather->start();
+    //    funcApp->start();
+    //    database->start();
+    //    serverControl->start();
+    //    wilddogControl->start();
+    //    debugControl->start();
 }
 
 /*******************************************************************************

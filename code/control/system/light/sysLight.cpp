@@ -158,13 +158,8 @@ void SysLight::run()
 *******************************************************************************/
 void SysLight::slot_set_value(int light)
 {
-
     iCurrentLight = qRound(MIN_INLIGHT_VALUE + (MAX_INLIGHT_VALUE - MIN_INLIGHT_VALUE)*(light/100.0));
-    if(iCurrentLight > 250)
-    {
-        iCurrentLight = 251;
-    }
-
+    qDebug() << "iCurrentLight = " <<iCurrentLight << endl;
     driverLight->set_inLight(iCurrentLight);
 }
 

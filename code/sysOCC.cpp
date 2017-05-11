@@ -3,6 +3,7 @@
 SysOCC::SysOCC()
     :QThread()
 {
+    isFor = false;
 }
 
 void SysOCC::run()

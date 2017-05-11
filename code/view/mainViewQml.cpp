@@ -22,6 +22,7 @@ MainViewQML::MainViewQML(QWidget *parent)
     //数据类线程初始化
     data_init();
 
+
     //信号槽连接定义
     connect_init();
 
@@ -43,7 +44,7 @@ MainViewQML::MainViewQML(QWidget *parent)
 void MainViewQML::init()
 {
     usage = "0";
-
+    lightValue = 0;
     //当前屏幕方向
     fre = 1.008;
     currentDirection = 0;
@@ -76,6 +77,15 @@ void MainViewQML::init()
 
     pmUpdateTimer->setInterval(6000);
 
+    falgModelist.append("Basic mode");
+    falgModelist.append("High CPU Freq mode");
+    falgModelist.append("LCD max brightness mode");
+    falgModelist.append("CPU max load");
+    modeIndex = 0;
+    modeSwitchTimer  = new QTimer();
+
+    //两个小时
+    modeSwitchTimer->start(1000 *60 *60 * 2);
 
     //    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -100,14 +110,14 @@ void MainViewQML::data_init()
     sysGravity      = SysGravity::getInstance();
     sysData         = SysData::getInstance();
     sysTime         = SysTime::getInstance();
-    funcWeather     = FuncWeather::getInstance();
-    funcCity        = FuncCity::getInstance();
+    //    funcWeather     = FuncWeather::getInstance();
+    //    funcCity        = FuncCity::getInstance();
     dataAirControl  = DataAirControl::getInstance();
 
     isNight = sysControl->get_night();
     battery = sysControl->get_battery();
     wifi    = sysWiFi->get_currentWiFi();
-    sLocation =  funcCity->get_location();
+    //    sLocation =  funcCity->get_location();
     iAppBindStatus = sysControl->get_value(APP_BIND_STATUS).toInt();
     if(isNight)
     {
@@ -135,21 +145,23 @@ void MainViewQML::connect_init()
     connect(dataAirControl, SIGNAL(signal_update_data(AirData)), this, SLOT(slot_update_airData(AirData)));
     connect(this, SIGNAL(signal_getPmData()), dataAirControl, SLOT(slot_sampling_pm25()));
     connect(pmUpdateTimer, SIGNAL(timeout()), this, SLOT(slot_pmLastUpdateTime()));
-    pmUpdateTimer->start();
+    //    pmUpdateTimer->start();
     connect(sysData, SIGNAL(signal_change_unitTEMP(UnitType)), this, SLOT(slot_updateUnit(UnitType)));
     connect(sysData, SIGNAL(signal_change_unitTVOC(UnitType)), this, SLOT(slot_updateUnit(UnitType)));
     connect(sysGravity, SIGNAL(signal_device_horizontalPrompt()), this, SLOT(slot_device_horizontalPrompt()));
     connect(sysGravity, SIGNAL(signal_device_pickUp()), this, SLOT(slot_device_pickUp()));
 
-    connect(funcWeather, SIGNAL(signal_update_weather(InfoWeather)), this, SLOT(slot_update_weather(InfoWeather)));
-    connect(funcWeather, SIGNAL(signal_sampling_weather()), this, SLOT(slot_sampling_weather()));
-    connect(funcCity, SIGNAL(signal_update_cityName(QString)), this, SLOT(slot_update_location(QString)));
+    //    connect(funcWeather, SIGNAL(signal_update_weather(InfoWeather)), this, SLOT(slot_update_weather(InfoWeather)));
+    //    connect(funcWeather, SIGNAL(signal_sampling_weather()), this, SLOT(slot_sampling_weather()));
+    //    connect(funcCity, SIGNAL(signal_update_cityName(QString)), this, SLOT(slot_update_location(QString)));
     //    connect(sysControl, SIGNAL(signal_change_direction(DIRECTION)), this, SLOT(change_direction(DIRECTION)));
     connect(sysControl, SIGNAL(signal_update_battery(InfoBattery)), this, SLOT(slot_update_battery(InfoBattery)));
     connect(sysControl, SIGNAL(signal_shell_doubleTap()), this, SLOT(slot_doubleTap()));
     connect(sysControl, SIGNAL(signal_in_night(bool)), this, SLOT(slot_setNightMode(bool)));
     connect(sysWiFi, SIGNAL(signal_update_wifi(WiFi)), this, SLOT(slot_update_wifi(WiFi)));
     connect(sysTime, SIGNAL(signal_timeInit_success()), this, SLOT(slot_timeInit_success()));
+    connect(this, SIGNAL(signal_set_timeAuto(bool)), sysTime, SLOT(slot_set_timeAuto(bool)));
+
     connect(this, SIGNAL(signal_screenoff()), sysControl, SLOT(slot_screenOff()));
     connect(this, SIGNAL(signal_set_lightValue(int)), sysControl, SLOT(slot_set_lightValue(int)));
 
@@ -159,6 +171,8 @@ void MainViewQML::connect_init()
     connect(this, SIGNAL(signal_change_fre(bool)), sysCPU, SLOT(slot_change_fre(bool)));
     connect(this, SIGNAL(signal_pmOn()), driverPM25, SLOT(start_sampling()));
     connect(this, SIGNAL(signal_pmOff()), driverPM25, SLOT(stop_sampling()));
+
+    connect(modeSwitchTimer, SIGNAL(timeout()), this, SLOT(slot_modeSwitch()));
 
 }
 
@@ -204,6 +218,8 @@ void MainViewQML::scene_init(void)
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(Qt::black));
     this->setPalette(palette);
+
+    slot_setLightValue(0);
 }
 
 /*******************************************************************************
@@ -1526,9 +1542,7 @@ void MainViewQML::slot_setLightValue(int value)
 
 int MainViewQML::slot_getCurLightValue()
 {
-    lightValue = sysControl->get_value(LIGHT_VALUE).toInt();
     return lightValue;
-
 }
 
 QString MainViewQML::slot_getWifiStatus()
@@ -1589,11 +1603,13 @@ QString MainViewQML::slot_getScreenTime()
 void MainViewQML::slot_setCpuUseage100()
 {
     sysOCC->start();
+    emit signal_cpuLoad();
 }
 
 void MainViewQML::slot_setCpuUsage0()
 {
     sysOCC->stop();
+    emit signal_cpuNoLoad();
 }
 
 void MainViewQML::slot_set120M()
@@ -1648,9 +1664,58 @@ QString MainViewQML::slot_getBaseLine()
     return baseline;
 }
 
+void MainViewQML::slot_modeSwitch()
+{
+    modeIndex++;
+    if(modeIndex > 3)
+    {
+        emit signal_testFinished();
+        slot_setCpuUsage0();
+
+        modeSwitchTimer->stop();
+    }
+    switch (modeIndex) {
+    //基态
+    case 0:
+
+        break;
+    case 1://CPU高频
+        slot_setLightValue(0);
+        slot_set120M();
+        slot_setCpuUsage0();
+        break;
+
+
+    case 2://亮度最高
+        slot_setLightValue(100);
+        slot_setCpuUsage0();
+        slot_set120M();
+        break;
+
+
+    case 3://CPU满载
+        slot_setLightValue(100);
+        slot_set120M();
+        slot_setCpuUseage100();
+        break;
+    default:
+        break;
+    }
+    emit signal_autoLightChanged();
+}
+
+void MainViewQML::slot_syncRTC()
+{
+    emit signal_set_timeAuto(true);
+}
+
 void MainViewQML::slot_save_data()
 {
 
+    if(modeIndex > 3)
+    {
+        return ;
+    }
     QDir *debug = new QDir;
     bool exist = debug->exists("./debugFile");
     if(!exist)
@@ -1670,10 +1735,10 @@ void MainViewQML::slot_save_data()
         QTextStream in(&file1);
         if(file1.size() == 0)
         {
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14\n").arg("Date Time").arg("pm2.5 sensor is On").arg("Temperature").arg("Humidity (%)").arg("Baseline").
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg("Date Time").arg("Flag").arg("pm2.5 sensor is On").arg("Temperature").arg("Humidity (%)").arg("Baseline").
                 arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light").arg("Charging").arg("Electricity (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14\n").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(slot_getTempValue()).arg(get_humValue())
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(falgModelist[modeIndex]).arg(pm25IsOn ? "On" : "Off").arg(slot_getTempValue()).arg(get_humValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue).arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.current).arg(slot_getBatteryCapacity()).arg(get_wifiStatus());
         in<<line;
         file1.close();

@@ -175,7 +175,25 @@ Item {
         }
         onSignal_updateFre:
         {
-            cpuFrequ.text ="CPU frequency: " + MainViewProperty.slot_getFre() + "G"
+            var fre = MainViewProperty.slot_getFre()
+            cpuFrequ.text ="CPU frequency: " +  fre + "G"
+            if(fre == 0.12)
+            {
+                isCpu120M = true
+            }
+            else
+            {
+                isCpu120M = false
+            }
+
+        }
+        onSignal_cpuNoLoad:
+        {
+            isCpu100 = false
+        }
+        onSignal_cpuLoad:
+        {
+            isCpu100 = true
         }
     }
 }

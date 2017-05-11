@@ -267,5 +267,6 @@
         <file>resource/images/test/smallbuttonRelease.png</file>
         <file>resource/images/test/smallbuttonPress.png</file>
         <file>resource/qml/testQml/CpuItem.qml</file>
+        <file>resource/qml/testQml/TestFinished.qml</file>
     </qresource>
 </RCC>

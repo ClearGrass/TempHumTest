@@ -9,7 +9,7 @@ Item {
 
     signal click()
 
-    width: 422
+    width: 281
     height: 120
     Image {
         id: back
@@ -68,6 +68,7 @@ Item {
        animationLarge.stop()
 
    }
+
 
 
 }

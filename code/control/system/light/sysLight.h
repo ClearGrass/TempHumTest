@@ -8,7 +8,7 @@
 #include "file/config/fileConfig.h"
 
 #define MAX_INLIGHT_VALUE   0
-#define MIN_INLIGHT_VALUE   255
+#define MIN_INLIGHT_VALUE   251
 #define MAX_OUTLIGHT_VALUE  3000
 #define MIN_OUTLIGHT_VALUE  40
 #define COSY_OUTLIGHT_VALUE 400

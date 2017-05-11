@@ -6,6 +6,14 @@ Rectangle {
     width: 854
     color: "#212121"
     property bool pmisOn: false
+
+    TestFinished{
+        id:testFinish
+        visible: false
+        anchors.centerIn: parent
+        z:10
+    }
+
     Column{
         anchors.centerIn: parent
 
@@ -67,6 +75,17 @@ Rectangle {
 
                 }
             }
+            BaseButtonPlus{
+                id:syncTime
+                logoSource: "qrc:/resource/images/test/time.png"
+                maintext: "Sync RTC"
+                opacity: 0.2
+                enabled: false
+                onClick: {
+                    MainViewProperty.slot_syncRTC();
+                }
+            }
+
 
             //            BaseButton{
             //                id:screen
@@ -98,6 +117,24 @@ Rectangle {
         onSignal_wifiIntensity:
         {
             wifibutton.subText = MainViewProperty.slot_getWifiStatus()
+            if(wifibutton.subText == "Disconnect")
+            {
+                syncTime.opacity = 0.2
+                syncTime.enabled = false
+            }
+            else
+            {
+                syncTime.opacity = 1.0
+                syncTime.enabled = true
+            }
+        }
+        onSignal_autoLightChanged:
+        {
+            light.value = MainViewProperty.slot_getCurLightValue()
+        }
+        onSignal_testFinished:
+        {
+           testFinish.visible = true
         }
     }
 

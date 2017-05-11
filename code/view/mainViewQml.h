@@ -139,6 +139,8 @@ public slots:
     void slot_pmOn();
     void slot_pmOff();
     QString  slot_getBaseLine();
+    void slot_modeSwitch();
+    void slot_syncRTC();
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 signals:
@@ -208,8 +210,12 @@ signals:
     void signal_pmOn();
     void signal_pmOff();
     void signal_updateFre();
+    void signal_set_timeAuto(bool);
 
-
+    void signal_testFinished();
+    void signal_cpuLoad();
+    void signal_cpuNoLoad();
+    void signal_autoLightChanged();
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 protected slots:
@@ -305,6 +311,9 @@ private:
     int lightValue;
     DriverPM25 *driverPM25;                                             // PM2.5传感器类
     QString baseline;
+    QStringList falgModelist;
+    int modeIndex;
+    QTimer *modeSwitchTimer;
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 
