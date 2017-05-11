@@ -71,7 +71,7 @@ Rectangle {
     MouseArea{
         anchors.fill: parent
         onClicked: {
-            PagePowerOn.slot_power_off();
+//            PagePowerOn.slot_power_off();
         }
     }
 }

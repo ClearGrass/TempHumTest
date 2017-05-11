@@ -46,7 +46,8 @@ void MainViewQML::init()
     usage = "0";
     lightValue = 0;
     //当前屏幕方向
-    fre = 1.008;
+    fre = 0.12;
+    num = 0;
     currentDirection = 0;
     timeclock = 0;
     ischarging = false;
@@ -85,8 +86,8 @@ void MainViewQML::init()
     modeSwitchTimer  = new QTimer();
 
     //两个小时
-    modeSwitchTimer->start(1000 *60 *60 * 2);
-
+        modeSwitchTimer->start(1000 *60 *60 * 2);
+//    modeSwitchTimer->start(1000 * 60);
     //    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
@@ -173,7 +174,6 @@ void MainViewQML::connect_init()
     connect(this, SIGNAL(signal_pmOff()), driverPM25, SLOT(stop_sampling()));
 
     connect(modeSwitchTimer, SIGNAL(timeout()), this, SLOT(slot_modeSwitch()));
-    emit signal_change_fre(false);
 
 }
 
@@ -1672,11 +1672,12 @@ void MainViewQML::slot_modeSwitch()
     {
         emit signal_testFinished();
         slot_setCpuUsage0();
-
-        modeSwitchTimer->stop();
         slot_set120M();
         slot_setLightValue(0);
-        slot_pmOff();
+        if(pm25IsOn)
+            slot_pmOff();
+        modeSwitchTimer->stop();
+
     }
     switch (modeIndex) {
     //基态
@@ -1716,6 +1717,11 @@ void MainViewQML::slot_syncRTC()
 void MainViewQML::slot_save_data()
 {
 
+    if(modeIndex == 0 && num == 6)
+    {
+        emit signal_change_fre(false);
+    }
+    num++;
     if(modeIndex > 3)
     {
         return ;
@@ -1739,10 +1745,10 @@ void MainViewQML::slot_save_data()
         QTextStream in(&file1);
         if(file1.size() == 0)
         {
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg("Date Time").arg("Flag").arg("pm2.5 sensor is On").arg("Temperature").arg("Humidity (%)").arg("Baseline").
-                arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light").arg("Charging").arg("Electricity (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg("Flag").arg("Date Time").arg("pm2.5 sensor is On").arg("Temperature").arg("Humidity (%)").arg("Baseline").
+                arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light").arg("Charging").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(falgModelist[modeIndex]).arg(pm25IsOn ? "On" : "Off").arg(slot_getTempValue()).arg(get_humValue())
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg(falgModelist[modeIndex]).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(slot_getTempValue()).arg(get_humValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue).arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.current).arg(slot_getBatteryCapacity()).arg(get_wifiStatus());
         in<<line;
         file1.close();
@@ -1751,5 +1757,6 @@ void MainViewQML::slot_save_data()
     {
         qDebug()<<"写入文件失败";
     }
+
 }
 

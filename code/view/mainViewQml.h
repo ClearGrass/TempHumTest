@@ -314,6 +314,7 @@ private:
     QStringList falgModelist;
     int modeIndex;
     QTimer *modeSwitchTimer;
+    int num;
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 

@@ -14,34 +14,18 @@ MainControl::MainControl(QObject *parent)
 
 
     widget_init();
-    // 则开始判定是否在底座上
-    if((sysControl->is_chargingByAC()) || ("true" == fileConfig->get_value(SYS_ENTER)))
-    {
-        if("true" == fileConfig->get_value(SYS_ENTER))
-        {
-            fileConfig->set_value(SYS_ENTER, "false");
-        }
 
-        // 若在底座上，直接显示出主界面，数据采集开始
-        dataAirControl->start();
-        sysWiFi->start();
-        pageMainProxy->show();
-        gCurrent_pageIndex = PAGE_MAIN;
-    }
-    else
+    if("true" == fileConfig->get_value(SYS_ENTER))
     {
-        gCurrent_pageIndex = PAGE_POWER_ON;
-        pagePowerOn = new PagePowerOn();
-        timerPowerOff->start();
-        timerScreenOff->start();
-
-        //加载QML对象到当前场景中
-        pagePowerOnProxy = mainScene->addWidget(qobject_cast<QWidget *>(pagePowerOn));
-        pagePowerOnProxy->setZValue(0);
-        connect(pagePowerOn, SIGNAL(signal_system_start()), this, SLOT(slot_enter_system()));
-        connect(pagePowerOn, SIGNAL(signal_device_powerOff()), this, SLOT(slot_device_powerOff()));
-        connect(pagePowerOn, SIGNAL(signal_device_powerOff()), sysControl, SLOT(slot_device_powerOff()));
+        fileConfig->set_value(SYS_ENTER, "false");
     }
+
+    // 若在底座上，直接显示出主界面，数据采集开始
+    dataAirControl->start();
+    sysWiFi->start();
+    pageMainProxy->show();
+    gCurrent_pageIndex = PAGE_MAIN;
+
 
 
 
