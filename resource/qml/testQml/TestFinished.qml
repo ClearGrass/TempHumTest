@@ -8,7 +8,7 @@ Rectangle {
 
     Text
     {
-        text: "Test Finished"
+        text: "Test done"
         color: "#ffffff"
 
         //字体
