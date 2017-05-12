@@ -112,13 +112,13 @@ void MainViewQML::data_init()
     sysData         = SysData::getInstance();
     sysTime         = SysTime::getInstance();
     //    funcWeather     = FuncWeather::getInstance();
-    //    funcCity        = FuncCity::getInstance();
+//        funcCity        = FuncCity::getInstance();
     dataAirControl  = DataAirControl::getInstance();
 
     isNight = sysControl->get_night();
     battery = sysControl->get_battery();
     wifi    = sysWiFi->get_currentWiFi();
-    //    sLocation =  funcCity->get_location();
+//        sLocation =  funcCity->get_location();
     iAppBindStatus = sysControl->get_value(APP_BIND_STATUS).toInt();
     if(isNight)
     {
@@ -154,7 +154,7 @@ void MainViewQML::connect_init()
 
     //    connect(funcWeather, SIGNAL(signal_update_weather(InfoWeather)), this, SLOT(slot_update_weather(InfoWeather)));
     //    connect(funcWeather, SIGNAL(signal_sampling_weather()), this, SLOT(slot_sampling_weather()));
-    //    connect(funcCity, SIGNAL(signal_update_cityName(QString)), this, SLOT(slot_update_location(QString)));
+//        connect(funcCity, SIGNAL(signal_update_cityName(QString)), this, SLOT(slot_update_location(QString)));
     //    connect(sysControl, SIGNAL(signal_change_direction(DIRECTION)), this, SLOT(change_direction(DIRECTION)));
     connect(sysControl, SIGNAL(signal_update_battery(InfoBattery)), this, SLOT(slot_update_battery(InfoBattery)));
     connect(sysControl, SIGNAL(signal_shell_doubleTap()), this, SLOT(slot_doubleTap()));
