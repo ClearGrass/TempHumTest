@@ -144,6 +144,7 @@ void MainViewQML::connect_init()
     connect(dataAirControl, SIGNAL(signal_sampling_start(time_t)), this, SLOT(slot_updatePmData_lastTime(time_t)));
     connect(dataAirControl, SIGNAL(signal_sampling_off()), this, SLOT(slot_finishPmRefresh()));
     connect(dataAirControl, SIGNAL(signal_update_data(AirData)), this, SLOT(slot_update_airData(AirData)));
+    connect(dataAirControl, SIGNAL(signal_update_rawData(float,float)), this, SLOT(slot_updataRawData(float, float)));
     connect(this, SIGNAL(signal_getPmData()), dataAirControl, SLOT(slot_sampling_pm25()));
     connect(pmUpdateTimer, SIGNAL(timeout()), this, SLOT(slot_pmLastUpdateTime()));
     //    pmUpdateTimer->start();
@@ -1042,6 +1043,17 @@ QString MainViewQML::slot_getHumValue()
     return  QString::number(fHumValue, 'f',2);
 }
 
+QString MainViewQML::slot_getRawTempValue()
+{
+    return  QString::number(fRawTempValue, 'f',2);
+
+}
+
+QString MainViewQML::slot_getRawHumValue()
+{
+    return  QString::number(fRawHumValue, 'f',2);
+}
+
 /*******************************************************************************
 * Author        :   虎正玺@2016-10-28
 * Function Name :   slot_updatePmData_lastTime
@@ -1745,11 +1757,17 @@ void MainViewQML::slot_save_data()
         QTextStream in(&file1);
         if(file1.size() == 0)
         {
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg("Flag").arg("Date Time").arg("pm2.5 sensor is On").arg("Temperature").arg("Humidity (%)").arg("Baseline").
-                arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light").arg("Charging").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17\n").arg("Flag")
+                .arg("Date Time").arg("pm2.5 sensor is On")
+                .arg("Temperature").arg("Raw Temperature").arg("Humidity (%)").arg("Raw Humidity (%)")
+                .arg("Baseline"). arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light")
+                .arg("Charging").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15\n").arg(falgModelist[modeIndex]).arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(slot_getTempValue()).arg(get_humValue())
-                .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue).arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.current).arg(slot_getBatteryCapacity()).arg(get_wifiStatus());
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17\n").arg(falgModelist[modeIndex])
+                .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off")
+                .arg(slot_getTempValue()).arg(slot_getRawTempValue()).arg(get_humValue()).arg(slot_getRawHumValue())
+                .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue)
+                .arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.current).arg(slot_getBatteryCapacity()).arg(get_wifiStatus());
         in<<line;
         file1.close();
     }
@@ -1758,5 +1776,11 @@ void MainViewQML::slot_save_data()
         qDebug()<<"写入文件失败";
     }
 
+}
+
+void MainViewQML::slot_updataRawData(float temp, float hum)
+{
+    fRawTempValue = temp;
+    fRawHumValue = hum;
 }
 

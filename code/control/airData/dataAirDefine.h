@@ -73,6 +73,40 @@ typedef struct airData
     float       value;
     time_t      timestamp;
     QString     dateTime;
+    QString     keyName;
+
+    void init(AirDataType type)
+    {
+        switch(type)
+        {
+        case PM25:
+            keyName = "pm25";
+        break;
+        case TEMP:
+            keyName = "temperature";
+        break;
+        case HUMI:
+            keyName = "humidity";
+        break;
+        case TVOC:
+            keyName = "tvoc";
+        break;
+        case CO2E:
+            keyName = "co2e";
+        break;
+        case PM5:
+            keyName = "pm5";
+        break;
+        case PM10:
+            keyName = "pm10";
+        break;
+        default:
+            keyName = "unknown";
+        break;
+        }
+        this->type = type;
+        this->value = ERROR_DATA;
+    }
 
 }AirData;
 
@@ -118,6 +152,16 @@ typedef struct airDataDaily
         }
         return true;
     }
+
+    bool operator != (const airDataDaily & other) const
+    {
+        if((this->type == other.type) && (this->max == other.max) && (this->min == other.min) && (this->timestamp == other.timestamp) && (this->timestampDaily == other.timestampDaily) && (this->dateTime == other.dateTime) && (this->date == other.date))
+        {
+            return false;
+        }
+        return true;
+    }
+
 }AirDataDaily;
 
 typedef struct airDataHourly

@@ -45,7 +45,7 @@ FileConfig::FileConfig()
 *******************************************************************************/
 void FileConfig::config_init()
 {
-    QFile file(SYSTEM_CONFIG_PATH);
+    QFile file(PATH_BRAN_CONF);
     if(file.open(QIODevice::ReadOnly))
     {
         //设置字符编码
@@ -189,7 +189,7 @@ void FileConfig::list_init(void)
 *******************************************************************************/
 void FileConfig::config_save()
 {
-    QFile file(SYSTEM_CONFIG_PATH);
+    QFile file(PATH_BRAN_CONF);
     if(file.open(QFile::WriteOnly))
     {
         //声明并初始化数据流对象

@@ -22,7 +22,7 @@ public:
 signals:
     void signal_update_data(AirData);
     void signal_update_dataDaily(AirDataDaily);
-
+    void signal_update_rawData(float temp, float hum);
 protected slots:
     void slot_update_data();                                            // 刷新数值
     void slot_dataDaily_today(AirDataDaily);

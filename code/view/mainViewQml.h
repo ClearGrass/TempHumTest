@@ -93,6 +93,8 @@ public slots:
 
     QString slot_getTempValue();                                        //获取温度值 精确到小数点后两位
     QString slot_getHumValue();                                         //获取湿度值，精确到小数点后两位
+    QString slot_getRawTempValue();
+    QString slot_getRawHumValue();
     void slot_updatePmData_lastTime(time_t time);                       //pm2.5更新时间
     void slot_pmLastUpdateTime();                                       //获取pm2.5更新时间 描述字符串
     QString slot_getpmLastUpdateTime();
@@ -141,6 +143,7 @@ public slots:
     QString  slot_getBaseLine();
     void slot_modeSwitch();
     void slot_syncRTC();
+
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 signals:
@@ -231,7 +234,7 @@ protected slots:
     void slot_sampling_weather();                                          //开始获取天气数据
     void slot_updateAppBindstat(int);
     void slot_save_data();
-
+    void slot_updataRawData(float temp, float hum);
 
 private:
     void init(void);
@@ -255,6 +258,8 @@ private:
     float fTempValue;
     float fHumValue;
     float fPm5Value;
+    float fRawTempValue;
+    float fRawHumValue;
     float fPm10Value;
     float fCO2eValue;
     float ftVOCValue;

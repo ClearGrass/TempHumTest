@@ -68,14 +68,11 @@ void DataTempHumi::run()
 void DataTempHumi::data_init()
 {
     driverTempHumi = DriverTempHum::getInstance();
-    dataTEMP.type = TEMP;
-    dataHUMI.type = HUMI;
+    dataTEMP.init(TEMP);
+    dataHUMI.init(HUMI);
 
     dataDailyTEMP.init(TEMP);
     dataDailyHUMI.init(HUMI);
-
-    dataTEMP.value = ERROR_DATA;
-    dataHUMI.value = ERROR_DATA;
 
     // 初始化默认数值列表
     listDataTemp = QString(DATALIST_TEMP).split(",");
@@ -108,32 +105,37 @@ void DataTempHumi::connect_init()
 *******************************************************************************/
 void DataTempHumi::slot_update_data()
 {
-    float tempValue;
-    float humiValue;
+    float tempValue, rawTempValue;
+    float humiValue, rawHumiValue;
     static int i;
 #ifdef Bran_R8
     // R8获取传感器数据
     //    driverTempHumi->update_data(tempValue,humiValue);
 
-    int temperature, humidity;
-    short err = sht_measure_blocking_read(&temperature, &humidity);
+    int temperature, humidity, rawTemp, rawHumi;
+    short err = sht_measure_blocking_read_compensated_every_1_seconds(&temperature, &humidity, &rawTemp, &rawHumi);
+
 
     if (err == STATUS_OK)
     {
-        tempValue = (float)temperature / 1000.0;
-        humiValue = (float)humidity / 1000.0;
+        tempValue    = (float)temperature / 1000.0;
+        humiValue    = (float)humidity / 1000.0;
+        rawTempValue = (float)rawTemp / 1000.0;
+        rawHumiValue = (float)rawHumi / 1000.0;
         if (i++ >= 10)
         {
             i = 0;
-            qDebug("--------------------------------------------temperature: %f degC, humidity: %f  \n", tempValue, humiValue);
+            qDebug("--------------------------------------------temperature:    %f degC, humidity:    %f  \n", tempValue, humiValue);
+            qDebug("--------------------------------------------rawTemperature: %f degC, rawhumidity: %f  \n", rawTempValue, rawHumiValue);
         }
     }
     else
     {
-        tempValue = 999.99;
-        humiValue = 999.99;
+        tempValue = ERROR_DATA;
+        humiValue = ERROR_DATA;
         qDebug("error reading measurement\n");
     }
+    emit signal_update_rawData(rawTempValue, rawHumiValue);
 #else
     // PC测试获取模拟数据
     tempValue = listDataTemp.at(index).toFloat();

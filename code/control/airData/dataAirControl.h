@@ -39,6 +39,7 @@ signals:
     void signal_battery_charging(bool);
     void signal_intervalPM25_charging(IntervalType);
     void signal_intervalPM25_discharging(IntervalType);
+    void signal_update_rawData(float temp, float hum);
 
 private slots:
     void slot_update_data(AirData);                                     // 更新数据
@@ -60,6 +61,7 @@ private slots:
     void slot_battery_charging(bool);
     void slot_intervalPM25_charging(IntervalType);
     void slot_intervalPM25_discharging(IntervalType);
+    void slot_updateRaw(float temp, float hum);
 
 private:
     explicit DataAirControl();

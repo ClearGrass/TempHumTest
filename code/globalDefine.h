@@ -12,8 +12,6 @@
 #ifndef GLOBALDEFINE_H
 #define GLOBALDEFINE_H
 
-/* Includes ------------------------------------------------------------------*/
-#include <QString>
 //----------------------- System ----------------------------------------------/
 
 
@@ -54,27 +52,33 @@
 #define VERTICAL_HEIGHT    854                                          //竖屏高度
 
 //-------------------------SysConfig----------------------------------------/
-//!
-//! 室内外亮度宏定义
-//!
 
+#ifdef P3
 #define MAX_INLIGHT_VALUE   0
-#define MIN_INLIGHT_VALUE   255
-#define MAX_OUTLIGHT_VALUE  3000
-#define MIN_OUTLIGHT_VALUE  40
+#define MIN_INLIGHT_VALUE   251
+#else
+#define MAX_INLIGHT_VALUE   0
+#define MIN_INLIGHT_VALUE   251
+#endif
+
+#define MAX_OUTLIGHT_VALUE  40000
+#define MIN_OUTLIGHT_VALUE  15
 
 #define COSY_OUTLIGHT_VALUE 400
 #define COSY_INLIGHT_VALUE  20
-
 
 //!
 //! 系统配置文件路径
 //!
 
-#define SYSTEM_CONFIG_PATH  "bran.config"
 #define LANGUAGE_PATH
 
-#define LOGPATH     "/bin/qtapp/debuglog.txt"                           // 日志路径
+#define LOGPATH     "/usr/bin/qtapp/debuglog.txt"                           // 日志路径
+
+#define PATH_MIIO_DEVICE_CONF       "/usr/bin/qtapp/etc/device.conf"
+#define PATH_MIIO_DEVICE_TOKEN      "/usr/bin/qtapp/etc/device.token"
+#define PATH_BRAN_CONF              "/usr/bin/qtapp/etc/bran.conf"
+#define PATH_BASELINE_CONF          "/usr/bin/qtapp/etc/baseline.conf"
 
 //-------------------------Timer----------------------------------------/
 //!
