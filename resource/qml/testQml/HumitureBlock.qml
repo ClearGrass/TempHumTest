@@ -4,7 +4,7 @@ Item {
     property string tempUnitSource: "qrc:/resource/images/test/tempunit.png"
     property string rhUnitSource: "qrc:/resource/images/test/larghRhUnit.png"
 
-    height: 60
+    height: 70
     width: 854
     id:rooeRect
     property string fontName: "MI LANTING"
@@ -31,7 +31,7 @@ Item {
             anchors{
                 top: parent.top
                 left: parent.left
-                topMargin: 22
+                topMargin: 5
                 leftMargin: 19
             }
         }
@@ -46,7 +46,41 @@ Item {
             anchors{
                 top: parent.top
                 left: tempLogo.right
-                topMargin: 22
+                topMargin: 5
+                leftMargin: 20
+            }
+
+        }
+
+        Text {
+            id:rawtempLogo
+            text: qsTr("Raw-Temp")
+            color: "#ffffff"
+            //字体
+            font.bold: true
+            font.family: fontName
+            font.pixelSize: fontSize
+
+
+            anchors{
+                bottom: parent.bottom
+                left: parent.left
+                bottomMargin: 5
+                leftMargin: 19
+            }
+        }
+
+        Text {
+            id:rawtempText
+            color: "#ffffff"
+            //字体
+            font.family: fontName
+            font.pixelSize: fontSize
+            font.bold: true
+            anchors{
+                bottom: parent.bottom
+                left: rawtempLogo.right
+                bottomMargin: 5
                 leftMargin: 20
             }
 
@@ -60,7 +94,7 @@ Item {
         width: 213
         anchors.top: parent.top
         anchors.left:  itemTemp.right
-        anchors.leftMargin: 0
+        anchors.leftMargin: 70
 
 
         Text {
@@ -70,7 +104,7 @@ Item {
             anchors{
                 top: parent.top
                 left: parent.left
-                topMargin: 22
+                topMargin: 5
                 leftMargin: 20
             }
             //字体
@@ -84,10 +118,42 @@ Item {
             anchors{
                 top: parent.top
                 left: rhDes.right
-                topMargin: 22
+                topMargin: 5
                 leftMargin: 20
             }
             id:rhText
+            color: "#ffffff"
+            //字体
+            font.family: fontName
+            font.pixelSize: fontSize
+            font.bold: true
+        }
+
+        Text {
+            id:rawrhDes
+            text: qsTr("Raw-RH")
+            color: "#ffffff"
+            anchors{
+                bottom: parent.bottom
+                left: parent.left
+                bottomMargin: 5
+                leftMargin: 20
+            }
+            //字体
+            font.family: fontName
+            font.pixelSize: fontSize
+            font.bold: true
+
+        }
+
+        Text {
+            anchors{
+                bottom: parent.bottom
+                left: rawrhDes.right
+                bottomMargin: 5
+                leftMargin: 20
+            }
+            id:rawrhText
             color: "#ffffff"
             //字体
             font.family: fontName
@@ -101,17 +167,17 @@ Item {
     Item{
         id:itemTvoc
         height: parent.height
-        width: 213
+        width: 300
         anchors.top: parent.top
         anchors.left:  itemHum.right
-        anchors.leftMargin: 0
+        anchors.leftMargin: 90
 
 
         Text {
             anchors{
                 top: parent.top
                 left: parent.left
-                topMargin: 22
+                topMargin: 5
                 leftMargin: 15
             }
             id:tvocDes
@@ -128,7 +194,7 @@ Item {
             anchors{
                 top: parent.top
                 left: tvocDes.right
-                topMargin: 22
+                topMargin: 5
                 leftMargin: 15
             }
             id:tvovText
@@ -139,22 +205,13 @@ Item {
             font.bold: true
         }
 
-    }
-    Item{
-        id:itemCo2e
-        height: parent.height
-        width: 213
-        anchors.top: parent.top
-        anchors.left:  itemTvoc.right
-        anchors.leftMargin: 0
-
 
 
         Text {
             anchors{
-                top: parent.top
+                bottom: parent.bottom
                 left: parent.left
-                topMargin: 22
+                bottomMargin: 5
                 leftMargin: 15
             }
             id:co2eDesc
@@ -169,10 +226,10 @@ Item {
 
         Text {
             anchors{
-                top: parent.top
-                right: parent.right
-                topMargin: 22
-                rightMargin: 15
+                bottom: parent.bottom
+                left: co2eDesc.right
+                bottomMargin: 5
+                leftMargin: 15
             }
             id:co2eText
             color: "#ffffff"
@@ -181,12 +238,7 @@ Item {
             font.pixelSize: fontSize
         }
 
-
     }
-
-
-
-
 
 
 
@@ -195,9 +247,15 @@ Item {
 
         target:MainViewProperty
         onSignal_humChanged:
+        {
             rhText.text =deal_with(Math.round(MainViewProperty.slot_getHumValue() * 100) /100) +"%"
+            rawrhText.text = deal_with(Math.round(MainViewProperty.slot_getRawHumValue() * 100) /100) +"%"
+        }
         onSignal_tempChanged:
+        {
             tempText.text =  deal_with(Math.round(MainViewProperty.slot_getTempValue() * 100) / 100) + "℃"
+            rawtempText.text =  deal_with(Math.round(MainViewProperty.slot_getRawTempValue() * 100) / 100) + "℃"
+        }
         onSignal_tVOCValueChanged:
         {
             console.log("tvoc = ", MainViewProperty.slot_getTvocValue())
