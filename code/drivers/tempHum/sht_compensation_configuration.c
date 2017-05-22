@@ -55,6 +55,8 @@
 #include "sht_compensation_configuration.h"
 #include "globalDefine.h"
 
+#define  DUBUG_INTERVAL     10
+
 
 /*
  * Sensirion Temperature+Humidity Compensation
@@ -84,9 +86,9 @@ void get_status_CPU_f(int *status_CPU_f)
     fre = atof(buf);
     fre = fre/1000000.0;
     pclose(stream);
-    if(1.008 == fre)
+    if(fre > 0.9)
     {
-        if (stamp % 10 == 0)
+        if (stamp % DUBUG_INTERVAL == 0)
         {
             printf("------------------------------------------当前主频率 1.008G\r\n");
         }
@@ -94,7 +96,7 @@ void get_status_CPU_f(int *status_CPU_f)
     }
     else
     {
-        if (stamp % 10 == 0)
+        if (stamp % DUBUG_INTERVAL == 0)
         {
             printf("------------------------------------------当前主频率 120M\r\n");
         }
@@ -123,10 +125,10 @@ void get_status_LCD_bri(int *status_screen_brightness){
     fread(buf, sizeof(char), sizeof(buf),  stream);
     light = atoi(buf);
 
-     *status_screen_brightness = 100 * (MIN_INLIGHT_VALUE - light)/ (MIN_INLIGHT_VALUE - MAX_INLIGHT_VALUE);
+     *status_screen_brightness = 1000 * (MIN_INLIGHT_VALUE - light)/ (MIN_INLIGHT_VALUE - MAX_INLIGHT_VALUE);
 
     //printf("ttt%s\n", buf);
-    if (stamp % 10 == 0)
+    if (stamp % DUBUG_INTERVAL == 0)
     {
         printf("------------------------------------------当前亮度 light = %d 补偿值 = %d\r\n", light, *status_screen_brightness);
     }
@@ -170,8 +172,8 @@ void get_status_CPU_load(int *status_CPU_load){
         cpuLoad = atof(charlist[8]);
         *status_CPU_load = (int)(cpuLoad);
     }
-
-    if (stamp % 10 == 0)
+    *status_CPU_load *= 10;
+    if (stamp % DUBUG_INTERVAL == 0)
     {
         printf("------------------------------------------当前负载 %d\r\n", *status_CPU_load);
     }
