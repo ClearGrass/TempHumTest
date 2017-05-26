@@ -101,7 +101,11 @@ void MainViewQML::init()
 void MainViewQML::data_init()
 {
     sysCPU = new SysCPU();
+    sysocc1 = new SysOCC1();
+    stsocc2 = new SysOCC2();
+
     sysOCC = new SysOCC();
+
     driverPM25 = DriverPM25::getInstance();
     driverPM25->start();
     sysControl      = SysControl::getInstance();
@@ -1617,13 +1621,16 @@ QString MainViewQML::slot_getScreenTime()
 void MainViewQML::slot_setCpuUseage100()
 {
     sysOCC->set_start();
-
+    sysocc1->set_start();
+    stsocc2->set_start();
     emit signal_cpuLoad();
 }
 
 void MainViewQML::slot_setCpuUsage0()
 {
     sysOCC->stop();
+    sysocc1->stop();
+    stsocc2->stop();
     emit signal_cpuNoLoad();
 }
 

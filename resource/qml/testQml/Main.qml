@@ -11,8 +11,73 @@ Rectangle {
         id:testFinish
         visible: false
         anchors.centerIn: parent
+
         z:10
     }
+
+    property string sourceImage: "qrc:/resource/images/verticalScreen/starting.png"
+    Image {
+        id: scaningImage
+        source: sourceImage
+
+        rotation: 90
+        width: 480
+        height: 100
+        x:0
+        y:0
+        z:20
+        NumberAnimation {id:animation; target: scaningImage; property: "x"; from: 0; to:854; running:false;duration: 2000; easing.type: Easing.Linear;loops: Animation.Infinite }
+        visible: false
+    }
+
+    Image {
+        id: scaningImage2
+        height: 50
+        width: 854
+        source: sourceImage
+        x:20
+        y:0
+        z:16
+        NumberAnimation { target: scaningImage2; property: "y"; from: 0; to:480; running:scaningImage2.visible;duration: 1500; easing.type: Easing.Linear;loops: Animation.Infinite }
+        visible: scaningImage.visible
+    }
+
+
+    Image {
+        id: scaningImage1
+        source: sourceImage
+        anchors.centerIn: parent
+        z:18
+        visible: false
+        NumberAnimation on rotation {
+            id:animationLarge ; from: 0; to: 360; running: scaningImage1.visible; loops: Animation.Infinite; duration: 2000
+        }
+    }
+
+    Image {
+        id: scaningImage3
+        source: sourceImage
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        z:18
+        visible: scaningImage1.visible
+        NumberAnimation on rotation {
+             from: 0; to: 360; running: scaningImage1.visible; loops: Animation.Infinite; duration: 2100
+        }
+    }
+
+    Image {
+        id: scaningImage4
+        source: sourceImage
+        anchors.left: parent.left
+        anchors.top: parent.top
+        z:18
+        visible: scaningImage1.visible
+        NumberAnimation on rotation {
+             from: 0; to: 360; running: scaningImage1.visible; loops: Animation.Infinite; duration: 2300
+        }
+    }
+
 
     Vk
     {
@@ -28,7 +93,7 @@ Rectangle {
         anchors.topMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 10
-        spacing: 60
+        spacing: 45
 
         Text {
             text: "温度测试程序"
@@ -105,7 +170,16 @@ Rectangle {
         }
 
         CpuItem{
-
+//            onStart_animation: {
+//                scaningImage.visible = true
+//                scaningImage1.visible = true
+//                animation.start()
+//            }
+//            onStop_animation: {
+//                animation.stop()
+//                scaningImage.visible = false
+//                scaningImage1.visible = false
+//            }
         }
 
         Row{
@@ -144,6 +218,7 @@ Rectangle {
                 }
             }
             BaseButtonPlus{
+
                 id:syncTime
                 logoSource: "qrc:/resource/images/test/time.png"
                 maintext: "Sync RTC"

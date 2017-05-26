@@ -148,7 +148,9 @@ SOURCES += \
     code/drivers/tempHum/sensirion_configuration.c \
     code/drivers/tempHum/sht3x.c \
     code/drivers/tempHum/sht_compensation_configuration.c \
-    code/sysOCC.cpp
+    code/sysOCC.cpp \
+    code/sysOCC1.cpp \
+    code/sysOCC2.cpp
 	
 HEADERS  += \
     code/view/historyPage/colorGenerator.h \
@@ -251,7 +253,9 @@ HEADERS  += \
     code/drivers/tempHum/sensirion_configuration.h \
     code/drivers/tempHum/sht3x.h \
     code/drivers/tempHum/sht_compensation_configuration.h \
-    code/sysOCC.h
+    code/sysOCC.h \
+    code/sysOCC1.h \
+    code/sysOCC2.h
 
 
 

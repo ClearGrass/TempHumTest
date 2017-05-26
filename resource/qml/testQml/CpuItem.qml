@@ -8,6 +8,8 @@ Item {
     property bool isCpu120M: true
     property bool isCpu100: false
     property string strFre: "0"
+    signal start_animation()
+    signal stop_animation()
     Row{
         anchors.centerIn: parent
         spacing: 3
@@ -132,6 +134,8 @@ Item {
                     onClicked: {
                         MainViewProperty.slot_setCpuUsage0()
                         isCpu100 = false
+                        stop_animation()
+
                     }
                 }
             }
@@ -159,6 +163,7 @@ Item {
                     onClicked: {
                         MainViewProperty.slot_setCpuUseage100()
                         isCpu100 = true
+                        start_animation()
                     }
                 }
             }
@@ -190,10 +195,12 @@ Item {
         onSignal_cpuNoLoad:
         {
             isCpu100 = false
+            stop_animation()
         }
         onSignal_cpuLoad:
         {
             isCpu100 = true
+            start_animation()
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿#ifndef SYSOCC_H
-#define SYSOCC_H
+﻿#ifndef SYSOCC1_H
+#define SYSOCC1_H
 
 #include <QThread>
 #include <QDebug>
@@ -7,20 +7,18 @@
 #include <QStringList>
 #include "math.h"
 
-class SysOCC : public QThread
+class SysOCC1 : public QThread
 {
 
     Q_OBJECT
 public:
-    SysOCC();
+    SysOCC1();
     void stop();
     void set_start();
 
 protected:
     void run();
-    void testFunc1();
-    void testFunc2();
-    void testFunc3();
+
 
 private:
 
@@ -28,4 +26,4 @@ private:
 
 };
 
-#endif // SYSOCC_H
+#endif // SYSOCC1_H

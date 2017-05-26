@@ -25,13 +25,15 @@
 #include "data/sysData.h"
 #include "control/function/city/funcCity.h"
 #include "sysOCC.h"
+#include "sysOCC1.h"
+#include "sysOCC2.h"
 #define DEVICE_POWER_VALUE          "/sys/class/power_supply/battery/capacity"                      //电池容量
 #define DEVICE_POWER_STATUS         "/sys/class/power_supply/battery/status"                        //充电状态
 #define QML_SOURCE_URL              "qrc:/resource/qml/testQml/Main.qml"
 
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
-#define VERSION_NO                   "2.2"
+#define VERSION_NO                   "2.3"
 
 #include "driverWiFi.h"
 
@@ -313,6 +315,8 @@ private:
     bool isLightOn;
     int  screenOnTime;
     SysOCC *sysOCC;
+    SysOCC1 *sysocc1;
+    SysOCC2 *stsocc2;
     SysCPU *sysCPU;
     QString usage;
     float fre;
