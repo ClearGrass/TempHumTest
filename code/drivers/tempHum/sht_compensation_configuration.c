@@ -92,7 +92,7 @@ void get_status_CPU_f(int *status_CPU_f)
         {
             printf("------------------------------------------当前主频率 1.008G\r\n");
         }
-        *status_CPU_f = 1;
+        *status_CPU_f = 1000;
     }
     else
     {
@@ -170,9 +170,8 @@ void get_status_CPU_load(int *status_CPU_load){
     if(i >= 8)
     {
         cpuLoad = atof(charlist[8]);
-        *status_CPU_load = (int)(cpuLoad);
+        *status_CPU_load = (int)(cpuLoad * 10);
     }
-    *status_CPU_load *= 10;
     if (stamp % DUBUG_INTERVAL == 0)
     {
         printf("------------------------------------------当前负载 %d\r\n", *status_CPU_load);

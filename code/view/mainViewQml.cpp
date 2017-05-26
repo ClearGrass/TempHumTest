@@ -85,9 +85,7 @@ void MainViewQML::init()
     modeIndex = 0;
     modeSwitchTimer  = new QTimer();
 
-    //两个小时
-        modeSwitchTimer->start(1000 *60 *60 * 2);
-//    modeSwitchTimer->start(1000 * 60);
+
     //    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
@@ -112,13 +110,13 @@ void MainViewQML::data_init()
     sysData         = SysData::getInstance();
     sysTime         = SysTime::getInstance();
     //    funcWeather     = FuncWeather::getInstance();
-//        funcCity        = FuncCity::getInstance();
+    //        funcCity        = FuncCity::getInstance();
     dataAirControl  = DataAirControl::getInstance();
 
     isNight = sysControl->get_night();
     battery = sysControl->get_battery();
     wifi    = sysWiFi->get_currentWiFi();
-//        sLocation =  funcCity->get_location();
+    //        sLocation =  funcCity->get_location();
     iAppBindStatus = sysControl->get_value(APP_BIND_STATUS).toInt();
     if(isNight)
     {
@@ -145,6 +143,7 @@ void MainViewQML::connect_init()
     connect(dataAirControl, SIGNAL(signal_sampling_off()), this, SLOT(slot_finishPmRefresh()));
     connect(dataAirControl, SIGNAL(signal_update_data(AirData)), this, SLOT(slot_update_airData(AirData)));
     connect(dataAirControl, SIGNAL(signal_update_rawData(float,float)), this, SLOT(slot_updataRawData(float, float)));
+    connect(dataAirControl, SIGNAL(signal_update_tempFlag(int,int,int)), this, SLOT(slot_updateTempFlag(int,int,int)));
     connect(this, SIGNAL(signal_getPmData()), dataAirControl, SLOT(slot_sampling_pm25()));
     connect(pmUpdateTimer, SIGNAL(timeout()), this, SLOT(slot_pmLastUpdateTime()));
     //    pmUpdateTimer->start();
@@ -155,7 +154,7 @@ void MainViewQML::connect_init()
 
     //    connect(funcWeather, SIGNAL(signal_update_weather(InfoWeather)), this, SLOT(slot_update_weather(InfoWeather)));
     //    connect(funcWeather, SIGNAL(signal_sampling_weather()), this, SLOT(slot_sampling_weather()));
-//        connect(funcCity, SIGNAL(signal_update_cityName(QString)), this, SLOT(slot_update_location(QString)));
+    //        connect(funcCity, SIGNAL(signal_update_cityName(QString)), this, SLOT(slot_update_location(QString)));
     //    connect(sysControl, SIGNAL(signal_change_direction(DIRECTION)), this, SLOT(change_direction(DIRECTION)));
     connect(sysControl, SIGNAL(signal_update_battery(InfoBattery)), this, SLOT(slot_update_battery(InfoBattery)));
     connect(sysControl, SIGNAL(signal_shell_doubleTap()), this, SLOT(slot_doubleTap()));
@@ -175,6 +174,8 @@ void MainViewQML::connect_init()
     connect(this, SIGNAL(signal_pmOff()), driverPM25, SLOT(stop_sampling()));
 
     connect(modeSwitchTimer, SIGNAL(timeout()), this, SLOT(slot_modeSwitch()));
+    //两个小时
+    modeSwitchTimer->start(1000 *60 *60 * 2);
 
 }
 
@@ -1615,7 +1616,8 @@ QString MainViewQML::slot_getScreenTime()
 
 void MainViewQML::slot_setCpuUseage100()
 {
-    sysOCC->start();
+    sysOCC->set_start();
+
     emit signal_cpuLoad();
 }
 
@@ -1728,12 +1730,16 @@ void MainViewQML::slot_syncRTC()
 
 void MainViewQML::slot_save_data()
 {
+    num++;
 
-    if(modeIndex == 0 && num == 6)
+    if(modeIndex == 0 && num == 5)
     {
         emit signal_change_fre(false);
     }
-    num++;
+    if(modeIndex == 0 && num < 5)
+    {
+        return ;
+    }
     if(modeIndex > 3)
     {
         return ;
@@ -1757,13 +1763,16 @@ void MainViewQML::slot_save_data()
         QTextStream in(&file1);
         if(file1.size() == 0)
         {
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17\n").arg("Flag")
+            in << QString("Current Version:%1\n").arg(slot_get_version_system());
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20\n").arg("Flag")
+                .arg("status_CPU_f").arg("status_CPU_load").arg("status_LCD_bri")
                 .arg("Date Time").arg("pm2.5 sensor is On")
                 .arg("Temperature").arg("Raw Temperature").arg("Humidity (%)").arg("Raw Humidity (%)")
                 .arg("Baseline"). arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light")
                 .arg("Charging").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17\n").arg(falgModelist[modeIndex])
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20\n").arg(falgModelist[modeIndex])
+                .arg(status_CPU_f).arg(status_CPU_load).arg(status_LCD_bri)
                 .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off")
                 .arg(slot_getTempValue()).arg(slot_getRawTempValue()).arg(get_humValue()).arg(slot_getRawHumValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue)
@@ -1784,3 +1793,83 @@ void MainViewQML::slot_updataRawData(float temp, float hum)
     fRawHumValue = hum;
 }
 
+void MainViewQML::slot_updateTempFlag(int cpu_f, int cpu_load, int lcd_bri)
+{
+    status_CPU_f = cpu_f;
+    status_CPU_load = QString("%1").arg(cpu_load);
+    status_LCD_bri = QString("%1").arg(lcd_bri);;
+}
+
+/*******************************************************************************
+* Function Name  :  slot_get_version_system
+* Description    :  获取系统版本
+* Input          :  None
+* Output         :  None
+* Return         :  None
+*******************************************************************************/
+QString MainViewQML::slot_get_version_system()
+{
+    QFile file("/usr/bin/qtapp/IMG_Version");
+    QStringList listStr;
+    QString strRead;
+    QString version = "999.0";
+    if (file.open(QFile::ReadOnly))
+    {
+        QTextStream stream(&file);
+
+        //读取文件内容
+        strRead = stream.readAll();
+        listStr = strRead.split(" ");
+        version = listStr.at(0).trimmed();
+
+        //关闭文件
+        file.close();
+    }
+
+    QFile file1("/usr/bin/qtapp/IMG_Version");
+
+
+    version = QString("%1/%2/%3").arg(VERSION_NO).arg(version).arg(get_os_version());
+    return version;
+}
+/*******************************************************************************
+* Function Name  :  get_os_version
+* Description    :  获取此时的系统版本
+* Input          :  None
+* Output         :  None
+* Return         :  None
+*******************************************************************************/
+QString MainViewQML::get_os_version()
+{
+    QString field = "CLEARGRASS_VERSION";
+    QString filePath = "/usr/bin/qtapp/os-release";
+    FILE  *stream;
+    char  buf[4096];
+    QString strCmd = QString("grep \"%1\" %2 | cut -f 2 -d '='").arg(field).arg(filePath);
+    QString result;
+    QByteArray ba = strCmd.toLatin1();
+    char *cmd = ba.data();
+
+    // 获取此时的版本号
+    stream = popen(cmd, "r");
+    fread(buf, sizeof(char), sizeof(buf),  stream);
+    result = buf;
+    pclose(stream);
+
+    if(result.contains("\n"))
+    {
+        result = result.split("\n").at(0);
+    }
+
+    if(!result.contains("_")||!result.contains("."))
+    {
+        result = "unknown";
+    }
+    return result;
+}
+
+
+void MainViewQML::slot_setInterval(int interval)
+{
+    modeSwitchTimer->setInterval(interval *1000 *60);
+}

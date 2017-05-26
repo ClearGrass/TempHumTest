@@ -167,7 +167,7 @@ extern "C" {
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity);
+int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity, int32_t *status_CPU_f, int32_t *status_CPU_load, int32_t *status_LCD_bri);
 
 /**
  * Reads a finished measurement and performs the Sensirion Temperature+Humidity Compensation.
@@ -183,7 +183,7 @@ int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperatur
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity);
+int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity, int32_t *status_CPU_f, int32_t *status_CPU_load, int32_t *status_LCD_bri);
 
 #ifdef __cplusplus
 }

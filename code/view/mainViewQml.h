@@ -31,6 +31,8 @@
 
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
+#define VERSION_NO                   "2.2"
+
 #include "driverWiFi.h"
 
 enum PAGE
@@ -143,7 +145,9 @@ public slots:
     QString  slot_getBaseLine();
     void slot_modeSwitch();
     void slot_syncRTC();
+    QString slot_get_version_system();
 
+    void slot_setInterval(int interval);
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 signals:
@@ -235,7 +239,7 @@ protected slots:
     void slot_updateAppBindstat(int);
     void slot_save_data();
     void slot_updataRawData(float temp, float hum);
-
+    void slot_updateTempFlag(int cpu_f, int cpu_load, int lcd_bri);
 private:
     void init(void);
     void scene_init(void);
@@ -249,6 +253,7 @@ private:
     QString get_englishDate(QDate date);                                //获取英文时间
     QString get_wifiStatus();
     void read_baseline();
+    QString get_os_version();
 private:
     HistoryPage *historyPage;                                           //历史页面实例
 
@@ -320,9 +325,10 @@ private:
     int modeIndex;
     QTimer *modeSwitchTimer;
     int num;
+    int status_CPU_f;
+    QString status_CPU_load;
+    QString status_LCD_bri;
     //////////////////////////////////end test/////////////////////////////////////////////////////
-
-
 };
 
 #endif // MAINVIEWQML_H

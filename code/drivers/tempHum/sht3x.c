@@ -216,17 +216,17 @@ static int64_t v[18] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 static int32_t t1[5] = {0, 0, 0, 0, 0};
 static uint8_t t0[8] = {54, 130, 0, 0, 0, 0, 0, 0};
 
-int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity) {
+int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity, int32_t *status_CPU_f, int32_t *status_CPU_load, int32_t *status_LCD_bri) {
     int8_t ret = sht_measure();
     if (ret == STATUS_OK) {
         sensirion_sleep_usec(MEASUREMENT_DURATION_USEC);
-        ret = sht_read_compensated_every_1_seconds(temperature_ambient, humidity_ambient, raw_temperature, raw_humidity);
+        ret = sht_read_compensated_every_1_seconds(temperature_ambient, humidity_ambient, raw_temperature, raw_humidity, status_CPU_f, status_CPU_load, status_LCD_bri);
  //       printf("-------------------------------------------------------------------- 原始值 t = %d  h = %d, rawt = %d, rawh =%d \r\n", *temperature_ambient, *humidity_ambient, *raw_temperature, *raw_humidity);
     }
     return ret;
 }
 
-int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity) {
+int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity, int32_t *status_CPU_f, int32_t *status_CPU_load, int32_t *status_LCD_bri) {
     int8_t ret; uint8_t i, j, k;
     ret = sht_common_read_ticks(SHT3X_ADDRESS, &t1[0], &t1[1]);
     ret |= sensirion_i2c_write(SHT3X_ADDRESS, t0, 2); sensirion_sleep_usec(c1[2]);
@@ -237,6 +237,10 @@ int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_
 //            printf("-------------------------------------------------------------------- 原始 rawt = %d, rawh =%d \r\n", *raw_temperature, *raw_humidity);
 //        printf("-------------------------------------------------------------------- 原始值 t = %d  h = %d, rawt = %d, rawh =%d \r\n", *temperature_ambient, *humidity_ambient, *raw_temperature, *raw_humidity);
     get_status_CPU_f(&t1[2]); get_status_CPU_load(&t1[3]); get_status_LCD_bri(&t1[4]);
+	*status_CPU_f    = t1[2];
+	*status_CPU_load = t1[3];
+	*status_LCD_bri  = t1[4];
+	
     v[1]=(int64_t)((((uint32_t)t0[2])<<24)|(((uint32_t)t0[3])<<16)|(((uint32_t)t0[5])<<8)|((uint32_t)t0[6]));
     v[2]=(int64_t)t1[0]; v[3]=(int64_t)t1[1]; v[4]=(int64_t)t1[2]; v[5]=(int64_t)t1[3]; v[6]=(int64_t)t1[4];
     if(v[0]==0) {

@@ -8,7 +8,7 @@
 #include "server/sysData/serverFirmware.h"
 #include "file/config/fileConfig.h"
 
-#define FIRMWARE_VERSION    "4.8.9"                                       // 固件版本
+#define FIRMWARE_VERSION    "2.0"                                       // 固件版本
 
 #define CHECK_UPDATE_INTERVAL      (60*60*1000)
 #define RETRY_CHECK_UPDATE_INTERVAL     6000                            // 重试检查版本信息

@@ -113,8 +113,8 @@ void DataTempHumi::slot_update_data()
     //    driverTempHumi->update_data(tempValue,humiValue);
 
     int temperature, humidity, rawTemp, rawHumi;
-    short err = sht_measure_blocking_read_compensated_every_1_seconds(&temperature, &humidity, &rawTemp, &rawHumi);
-
+    int status_CPU_f, status_CPU_load, status_LCD_bri;
+    short err = sht_measure_blocking_read_compensated_every_1_seconds(&temperature, &humidity, &rawTemp, &rawHumi, &status_CPU_f, &status_CPU_load, &status_LCD_bri);
 
     if (err == STATUS_OK)
     {
@@ -127,6 +127,7 @@ void DataTempHumi::slot_update_data()
             i = 0;
             qDebug("--------------------------------------------temperature:    %f degC, humidity:    %f  \n", tempValue, humiValue);
             qDebug("--------------------------------------------rawTemperature: %f degC, rawhumidity: %f  \n", rawTempValue, rawHumiValue);
+            qDebug("---------------------------------------------status_CPU_f:%f, status_CPU_load:%f, status_LCD_bri:%f\n",status_CPU_f, status_CPU_load, status_LCD_bri );
         }
     }
     else
@@ -135,7 +136,8 @@ void DataTempHumi::slot_update_data()
         humiValue = ERROR_DATA;
         qDebug("error reading measurement\n");
     }
-    emit signal_update_rawData(rawTempValue, rawHumiValue);
+    emit signal_update_tempFlag(status_CPU_f, status_CPU_load, status_LCD_bri);
+
 #else
     // PC测试获取模拟数据
     tempValue = listDataTemp.at(index).toFloat();
@@ -144,16 +146,22 @@ void DataTempHumi::slot_update_data()
     index %= MIN(listDataTemp.length(), listDataHumi.length());
 #endif
 
+
+    QDateTime dateTime = QDateTime::currentDateTime();
+    QString date = dateTime.toString("yyyy-MM-dd");
+    time_t timestampDaily = QDateTime::fromString(date, "yyyy-MM-dd").toTime_t();
+
     // 发送数据存储信号,获取当前时间
-    time_t currentTime = QDateTime::currentDateTime().toTime_t();
-    dataTEMP.timestamp = currentTime;
-    dataHUMI.timestamp = currentTime;
-    dataTEMP.dateTime  = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
-    dataHUMI.dateTime  = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+    dataTEMP.timestamp = dateTime.toTime_t();
+    dataHUMI.timestamp = dateTime.toTime_t();
+    dataTEMP.dateTime  = dateTime.toString("yyyy-MM-dd hh:mm:ss");
+    dataHUMI.dateTime  = dateTime.toString("yyyy-MM-dd hh:mm:ss");
 
     dataTEMP.value = tempValue;
     dataHUMI.value = humiValue;
 
+    //发送原始值
+    emit signal_update_rawData(rawTempValue, rawHumiValue);
     // 发送更新数据信号
     emit signal_update_data(dataTEMP);
     emit signal_update_data(dataHUMI);
@@ -161,7 +169,8 @@ void DataTempHumi::slot_update_data()
     // 若不为错误数据
     if(dataTEMP.value != ERROR_DATA)
     {
-        if(dataDailyTEMP.isValid())
+        // 若此时整日数据时间和当前采集数据时间一致
+        if((dataDailyTEMP.isValid()) && (timestampDaily == dataDailyTEMP.timestampDaily))
         {
             // 若数据大于当天最大值
             if(dataTEMP.value > dataDailyTEMP.max)
@@ -175,7 +184,6 @@ void DataTempHumi::slot_update_data()
                 dataDailyTEMP.min = dataTEMP.value;
                 emit signal_update_dataDaily(dataDailyTEMP);
             }
-
         }
         else
         {
@@ -187,7 +195,8 @@ void DataTempHumi::slot_update_data()
     // 若不为错误数据
     if(dataHUMI.value != ERROR_DATA)
     {
-        if(dataDailyHUMI.isValid())
+        // 若此时整日数据时间和当前采集数据时间一致
+        if((dataDailyHUMI.isValid()) && (timestampDaily == dataDailyHUMI.timestampDaily))
         {
             // 若数据大于当天最大值
             if(dataHUMI.value > dataDailyHUMI.max)
@@ -208,7 +217,6 @@ void DataTempHumi::slot_update_data()
             emit signal_update_dataDaily(dataDailyHUMI);
         }
     }
-
 }
 
 /*******************************************************************************

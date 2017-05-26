@@ -1,7 +1,7 @@
 import QtQuick 1.1
 
 Item {
-    height: 140
+    height: 120
     width: 854
     property string buttonPressed: "qrc:/resource/images/test/smallbuttonPress.png"
     property string buttonRelease: "qrc:/resource/images/test/smallbuttonRelease.png"
@@ -14,7 +14,7 @@ Item {
         BorderImage {
             id: name
             source: "qrc:/resource/images/test/borderImage.png"
-            width: 422; height: 140
+            width: 422; height: 120
             border.left: 0; border.top: 0
             border.right: 0; border.bottom: 0
 
@@ -90,7 +90,7 @@ Item {
         }
         BorderImage {
             source: "qrc:/resource/images/test/borderImage.png"
-            width: 422; height: 140
+            width: 422; height: 120
             border.left: 0; border.top: 0
             border.right: 0; border.bottom: 0
 

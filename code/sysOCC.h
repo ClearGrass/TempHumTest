@@ -14,6 +14,7 @@ class SysOCC : public QThread
 public:
     SysOCC();
     void stop();
+    void set_start();
 
 protected:
     void run();

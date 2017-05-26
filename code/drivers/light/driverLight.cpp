@@ -56,10 +56,11 @@ void DriverLight::set_inLight(int light)
 {
 
 #ifdef Bran_R8
-
-    system(qPrintable(QString("/bin/qtapp/baklight %1").arg(light)));
+    system(qPrintable(QString("/usr/bin/qtapp/baklight %1").arg(light)));
+    system(qPrintable(QString("echo %1 > /usr/bin/qtapp/light").arg(light)));
 
 #endif
+
 
 }
 

@@ -10,7 +10,7 @@ Item {
     signal click()
 
     width: 281
-    height: 120
+    height: 80
     Image {
         id: back
         source: releaseSource

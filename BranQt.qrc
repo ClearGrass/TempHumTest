@@ -268,5 +268,7 @@
         <file>resource/images/test/smallbuttonPress.png</file>
         <file>resource/qml/testQml/CpuItem.qml</file>
         <file>resource/qml/testQml/TestFinished.qml</file>
+        <file>resource/qml/testQml/Vk.qml</file>
+        <file>resource/qml/testQml/KeyButton.qml</file>
     </qresource>
 </RCC>

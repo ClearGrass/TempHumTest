@@ -9,7 +9,7 @@ Item {
     signal click()
 
     width: 281
-    height: 120
+    height: 80
     Image {
         id: back
         source: releaseSource
@@ -49,7 +49,7 @@ Item {
        anchors.left:logo.right
        anchors.leftMargin: 10
        anchors.top: parent.top
-       anchors.topMargin: 30
+       anchors.topMargin: 10
    }
 
    Text {
@@ -64,7 +64,7 @@ Item {
        anchors.left: logo.right
        anchors.leftMargin: 10
        anchors.bottom: parent.bottom
-       anchors.bottomMargin: 25
+       anchors.bottomMargin: 10
    }
 
 

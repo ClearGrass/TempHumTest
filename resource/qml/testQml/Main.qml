@@ -14,8 +14,76 @@ Rectangle {
         z:10
     }
 
-    Column{
+    Vk
+    {
+        id:virtualKeyboard
         anchors.centerIn: parent
+        z:8
+        visible: false
+        text: ""
+    }
+
+    Row{
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        spacing: 60
+
+        Text {
+            text: "温度测试程序"
+
+            color: "#ffffff"
+            //字体
+            font.family: "MI LANTING"
+            font.pixelSize: 24
+        }
+
+
+        Text {
+            text: "Current Version:" + MainViewProperty.slot_get_version_system()
+
+            color: "#ffffff"
+            //字体
+            font.family: "MI LANTING"
+            font.pixelSize: 24
+        }
+
+        Rectangle{
+            height: 40
+            width: 200
+            color: "#2EA5E5"
+            radius: 20
+            Text {
+                anchors.centerIn: parent
+                text: "Set Interval"
+
+                color: "#ffffff"
+                //字体
+                font.family: "MI LANTING"
+                font.pixelSize: 24
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    virtualKeyboard.text = ""
+                    virtualKeyboard.visible  = true
+                }
+                onPressed: {
+                        parent.opacity = 0.5
+                }
+                onReleased: {
+                    parent.opacity = 1.0
+                }
+            }
+        }
+
+    }
+
+    Column{
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 10
 
         spacing: 3
         Battery{
@@ -134,7 +202,7 @@ Rectangle {
         }
         onSignal_testFinished:
         {
-           testFinish.visible = true
+            testFinish.visible = true
         }
     }
 
