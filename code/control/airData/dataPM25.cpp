@@ -28,8 +28,8 @@ DataPM25 *DataPM25::getInstance()
 DataPM25::DataPM25(QObject *parent)
     :QThread(parent)
 {
-    data_init();
-    connect_init();
+//    data_init();
+//    connect_init();
     moveToThread(this);
 }
 
@@ -111,15 +111,15 @@ void DataPM25::data_init()
 *******************************************************************************/
 void DataPM25::connect_init()
 {
-    connect(timerCharging, SIGNAL(timeout()), this, SLOT(slot_start_sampling()));
-    connect(timerDischarging, SIGNAL(timeout()), this, SLOT(slot_start_sampling()));
-    connect(timerSampling, SIGNAL(timeout()), this, SLOT(slot_stop_sampling()));
-    connect(timerReady, SIGNAL(timeout()), this, SLOT(slot_ready_timeout()));
-    connect(driverPM25, SIGNAL(signal_update_dataPM25(float)), this, SLOT(slot_update_dataPM25(float)));
-    connect(driverPM25, SIGNAL(signal_update_dataPM5(float)), this, SLOT(slot_update_dataPM5(float)));
-    connect(driverPM25, SIGNAL(signal_update_dataPM10(float)), this, SLOT(slot_update_dataPM10(float)));
-    connect(sysData, SIGNAL(signal_intervalSampling_charging(IntervalType)), this, SLOT(slot_interval_charging(IntervalType)));
-    connect(sysData, SIGNAL(signal_intervalSampling_discharging(IntervalType)), this, SLOT(slot_interval_discharging(IntervalType)));
+//    connect(timerCharging, SIGNAL(timeout()), this, SLOT(slot_start_sampling()));
+//    connect(timerDischarging, SIGNAL(timeout()), this, SLOT(slot_start_sampling()));
+//    connect(timerSampling, SIGNAL(timeout()), this, SLOT(slot_stop_sampling()));
+//    connect(timerReady, SIGNAL(timeout()), this, SLOT(slot_ready_timeout()));
+//    connect(driverPM25, SIGNAL(signal_update_dataPM25(float)), this, SLOT(slot_update_dataPM25(float)));
+//    connect(driverPM25, SIGNAL(signal_update_dataPM5(float)), this, SLOT(slot_update_dataPM5(float)));
+//    connect(driverPM25, SIGNAL(signal_update_dataPM10(float)), this, SLOT(slot_update_dataPM10(float)));
+//    connect(sysData, SIGNAL(signal_intervalSampling_charging(IntervalType)), this, SLOT(slot_interval_charging(IntervalType)));
+//    connect(sysData, SIGNAL(signal_intervalSampling_discharging(IntervalType)), this, SLOT(slot_interval_discharging(IntervalType)));
 
 }
 

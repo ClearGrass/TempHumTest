@@ -56,7 +56,7 @@ void MainViewQML::init()
 
 
     //初始化变量
-    fPmValue = 0;
+    fPmValue = -1;
     fTempValue = 0;
     fCO2eValue = 0;
     ftVOCValue = 0;
@@ -84,6 +84,12 @@ void MainViewQML::init()
     falgModelist.append("CPU max load");
     modeIndex = 0;
     modeSwitchTimer  = new QTimer();
+
+    pm_off_timer = new QTimer(this);
+    pm_on_timer = new QTimer(this);
+    pm_off_timer->setInterval(1000 * 60 * 14.5);
+
+    pm_on_timer->setInterval(1000 * 30);
 
 
     //    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -176,10 +182,16 @@ void MainViewQML::connect_init()
     connect(this, SIGNAL(signal_change_fre(bool)), sysCPU, SLOT(slot_change_fre(bool)));
     connect(this, SIGNAL(signal_pmOn()), driverPM25, SLOT(start_sampling()));
     connect(this, SIGNAL(signal_pmOff()), driverPM25, SLOT(stop_sampling()));
+    connect(driverPM25, SIGNAL(signal_update_dataPM25(float)), this, SLOT(set_pmValue(float)));
 
     connect(modeSwitchTimer, SIGNAL(timeout()), this, SLOT(slot_modeSwitch()));
+
+
+    connect(pm_off_timer, SIGNAL(timeout()), this, SLOT(slot_pm_off_timeout()));
+    connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
-    modeSwitchTimer->start(1000 *60 *60 * 2);
+    //    modeSwitchTimer->start(1000 *60 *60 * 2);
+    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
 
 }
 
@@ -508,7 +520,7 @@ void MainViewQML::slot_update_airData(AirData airData)
 * Output        :   None
 * Return        :   None
 *******************************************************************************/
-void MainViewQML::set_pmValue(const float newValue)
+void MainViewQML::set_pmValue(float newValue)
 {
     //如果形参和当前值相等则返回
     if(newValue == fPmValue)
@@ -1741,6 +1753,7 @@ void MainViewQML::slot_save_data()
 
     if(modeIndex == 0 && num == 5)
     {
+//        pm_off_timer->start();
         emit signal_change_fre(false);
     }
     if(modeIndex == 0 && num < 5)
@@ -1758,7 +1771,9 @@ void MainViewQML::slot_save_data()
         debug->mkdir("./debugFile");
     }
 
-    QString path = QString("./debugFile/%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    //    QString path = QString("./debugFile/charge-discharge-temp-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    QString path = QString("./debugFile/pm25-simulate-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+
     QFile file(filePath);
     if(!file.exists())
     {
@@ -1771,19 +1786,19 @@ void MainViewQML::slot_save_data()
         if(file1.size() == 0)
         {
             in << QString("Current Version:%1\n").arg(slot_get_version_system());
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20\n").arg("Flag")
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22\n").arg("Flag")
                 .arg("status_CPU_f").arg("status_CPU_load").arg("status_LCD_bri")
-                .arg("Date Time").arg("pm2.5 sensor is On")
+                .arg("Date Time").arg("pm2.5 sensor is On").arg("Pm2.5")
                 .arg("Temperature").arg("Raw Temperature").arg("Humidity (%)").arg("Raw Humidity (%)")
                 .arg("Baseline"). arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light")
-                .arg("Charging").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
+                .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20\n").arg(falgModelist[modeIndex])
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22\n").arg(falgModelist[modeIndex])
                 .arg(status_CPU_f).arg(status_CPU_load).arg(status_LCD_bri)
-                .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off")
+                .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(fPmValue)
                 .arg(slot_getTempValue()).arg(slot_getRawTempValue()).arg(get_humValue()).arg(slot_getRawHumValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue)
-                .arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.current).arg(slot_getBatteryCapacity()).arg(get_wifiStatus());
+                .arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.voltage).arg(battery.current).arg(slot_getBatteryCapacity()).arg(get_wifiStatus());
         in<<line;
         file1.close();
     }
@@ -1879,4 +1894,19 @@ QString MainViewQML::get_os_version()
 void MainViewQML::slot_setInterval(int interval)
 {
     modeSwitchTimer->setInterval(interval *1000 *60);
+}
+
+void MainViewQML::slot_pm_off_timeout()
+{
+    pm_off_timer->stop();
+    pm_on_timer->start();
+    slot_pmOn();
+}
+
+void MainViewQML::slot_pm_on_timeout()
+{
+    pm_off_timer->start();
+    pm_on_timer->stop();
+    slot_pmOff();
+    fPmValue = -1;
 }

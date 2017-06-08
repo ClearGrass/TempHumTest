@@ -33,7 +33,7 @@
 
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
-#define VERSION_NO                   "2.3"
+#define VERSION_NO                   "1.0"
 
 #include "driverWiFi.h"
 
@@ -59,7 +59,7 @@ public:
 
 
 public slots:
-    void set_pmValue(const float newValue);
+    void set_pmValue( float newValue);
     void set_tempValue(float newValue);
     void set_humValue(float newValue);
     void set_pm5Value(float newValue);
@@ -150,6 +150,8 @@ public slots:
     QString slot_get_version_system();
 
     void slot_setInterval(int interval);
+    void slot_pm_off_timeout();
+    void slot_pm_on_timeout();
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 signals:
@@ -332,6 +334,11 @@ private:
     int status_CPU_f;
     QString status_CPU_load;
     QString status_LCD_bri;
+
+    QTimer *pm_off_timer;
+    QTimer *pm_on_timer;
+
+
     //////////////////////////////////end test/////////////////////////////////////////////////////
 };
 

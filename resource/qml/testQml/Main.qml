@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-            text: "温度测试程序"
+            text: "PM2.5模式测试"
 
             color: "#ffffff"
             //字体
@@ -128,8 +128,10 @@ Rectangle {
                 font.family: "MI LANTING"
                 font.pixelSize: 24
             }
+            visible: false
             MouseArea{
                 anchors.fill: parent
+                enabled: parent.visible
                 onClicked: {
                     virtualKeyboard.text = ""
                     virtualKeyboard.visible  = true
@@ -193,13 +195,11 @@ Rectangle {
                 {
                     if(pmisOn)
                     {
-                        pmisOn = false
                         MainViewProperty.slot_pmOff()
                         pm25.maintext = "PM2.5 Off"
                     }
                     else
                     {
-                        pmisOn = true
                         MainViewProperty.slot_pmOn()
                         pm25.maintext = "PM2.5 On"
 
@@ -278,6 +278,14 @@ Rectangle {
         onSignal_testFinished:
         {
             testFinish.visible = true
+        }
+        onSignal_pmOn:
+        {
+            pmisOn = true;
+        }
+        onSignal_pmOff:
+        {
+            pmisOn = false;
         }
     }
 

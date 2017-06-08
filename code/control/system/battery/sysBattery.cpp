@@ -97,6 +97,7 @@ InfoBattery SysBattery::get_battery()
     battery.capacity = driverBattery->get_battery_capacity();
     battery.status   = driverBattery->get_battery_status();
     battery.way      = driverBattery->get_charging_way();
+    battery.voltage  = driverBattery->get_battery_voltage();
     return battery;
 }
 
@@ -144,6 +145,8 @@ void SysBattery::slot_refresh_battery()
     battery.status   = driverBattery->get_battery_status();
     battery.way      = driverBattery->get_charging_way();
     battery.current  = driverBattery->get_battery_current();
+    battery.voltage  = driverBattery->get_battery_voltage();
+
     emit signal_update_batteryInfo(battery);
 
     power.value = battery.capacity;

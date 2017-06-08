@@ -153,6 +153,7 @@ typedef struct infoBattery
     float   capacity;                                                   //剩余电量：单位 %
     bool    isExist;                                                    //电池存在：0 不存在 1 存在
     BatteryStatusType status;
+    float voltage;                                                      //电压
     ChargingType   way;
     float  current;
 

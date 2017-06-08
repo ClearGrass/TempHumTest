@@ -62,6 +62,7 @@ void DriverPM25::stop_sampling()
     power_off();
     close_uart();
 #endif
+    emit signal_update_dataPM25(-1);
     mutex.unlock();
 }
 
