@@ -5,7 +5,6 @@
 #include <QTextCodec>
 #include <QStringList>
 #include "dataAirDefine.h"
-#include "LogControl.h"
 
 #define DEVICE_TEMPHUM  "/sys/devices/platform/sun5i-i2c.2/i2c-2/2-0044/temp_humidity"
 

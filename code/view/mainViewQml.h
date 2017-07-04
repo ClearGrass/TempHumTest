@@ -34,7 +34,7 @@
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
 #define FRE_INTERVAL                 (10 * 1000)
-#define VERSION_NO                   "2.3"
+#define VERSION_NO                   "4.0"
 
 #include "driverWiFi.h"
 
@@ -245,7 +245,7 @@ protected slots:
     void slot_updateAppBindstat(int);
     void slot_save_data();
     void slot_updataRawData(float temp, float hum);
-    void slot_updateTempFlag(int cpu_f, int cpu_load, int lcd_bri);
+    void slot_updateTempFlag(int charging_on, int cpu_load, int lcd_bri);
 private:
     void init(void);
     void scene_init(void);
@@ -334,7 +334,7 @@ private:
     QTimer *modeSwitchTimer;
     QTimer *freSwitchTimer;
     int num;
-    int status_CPU_f;
+    int status_charging_on;
     QString status_CPU_load;
     QString status_LCD_bri;
 

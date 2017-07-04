@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-            text: "CPU主频测试"
+            text: "温湿度测试程序"
 
             color: "#ffffff"
             //字体

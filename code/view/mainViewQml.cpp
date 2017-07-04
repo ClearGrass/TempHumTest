@@ -192,7 +192,7 @@ void MainViewQML::connect_init()
     //两个小时
     //    modeSwitchTimer->start(1000 *60 *60 * 2);
     //    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
-    freSwitchTimer->start(FRE_INTERVAL);
+    //    freSwitchTimer->start(FRE_INTERVAL);
 
 
 }
@@ -1757,7 +1757,7 @@ void MainViewQML::slot_switchFre()
     }
     else
     {
-      slot_set1G();
+        slot_set1G();
     }
 }
 
@@ -1768,17 +1768,17 @@ void MainViewQML::slot_syncRTC()
 
 void MainViewQML::slot_save_data()
 {
-//    num++;
+    num++;
 
-//    if(modeIndex == 0 && num == 5)
-//    {
-//        pm_off_timer->start();
-//        emit signal_change_fre(false);
-//    }
-//    if(modeIndex == 0 && num < 5)
-//    {
-//        return ;
-//    }
+    if(modeIndex == 0 && num == 5)
+    {
+        //        pm_off_timer->start();
+        emit signal_change_fre(false);
+    }
+    if(modeIndex == 0 && num < 5)
+    {
+        return ;
+    }
     if(modeIndex > 3)
     {
         return ;
@@ -1791,7 +1791,7 @@ void MainViewQML::slot_save_data()
     }
 
     //    QString path = QString("./debugFile/charge-discharge-temp-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
-    QString path = QString("./debugFile/charging-temp-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    QString path = QString("./debugFile/tempHum-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
 
     QFile file(filePath);
     if(!file.exists())
@@ -1806,14 +1806,14 @@ void MainViewQML::slot_save_data()
         {
             in << QString("Current Version:%1\n").arg(slot_get_version_system());
             in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22\n").arg("Flag")
-                .arg("status_CPU_f").arg("status_CPU_load").arg("status_LCD_bri")
+                .arg("status_charging_on").arg("status_CPU_load").arg("status_LCD_bri")
                 .arg("Date Time").arg("pm2.5 sensor is On").arg("Pm2.5")
                 .arg("Temperature").arg("Raw Temperature").arg("Humidity (%)").arg("Raw Humidity (%)")
                 .arg("Baseline"). arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light")
                 .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status");
         }
         QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22\n").arg(falgModelist[modeIndex])
-                .arg(status_CPU_f).arg(status_CPU_load).arg(status_LCD_bri)
+                .arg(status_charging_on).arg(status_CPU_load).arg(status_LCD_bri)
                 .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(fPmValue)
                 .arg(slot_getTempValue()).arg(slot_getRawTempValue()).arg(get_humValue()).arg(slot_getRawHumValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue)
@@ -1834,9 +1834,9 @@ void MainViewQML::slot_updataRawData(float temp, float hum)
     fRawHumValue = hum;
 }
 
-void MainViewQML::slot_updateTempFlag(int cpu_f, int cpu_load, int lcd_bri)
+void MainViewQML::slot_updateTempFlag(int charging_on, int cpu_load, int lcd_bri)
 {
-    status_CPU_f = cpu_f;
+    status_charging_on = charging_on;
     status_CPU_load = QString("%1").arg(cpu_load);
     status_LCD_bri = QString("%1").arg(lcd_bri);;
 }

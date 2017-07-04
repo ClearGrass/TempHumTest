@@ -40,7 +40,7 @@ signals:
     void signal_intervalPM25_charging(IntervalType);
     void signal_intervalPM25_discharging(IntervalType);
     void signal_update_rawData(float temp, float hum);
-    void signal_update_tempFlag(int status_CPU_f, int status_CPU_load, int status_LCD_bri);
+    void signal_update_tempFlag(int status_charging_on, int status_CPU_load, int status_LCD_bri);
 
 private slots:
     void slot_update_data(AirData);                                     // 更新数据
