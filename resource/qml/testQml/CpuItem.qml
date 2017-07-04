@@ -5,7 +5,7 @@ Item {
     width: 854
     property string buttonPressed: "qrc:/resource/images/test/smallbuttonPress.png"
     property string buttonRelease: "qrc:/resource/images/test/smallbuttonRelease.png"
-    property bool isCpu120M: true
+    property bool isCpu120M: false
     property bool isCpu100: false
     property string strFre: "0"
     signal start_animation()

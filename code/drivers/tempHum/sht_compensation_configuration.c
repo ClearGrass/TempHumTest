@@ -125,7 +125,7 @@ void get_status_LCD_bri(int *status_screen_brightness){
     fread(buf, sizeof(char), sizeof(buf),  stream);
     light = atoi(buf);
 
-     *status_screen_brightness = 1000 * (MIN_INLIGHT_VALUE - light)/ (MIN_INLIGHT_VALUE - MAX_INLIGHT_VALUE);
+     *status_screen_brightness = light;
 
     //printf("ttt%s\n", buf);
     if (stamp % DUBUG_INTERVAL == 0)

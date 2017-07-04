@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-            text: "PM2.5模式测试"
+            text: "CPU主频测试"
 
             color: "#ffffff"
             //字体

@@ -46,7 +46,7 @@ void MainViewQML::init()
     usage = "0";
     lightValue = 0;
     //当前屏幕方向
-    fre = 0.12;
+    fre = 1.008;
     num = 0;
     currentDirection = 0;
     timeclock = 0;
@@ -84,7 +84,7 @@ void MainViewQML::init()
     falgModelist.append("CPU max load");
     modeIndex = 0;
     modeSwitchTimer  = new QTimer();
-
+    freSwitchTimer = new QTimer();
     pm_off_timer = new QTimer(this);
     pm_on_timer = new QTimer(this);
     pm_off_timer->setInterval(1000 * 60 * 14.5);
@@ -185,13 +185,15 @@ void MainViewQML::connect_init()
     connect(driverPM25, SIGNAL(signal_update_dataPM25(float)), this, SLOT(set_pmValue(float)));
 
     connect(modeSwitchTimer, SIGNAL(timeout()), this, SLOT(slot_modeSwitch()));
-
+    connect(freSwitchTimer, SIGNAL(timeout()), this, SLOT(slot_switchFre()));
 
     connect(pm_off_timer, SIGNAL(timeout()), this, SLOT(slot_pm_off_timeout()));
     connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
     //    modeSwitchTimer->start(1000 *60 *60 * 2);
-    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
+    //    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
+    freSwitchTimer->start(FRE_INTERVAL);
+
 
 }
 
@@ -1648,12 +1650,15 @@ void MainViewQML::slot_setCpuUsage0()
 
 void MainViewQML::slot_set120M()
 {
+    qDebug() << "slot_set120M,,,,,";
     emit signal_change_fre(false);
 
 }
 
 void MainViewQML::slot_set1G()
 {
+    qDebug() << "slot_set1G,,,";
+
     emit signal_change_fre(true);
 
 }
@@ -1667,6 +1672,7 @@ void MainViewQML::slot_update_usage(QString u)
 
 void MainViewQML::slot_update_fre(float f)
 {
+    qDebug() << "slot_update_fre  f = " << f;
     fre = f;
     emit signal_updateFre();
 }
@@ -1742,6 +1748,19 @@ void MainViewQML::slot_modeSwitch()
     emit signal_autoLightChanged();
 }
 
+void MainViewQML::slot_switchFre()
+{
+    qDebug() << "slot_switchFre-----------------------------fre =" << fre;
+    if(fre == 1.008f)
+    {
+        slot_set120M();
+    }
+    else
+    {
+      slot_set1G();
+    }
+}
+
 void MainViewQML::slot_syncRTC()
 {
     emit signal_set_timeAuto(true);
@@ -1749,17 +1768,17 @@ void MainViewQML::slot_syncRTC()
 
 void MainViewQML::slot_save_data()
 {
-    num++;
+//    num++;
 
-    if(modeIndex == 0 && num == 5)
-    {
+//    if(modeIndex == 0 && num == 5)
+//    {
 //        pm_off_timer->start();
-        emit signal_change_fre(false);
-    }
-    if(modeIndex == 0 && num < 5)
-    {
-        return ;
-    }
+//        emit signal_change_fre(false);
+//    }
+//    if(modeIndex == 0 && num < 5)
+//    {
+//        return ;
+//    }
     if(modeIndex > 3)
     {
         return ;
@@ -1772,7 +1791,7 @@ void MainViewQML::slot_save_data()
     }
 
     //    QString path = QString("./debugFile/charge-discharge-temp-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
-    QString path = QString("./debugFile/pm25-simulate-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    QString path = QString("./debugFile/charging-temp-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
 
     QFile file(filePath);
     if(!file.exists())

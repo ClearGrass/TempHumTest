@@ -33,7 +33,8 @@
 
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
-#define VERSION_NO                   "1.0"
+#define FRE_INTERVAL                 (10 * 1000)
+#define VERSION_NO                   "2.3"
 
 #include "driverWiFi.h"
 
@@ -146,6 +147,7 @@ public slots:
     void slot_pmOff();
     QString  slot_getBaseLine();
     void slot_modeSwitch();
+    void slot_switchFre();
     void slot_syncRTC();
     QString slot_get_version_system();
 
@@ -330,6 +332,7 @@ private:
     QStringList falgModelist;
     int modeIndex;
     QTimer *modeSwitchTimer;
+    QTimer *freSwitchTimer;
     int num;
     int status_CPU_f;
     QString status_CPU_load;

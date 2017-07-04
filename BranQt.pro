@@ -54,7 +54,7 @@ DESTDIR     += ../TempHumTest
 CONFIG      +=  qaxcontainer
 
 # 定义宏变量Bran_R8 以区分 QT编译的code是运行于R8还是PC
-DEFINES += Bran_R8
+#DEFINES += Bran_R8
 DEFINES += QML
 
 #条件编译

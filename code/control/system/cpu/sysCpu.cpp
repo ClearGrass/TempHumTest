@@ -8,7 +8,7 @@ SysCPU::SysCPU()
     timerUpdate->moveToThread(this);
     connect(timerUpdate, SIGNAL(timeout()), this, SLOT(slot_update_data()));
     system(qPrintable("echo Userspace > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"));
-    system(qPrintable("ls -t /bin/qtapp/debugFile/ | awk '{if(NR >5) {print \"rm /bin/qtapp/debugFile/\"$0}}' | sh"));
+    system(qPrintable("ls -t /usr/bin/qtapp/debugFile/ | awk '{if(NR >5) {print \"rm /usr/bin/qtapp/debugFile/\"$0}}' | sh"));
     increase_frequency();
 
     moveToThread(this);
