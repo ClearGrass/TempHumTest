@@ -1,4 +1,4 @@
-﻿/* SHT Driver Version: 0.9.6
+/* SHT Driver Version: 0.9.6
  *
  * Copyright (c) 2016 Sensirion AG.
  * All rights reserved.
@@ -50,8 +50,8 @@
  */
 
 #ifdef Bran_R8
-#include "sensirion_configuration.h"
 
+#include "sensirion_configuration.h"
 
 
 
@@ -59,19 +59,21 @@
 #ifndef SHT_COMPENSATION_CONFIGURATION_H
 #define SHT_COMPENSATION_CONFIGURATION_H
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 /*
  * Sensirion Temperature+Humidity Compensation
- * Version: cleargrass-iaq_v2
+ * Version: cleargrass-iaq-project-name-bran_v4
  */
 
-void get_status_CPU_f(int *status_CPU_f);
 
-void get_status_screen_brightness(int *status_screen_brightness);
+void get_status_charging_on(int *status_charging_on);
 
 void get_status_CPU_load(int *status_CPU_load);
+
+void get_status_LCD_bri(int *status_LCD_bri);
 
 #ifdef __cplusplus
 }

@@ -1,4 +1,4 @@
-﻿/* SHT Driver Version: 0.9.6
+/* SHT Driver Version: 0.9.6
  *
  * Copyright (c) 2016 Sensirion AG.
  * All rights reserved.
@@ -48,6 +48,11 @@
  * For full SLA details please see SLA in Folder "5 Legal Documents" of this
  * Composer Kit.
  */
+
+
+#include "sht_compensation_configuration.h"
+
+
 #ifdef Bran_R8
 
 #include <stdio.h>
@@ -60,91 +65,52 @@
 
 /*
  * Sensirion Temperature+Humidity Compensation
- * Version: cleargrass-iaq_v2
+ * Version: cleargrass-iaq-project-name-bran_v4
  */
 
 /**
- * Gets the status of CPU_f from device and stores it in status_CPU_f.
- * status_CPU_f must be in between 0...1000, i.e. status_CPU_f must have 0 as minimum value and 1000 as maximum value.
- * Hint from technical support: CPU_f=0  is 120MHz mode; CPU_f = 50 is 50% mode; CPU_f=100 is 1.008GHz mode
+ * Gets the status of charging_on from device and stores it in status_charging_on.
+ * status_charging_on must be in between 0...1000, i.e. status_charging_on must have 0 as minimum value and 1000 as maximum value.
+ * Hint from technical support: Current status of device. status_charging_on=0 if device runs on battery, status_charging_on=1000 if device is charging.
 **/
-
-void get_status_CPU_f(int *status_CPU_f)
-{
-
-    // IMPLEMENT
-    FILE  *stream;
-    char  buf[4096];
-    double fre;
-    static int stamp = 0;
-
-    stamp++;
-
-    // 获取cpu主频
-    stream = popen("cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r");
-    fread(buf, sizeof(char), sizeof(buf),  stream);
-    fre = atof(buf);
-    fre = fre/1000000.0;
-    pclose(stream);
-    if(fre > 0.9)
-    {
-        if (stamp % DUBUG_INTERVAL == 0)
-        {
-            printf("------------------------------------------当前主频率 1.008G\r\n");
-        }
-        *status_CPU_f = 1000;
-    }
-    else
-    {
-        if (stamp % DUBUG_INTERVAL == 0)
-        {
-            printf("------------------------------------------当前主频率 120M\r\n");
-        }
-        *status_CPU_f = 0;
-    }
-}
-
-/**
- * Gets the status of LCD_bri from device and stores it in status_LCD_bri.
- * status_LCD_bri must be in between 0...1000, i.e. status_LCD_bri must have 0 as minimum value and 1000 as maximum value.
- * Hint from technical support: LCD_bri=100 is 100% brightness (max); LCD_bri= 50 is 50% brightness; LCD_bri=0 is 0% brightness;
-**/
-
-void get_status_LCD_bri(int *status_screen_brightness){
+void get_status_charging_on(int *status_charging_on){
 
     // IMPLEMENT
     FILE  *stream;
     char  buf[4096];;
-    int light;
+    int current_now;
     static int stamp = 0;
 
     stamp++;
 
     // 获取cpu主频
-    stream = popen("cat /usr/bin/qtapp/light", "r");
+    stream = popen("cat /sys/class/power_supply/battery/current_now", "r");
     fread(buf, sizeof(char), sizeof(buf),  stream);
-    light = atoi(buf);
+    current_now = atoi(buf);
 
-     *status_screen_brightness = light;
+    *status_charging_on = current_now;
+    if(*status_charging_on > 160)
+    {
+        *status_charging_on = 1000;
+    }
+    else if(*status_charging_on <= 160)
+    {
+        *status_charging_on = 0;
+    }
 
-    //printf("ttt%s\n", buf);
     if (stamp % DUBUG_INTERVAL == 0)
     {
-        printf("------------------------------------------当前亮度 light = %d 补偿值 = %d\r\n", light, *status_screen_brightness);
+        printf("------------------------------------------当前电流 current_now = %d \r\n", *status_charging_on);
     }
-    //printf("light%d\n", light);
     pclose(stream);
-
 }
 
 /**
  * Gets the status of CPU_load from device and stores it in status_CPU_load.
  * status_CPU_load must be in between 0...1000, i.e. status_CPU_load must have 0 as minimum value and 1000 as maximum value.
- * Hint from technical support: CPU_load =100 is 100% load; CPU_load=50 is 50% ; CPU_load=0 is 0%
+ * Hint from technical support: CPU_load =1000 is 100% load; CPU_load=500 is 50% ; CPU_load=0 is 0%
 **/
-
 void get_status_CPU_load(int *status_CPU_load){
-
     // IMPLEMENT
     FILE  *stream;
     char  buf[4096];
@@ -172,10 +138,59 @@ void get_status_CPU_load(int *status_CPU_load){
         cpuLoad = atof(charlist[8]);
         *status_CPU_load = (int)(cpuLoad * 10);
     }
+    if(*status_CPU_load > 1000)
+    {
+        *status_CPU_load = 1000;
+    }
+    else if(*status_CPU_load < 0)
+    {
+        *status_CPU_load = 0;
+    }
+
     if (stamp % DUBUG_INTERVAL == 0)
     {
         printf("------------------------------------------当前负载 %d\r\n", *status_CPU_load);
     }
 }
 
+/**
+ * Gets the status of LCD_bri from device and stores it in status_LCD_bri.
+ * status_LCD_bri must be in between 0...1000, i.e. status_LCD_bri must have 0 as minimum value and 1000 as maximum value.
+ * Hint from technical support: LCD_bri=1000 is 100% brightness (max); LCD_bri= 500 is 50% brightness; LCD_bri=0 is 0% brightness;
+**/
+void get_status_LCD_bri(int *status_screen_brightness){
+    // IMPLEMENT
+    FILE  *stream;
+    char  buf[4096];;
+    int light;
+    static int stamp = 0;
+
+    stamp++;
+
+    // 获取cpu主频
+    stream = popen("cat /usr/bin/qtapp/light", "r");
+    fread(buf, sizeof(char), sizeof(buf),  stream);
+    light = atoi(buf);
+
+    *status_screen_brightness = light;
+    if(*status_screen_brightness > 1000)
+    {
+        *status_screen_brightness = 1000;
+    }
+    else if(*status_screen_brightness < 0)
+    {
+        *status_screen_brightness = 0;
+    }
+
+    //printf("ttt%s\n", buf);
+    if (stamp % DUBUG_INTERVAL == 0)
+    {
+        printf("------------------------------------------当前亮度 light = %d 补偿值 = %d\r\n", light, *status_screen_brightness);
+    }
+    //printf("light%d\n", light);
+    pclose(stream);
+}
+
 #endif
+
+

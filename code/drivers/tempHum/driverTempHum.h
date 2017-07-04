@@ -5,7 +5,7 @@
 #include <QTextCodec>
 #include <QStringList>
 #include "dataAirDefine.h"
-
+#include "LogControl.h"
 
 #define DEVICE_TEMPHUM  "/sys/devices/platform/sun5i-i2c.2/i2c-2/2-0044/temp_humidity"
 
@@ -14,10 +14,9 @@ class DriverTempHum : public QObject
 public:
     static DriverTempHum *getInstance();
     void update_data(float&,float&);
+    void update_data(float&,float&,float&,float&);
 
 private:
-    float fTemp;
-    float fHum;
 
 private:
     explicit DriverTempHum(QObject *parent = 0);
