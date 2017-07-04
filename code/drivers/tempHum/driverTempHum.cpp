@@ -35,9 +35,9 @@ DriverTempHum::DriverTempHum(QObject *parent)
 #ifdef Bran_R8
     if(sht_probe() != STATUS_OK)
     {
-        LogControl::error(OBJ_TEMP_HUMI,"SHT sensor probing failed");
+        qDebug() << "SHT sensor probing failed";
     }
-    LogControl::debug(OBJ_TEMP_HUMI,"SHT sensor probing success");
+    qDebug() <<"SHT sensor probing success" ;
 
     QFileInfo dir("/usr/bin/qtapp/debugFile");
     if(!dir.exists())
@@ -148,8 +148,8 @@ void DriverTempHum::update_data(float &temp, float &humi, float &tempRaw, float 
     if (i++ >= 60)
     {
         i = 0;
-        LogControl::debug(OBJ_TEMP_HUMI,QString("温度:%1, 湿度:%2, 原有温度:%3, 原有湿度:%4, 电流:%5, CPU负载:%6, 亮度值:%7")
-                          .arg(temp).arg(humi).arg(tempRaw).arg(humiRaw).arg(status_charging_on).arg(status_CPU_load).arg(status_LCD_bri));
+        qDebug() << QString("温度:%1, 湿度:%2, 原有温度:%3, 原有湿度:%4, 电流:%5, CPU负载:%6, 亮度值:%7")
+                          .arg(temp).arg(humi).arg(tempRaw).arg(humiRaw).arg(status_charging_on).arg(status_CPU_load).arg(status_LCD_bri);
     }
 #endif
 }
