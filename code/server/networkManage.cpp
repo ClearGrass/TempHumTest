@@ -3,7 +3,7 @@
 NetworkManage::NetworkManage()
 {
     // 设置为十秒
-    durationRequest = 2000;
+    durationRequest = 10000;
     readySize = 0;
 }
 

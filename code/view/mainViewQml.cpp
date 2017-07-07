@@ -190,7 +190,9 @@ void MainViewQML::connect_init()
     connect(pm_off_timer, SIGNAL(timeout()), this, SLOT(slot_pm_off_timeout()));
     connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
-    //    modeSwitchTimer->start(1000 *60 *60 * 2);
+    modeSwitchTimer->start(1000 *60 *60 * 2);
+//    modeSwitchTimer->start(60*1000);
+
     //    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
     //    freSwitchTimer->start(FRE_INTERVAL);
 
@@ -1790,7 +1792,7 @@ void MainViewQML::slot_save_data()
         debug->mkdir("./debugFile");
     }
 
-    //    QString path = QString("./debugFile/charge-discharge-temp-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    //    QString path = QString("./debugFile/tempHum-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
     QString path = QString("./debugFile/tempHum-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
 
     QFile file(filePath);

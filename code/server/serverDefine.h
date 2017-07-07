@@ -5,7 +5,7 @@
 ///
 ///! 向服务器发送的请求宏定义
 ///
-#define     URL_SERVER                  "http://api.cleargrass.com"     // 请求地址
+#define     URL_SERVER                  "http://branapi.cleargrass.com"     // 请求地址
 
 #define     REQUEST_INIT_DEVICE         "/device_init"                  // 初始化设备
 #define     REQUEST_GET_DEVICE_INFO     "/device_info"                  // 获取设备信息
