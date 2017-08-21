@@ -50,6 +50,7 @@
  */
 
 #ifdef Bran_R8
+
 #include "sht_compensation_configuration.h"
 #include "sensirion_configuration.h"
 
@@ -69,7 +70,7 @@
 #ifndef SHT3X_H
 #define SHT3X_H
 
-#include <sys/types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -150,7 +151,7 @@ extern "C" {
 #endif
 /*
  * Sensirion Temperature+Humidity Compensation
- * Version: cleargrass-iaq-project-name-bran_v4
+ * Version: cleargrass-iaq-project-name-bran_v5
  */
 
 /**
@@ -167,7 +168,9 @@ extern "C" {
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity, int32_t *status_charging_on, int32_t *status_CPU_load, int32_t *status_LCD_bri);
+int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
+                                                             int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri);
+
 
 /**
  * Reads a finished measurement and performs the Sensirion Temperature+Humidity Compensation.
@@ -183,11 +186,14 @@ int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperatur
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *raw_temperature, int32_t *raw_humidity, int32_t *status_charging_on, int32_t *status_CPU_load, int32_t *status_LCD_bri);
+int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
+                                            int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* SHT_COMPENSATION_H */
+
 #endif
+

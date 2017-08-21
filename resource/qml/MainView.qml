@@ -18,6 +18,7 @@ Rectangle {
     width:childWidth;height:childHeight
     color: "#000000"
 
+
     //竖屏
     Vertical.VerticalScreen{
         id:vertica
@@ -194,6 +195,7 @@ Rectangle {
 
             root.width = childWidth;
             root.height = childHeight
+
         }
 
         //竖屏

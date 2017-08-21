@@ -50,7 +50,7 @@ SysControl::SysControl()
 *******************************************************************************/
 void SysControl::run()
 {
-    sysDevice->start();
+//    sysDevice->start();
     sysBattery->start();
     sysTime->start();
     sysGravity->start();

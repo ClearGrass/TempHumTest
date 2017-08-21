@@ -120,37 +120,37 @@ void DriverTempHum::update_data(float &temp, float &humi, float &tempRaw, float 
 {
 #ifdef Bran_R8
     // R8获取传感器数据
-    static int i = 0;
-    int tempValue, humiValue, rawTemp, rawHumi;
-    int status_charging_on, status_CPU_load, status_LCD_bri;
-    short err = sht_measure_blocking_read_compensated_every_1_seconds(&tempValue, &humiValue, &rawTemp, &rawHumi, &status_charging_on, &status_CPU_load, &status_LCD_bri);
-    if(err == STATUS_OK)
-    {
-        temp    = (float)tempValue / 1000.0;
-        humi    = (float)humiValue / 1000.0;
-        tempRaw = (float)rawTemp / 1000.0;
-        humiRaw = (float)rawHumi / 1000.0;
+//    static int i = 0;
+//    int tempValue, humiValue, rawTemp, rawHumi;
+//    int status_charging_on, status_CPU_load, status_LCD_bri;
+//    short err = sht_measure_blocking_read_compensated_every_1_seconds(&tempValue, &humiValue, &rawTemp, &rawHumi, &status_charging_on, &status_CPU_load, &status_LCD_bri);
+//    if(err == STATUS_OK)
+//    {
+//        temp    = (float)tempValue / 1000.0;
+//        humi    = (float)humiValue / 1000.0;
+//        tempRaw = (float)rawTemp / 1000.0;
+//        humiRaw = (float)rawHumi / 1000.0;
 
-        if((temp > 50)||(temp < -20))
-        {
-            temp = ERROR_DATA;
-        }
-        if((humi > 100)||(humi < 0))
-        {
-            humi = ERROR_DATA;
-        }
-    }
-    else
-    {
-        temp = ERROR_DATA;
-        humi = ERROR_DATA;
-    }
-    if (i++ >= 60)
-    {
-        i = 0;
-        qDebug() << QString("温度:%1, 湿度:%2, 原有温度:%3, 原有湿度:%4, 电流:%5, CPU负载:%6, 亮度值:%7")
-                          .arg(temp).arg(humi).arg(tempRaw).arg(humiRaw).arg(status_charging_on).arg(status_CPU_load).arg(status_LCD_bri);
-    }
+//        if((temp > 50)||(temp < -20))
+//        {
+//            temp = ERROR_DATA;
+//        }
+//        if((humi > 100)||(humi < 0))
+//        {
+//            humi = ERROR_DATA;
+//        }
+//    }
+//    else
+//    {
+//        temp = ERROR_DATA;
+//        humi = ERROR_DATA;
+//    }
+//    if (i++ >= 60)
+//    {
+//        i = 0;
+//        qDebug() << QString("温度:%1, 湿度:%2, 原有温度:%3, 原有湿度:%4, 电流:%5, CPU负载:%6, 亮度值:%7")
+//                          .arg(temp).arg(humi).arg(tempRaw).arg(humiRaw).arg(status_charging_on).arg(status_CPU_load).arg(status_LCD_bri);
+//    }
 #endif
 }
 

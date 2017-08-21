@@ -34,7 +34,7 @@
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
 #define FRE_INTERVAL                 (10 * 1000)
-#define VERSION_NO                   "4.1"
+#define VERSION_NO                   "V5"
 
 #include "driverWiFi.h"
 
@@ -125,6 +125,7 @@ public slots:
     bool slot_getAppBindStatus();
     bool slot_timeIsInit();                                            //时间是否被初始化
     void slot_timeInit_success();                                     //时间初始化成功
+    void slot_clearLogs();
 
     ////////////////////////////////test///////////////////////////////////////////////////
 
@@ -245,7 +246,7 @@ protected slots:
     void slot_updateAppBindstat(int);
     void slot_save_data();
     void slot_updataRawData(float temp, float hum);
-    void slot_updateTempFlag(int charging_on, int cpu_load, int lcd_bri);
+    void slot_updateTempFlag(int charging_on, int cpu_load,int cpu_f,int cpu_load_CPU_f, int LCD_bri);
 private:
     void init(void);
     void scene_init(void);
@@ -335,12 +336,15 @@ private:
     QTimer *freSwitchTimer;
     int num;
     int status_charging_on;
-    QString status_CPU_load;
-    QString status_LCD_bri;
+    int status_CPU_load;
+    int status_CPU_f;
+    int status_CPU_load_CPU_f;
+    int status_LCD_bri;
+
 
     QTimer *pm_off_timer;
     QTimer *pm_on_timer;
-
+    QTimer *saveDataTimer;
 
     //////////////////////////////////end test/////////////////////////////////////////////////////
 };

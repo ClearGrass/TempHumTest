@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-            text: "温湿度测试程序"
+            text: "充放电-温升测试程序"
 
             color: "#ffffff"
             //字体
@@ -116,25 +116,27 @@ Rectangle {
 
         Rectangle{
             height: 40
-            width: 200
+            width: 100
             color: "#2EA5E5"
             radius: 20
             Text {
                 anchors.centerIn: parent
-                text: "Set Interval"
+                text: "清空log"
 
                 color: "#ffffff"
                 //字体
                 font.family: "MI LANTING"
                 font.pixelSize: 24
             }
-            visible: false
             MouseArea{
-                anchors.fill: parent
-                enabled: parent.visible
+                height: 100
+                width: 200
+                anchors.top: parent.top
+                anchors.right: parent.right
+
                 onClicked: {
-                    virtualKeyboard.text = ""
-                    virtualKeyboard.visible  = true
+                    MainViewProperty.slot_clearLogs()
+
                 }
                 onPressed: {
                         parent.opacity = 0.5
@@ -144,6 +146,7 @@ Rectangle {
                 }
             }
         }
+
 
     }
 

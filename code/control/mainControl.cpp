@@ -210,11 +210,11 @@ void MainControl::system_init()
     // 基本系统开始运行
     sysControl->start();
     //    funcFirmware->start();
-    funcCity->start();
+//    funcCity->start();
     //    funcWeather->start();
     //    funcApp->start();
     //    database->start();
-    serverControl->start();
+//    serverControl->start();
     //    wilddogControl->start();
     //    debugControl->start();
 }

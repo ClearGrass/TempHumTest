@@ -16,6 +16,9 @@
 #include "device/sysDevice.h"
 #include "server/sysData/serverTime.h"
 #include "globalVariable.h"
+#include <QHostInfo>
+#include <QDateTime>
+#include <QUdpSocket>
 
 enum NightType
 {
@@ -60,7 +63,8 @@ protected slots:
     void slot_net_disconnect();
     void slot_update_infoDevice(InfoDevice);
     void slot_update_infoCity(InfoCity);
-
+    void connectsucess();
+    void readingDataGrams();
 private:
     void run();
     void data_init();
@@ -103,6 +107,7 @@ private:
 
     QTimer *timerUpdate;
     QTimer *timerSync;
+    QUdpSocket *udpsocket;
 
 private:
     static SysTime *instance;                                           //系统时间单例 实例

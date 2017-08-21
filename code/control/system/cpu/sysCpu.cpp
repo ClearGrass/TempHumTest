@@ -23,24 +23,24 @@ void SysCPU::run()
 void SysCPU::slot_update_data()
 {
     float occ;
-       FILE  *stream1;
-       char  buf1[4096];
-       QString strtmp1;
+    FILE  *stream1;
+    char  buf1[4096];
+    QString strtmp1;
 
-       // 获取cpu占用数据
-       stream1 = popen("top -b -n 1 | grep BranQt4 | grep -v grep", "r");
-       fread( buf1, sizeof(char), sizeof(buf1),  stream1);
-       strtmp1 = buf1;
-       strtmp1 = strtmp1.simplified();
-       QStringList cpuList = strtmp1.split(" ");
-       qDebug()<<cpuList.length()<<strtmp1;
-       if(cpuList.length() >= 6)
-       {
-           occ = cpuList[8].toFloat();
-           qDebug()<<occ;
-       }
-       emit signal_update_cpuOcc(QString("%1").arg(occ));
-       pclose(stream1);
+    // 获取cpu占用数据
+    stream1 = popen("top -b -n 1 | grep BranQt4 | grep -v grep", "r");
+    fread( buf1, sizeof(char), sizeof(buf1),  stream1);
+    strtmp1 = buf1;
+    strtmp1 = strtmp1.simplified();
+    QStringList cpuList = strtmp1.split(" ");
+    qDebug()<<cpuList.length()<<strtmp1;
+    if(cpuList.length() >= 6)
+    {
+        occ = cpuList[8].toFloat();
+        qDebug()<<occ;
+    }
+    emit signal_update_cpuOcc(QString("%1").arg(occ));
+    pclose(stream1);
 }
 
 void SysCPU::slot_change_fre(bool type)

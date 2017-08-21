@@ -51,29 +51,34 @@
 
 #ifdef Bran_R8
 
-#include "sensirion_configuration.h"
-
-
-
 
 #ifndef SHT_COMPENSATION_CONFIGURATION_H
 #define SHT_COMPENSATION_CONFIGURATION_H
 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "sht_compensation_configuration.h"
+#include "globalDefine.h"
+#include "sensirion_configuration.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 /*
  * Sensirion Temperature+Humidity Compensation
- * Version: cleargrass-iaq-project-name-bran_v4
+ * Version: cleargrass-iaq-project-name-bran_v5
  */
 
+void get_status_charging_on(int32_t *status_charging_on);
 
-void get_status_charging_on(int *status_charging_on);
+void get_status_CPU_load_CPU_f(int32_t *status_CPU_load_CPU_f, int32_t *status_CPU_load, int32_t *status_CPU_f);
+
+void get_status_LCD_bri(int32_t *status_LCD_bri);
 
 void get_status_CPU_load(int *status_CPU_load);
 
-void get_status_LCD_bri(int *status_LCD_bri);
+void get_status_CPU_f(int *status_CPU_f);
 
 #ifdef __cplusplus
 }
@@ -82,3 +87,4 @@ void get_status_LCD_bri(int *status_LCD_bri);
 #endif /* SHT_COMPENSATION_CONFIGURATION_H */
 
 #endif
+

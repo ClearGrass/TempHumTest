@@ -113,8 +113,9 @@ void DataTempHumi::slot_update_data()
     //    driverTempHumi->update_data(tempValue,humiValue);
 
     int temperature, humidity, rawTemp, rawHumi;
-    int status_charging_on, status_CPU_load, status_LCD_bri;
-    short err = sht_measure_blocking_read_compensated_every_1_seconds(&temperature, &humidity, &rawTemp, &rawHumi, &status_charging_on, &status_CPU_load, &status_LCD_bri);
+    int status_charging_on, status_CPU_load,status_CPU_f,status_CPU_load_CPU_f, status_LCD_bri;
+    short err = sht_measure_blocking_read_compensated_every_1_seconds(&temperature, &humidity, &rawTemp, &rawHumi,
+                                                                      &status_charging_on, &status_CPU_load, &status_CPU_f, &status_CPU_load_CPU_f, &status_LCD_bri);
 
     if (err == STATUS_OK)
     {
@@ -136,7 +137,7 @@ void DataTempHumi::slot_update_data()
         humiValue = ERROR_DATA;
         qDebug("error reading measurement\n");
     }
-    emit signal_update_tempFlag(status_charging_on, status_CPU_load, status_LCD_bri);
+    emit signal_update_tempFlag(status_charging_on, status_CPU_load,status_CPU_f,status_CPU_load_CPU_f, status_LCD_bri);
 
 #else
     // PC测试获取模拟数据
