@@ -131,7 +131,7 @@ Item {
 
         Text {
             id:rawrhDes
-            text: qsTr("Second-Temp")
+            text: qsTr("Sec-Temp")
             color: "#ffffff"
             anchors{
                 bottom: parent.bottom
