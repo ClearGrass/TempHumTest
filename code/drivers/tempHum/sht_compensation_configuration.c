@@ -103,14 +103,13 @@ void get_status_charging_on(int32_t *status_charging_on){
  * status_CPU_load_CPU_f must be in between 0...1000, i.e. status_CPU_load_CPU_f must have 0 as minimum value and 1000 as maximum value.
  * Hint from technical support: This flag is for both CPU_load mode and CPU_f mode. And assume that the total self-heating of CPU_load mode is c1, the total self-heating of CPU_f mode is c2.For CPU_load mode, CPU_load =1000 is 100% load; CPU_load=500 is 50% ; CPU_load=0 is 0%;For CPU_f mode, CPU_f =0 is at 120MHz; CPU_f=1000 is at 1.008GHz; then CPU_load_CPU_f = CPU_load*c1/(c1+c2) + CPU_f*c2/(c1+c2).
 **/
-void get_status_CPU_load_CPU_f(int32_t *status_CPU_load_CPU_f,int32_t *status_CPU_load, int32_t *status_CPU_f){
+void get_status_CPU_load_CPU_f(int32_t *status_CPU_load_CPU_f){
     // IMPLEMENT
-    int cpu_load, cpu_f;
-    get_status_CPU_load(&cpu_load);
-    get_status_CPU_f(&cpu_f);
-    *status_CPU_load = cpu_load;
-    *status_CPU_f = cpu_f;
-    *status_CPU_load_CPU_f  = cpu_load * 280 *1.0 / 535 + cpu_f * 255 * 1.0 / 535 ;
+   int cpu_load, cpu_f;
+   get_status_CPU_load(&cpu_load);
+   get_status_CPU_f(&cpu_f);
+
+   *status_CPU_load_CPU_f  = cpu_load * 280 *1.0 / 535 + cpu_f * 255 * 1.0 / 535 ;
 }
 
 /**

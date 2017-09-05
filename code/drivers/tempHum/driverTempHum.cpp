@@ -33,17 +33,7 @@ DriverTempHum::DriverTempHum(QObject *parent)
     : QObject()
 {
 #ifdef Bran_R8
-    if(sht_probe() != STATUS_OK)
-    {
-        qDebug() << "SHT sensor probing failed";
-    }
-    qDebug() <<"SHT sensor probing success" ;
 
-    QFileInfo dir("/usr/bin/qtapp/debugFile");
-    if(!dir.exists())
-    {
-        system(qPrintable("mkdir /usr/bin/qtapp/debugFile"));
-    }
 
 #endif
 }

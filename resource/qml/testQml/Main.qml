@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-            text: "充放电-温升测试程序"
+            text: "双温传感器温升测试程序"
 
             color: "#ffffff"
             //字体
@@ -106,7 +106,7 @@ Rectangle {
 
 
         Text {
-            text: "Current Version:" + MainViewProperty.slot_get_version_system()
+            text: "V:" + MainViewProperty.slot_get_version_system()
 
             color: "#ffffff"
             //字体

@@ -34,7 +34,7 @@
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
 #define FRE_INTERVAL                 (10 * 1000)
-#define VERSION_NO                   "V5"
+#define VERSION_NO                   "two-sensors"
 
 #include "driverWiFi.h"
 
@@ -99,6 +99,7 @@ public slots:
     QString slot_getTempValue();                                        //获取温度值 精确到小数点后两位
     QString slot_getHumValue();                                         //获取湿度值，精确到小数点后两位
     QString slot_getRawTempValue();
+    QString slot_getSecondTempValue();
     QString slot_getRawHumValue();
     void slot_updatePmData_lastTime(time_t time);                       //pm2.5更新时间
     void slot_pmLastUpdateTime();                                       //获取pm2.5更新时间 描述字符串
@@ -245,7 +246,7 @@ protected slots:
     void slot_sampling_weather();                                          //开始获取天气数据
     void slot_updateAppBindstat(int);
     void slot_save_data();
-    void slot_updataRawData(float temp, float hum);
+    void slot_updataRawData(float temp, float hum, float secondTemp);
     void slot_updateTempFlag(int charging_on, int cpu_load,int cpu_f,int cpu_load_CPU_f, int LCD_bri);
 private:
     void init(void);
@@ -272,6 +273,7 @@ private:
     float fPm5Value;
     float fRawTempValue;
     float fRawHumValue;
+    float fRawSecondValue;
     float fPm10Value;
     float fCO2eValue;
     float ftVOCValue;

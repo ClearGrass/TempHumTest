@@ -22,7 +22,7 @@ public:
 signals:
     void signal_update_data(AirData);
     void signal_update_dataDaily(AirDataDaily);
-    void signal_update_rawData(float rawTemp, float rawhum);           //原始值
+    void signal_update_rawData(float rawTemp, float rawhum, float rawsecondTemp);           //原始值
     void signal_update_tempFlag(int status_charging_on, int status_CPU_load,int status_CPU_f,int status_CPU_load_CPU_f, int status_LCD_bri);
 protected slots:
     void slot_update_data();                                            // 刷新数值
@@ -33,9 +33,9 @@ private:
     void run();                                                         // 线程循环事件
     void data_init();                                                   // 数据初始化
     void connect_init();                                                // 信号槽初始化
+    void get_secondSensorTemp(float &temp);
 
 private:
-    DriverTempHum *driverTempHumi;                                      // 温湿度传感器类
 
     QTimer *timerUpdate;
 
@@ -67,6 +67,7 @@ private:
         }
     };
     static FreeInstance free;
+    bool existsSecondSensor;
 
 };
 

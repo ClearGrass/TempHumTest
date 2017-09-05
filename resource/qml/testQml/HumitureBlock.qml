@@ -131,7 +131,7 @@ Item {
 
         Text {
             id:rawrhDes
-            text: qsTr("Raw-RH")
+            text: qsTr("Second-Temp")
             color: "#ffffff"
             anchors{
                 bottom: parent.bottom
@@ -248,13 +248,14 @@ Item {
         target:MainViewProperty
         onSignal_humChanged:
         {
-            rhText.text =deal_with(Math.round(MainViewProperty.slot_getHumValue() * 100) /100) +"%"
-            rawrhText.text = deal_with(Math.round(MainViewProperty.slot_getRawHumValue() * 100) /100) +"%"
+            rhText.text =deal_with(MainViewProperty.slot_getHumValue()) +"%"
         }
         onSignal_tempChanged:
         {
-            tempText.text =  deal_with(Math.round(MainViewProperty.slot_getTempValue() * 100) / 100) + "℃"
-            rawtempText.text =  deal_with(Math.round(MainViewProperty.slot_getRawTempValue() * 100) / 100) + "℃"
+            tempText.text =  deal_with(MainViewProperty.slot_getTempValue()) + "℃"
+            rawtempText.text =  deal_with(MainViewProperty.slot_getRawTempValue()) + "℃"
+            rawrhText.text = deal_with(MainViewProperty.slot_getSecondTempValue()) + "℃"
+
         }
         onSignal_tVOCValueChanged:
         {

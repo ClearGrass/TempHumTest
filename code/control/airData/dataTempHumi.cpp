@@ -67,7 +67,6 @@ void DataTempHumi::run()
 *******************************************************************************/
 void DataTempHumi::data_init()
 {
-    driverTempHumi = DriverTempHum::getInstance();
     dataTEMP.init(TEMP);
     dataHUMI.init(HUMI);
 
@@ -82,6 +81,8 @@ void DataTempHumi::data_init()
     // 新建自动更新定时器
     timerUpdate = new QTimer();
     timerUpdate->setInterval(TEMP_HUMI_REFRESH_INTERVAL);
+
+    existsSecondSensor = QFile("/sys/devices/platform/sun5i-i2c.2/i2c-2/2-004a/sts30_temp_input").exists();
 }
 
 /*******************************************************************************
@@ -107,15 +108,19 @@ void DataTempHumi::slot_update_data()
 {
     float tempValue, rawTempValue;
     float humiValue, rawHumiValue;
+    float tempRowSecond;
     static int i;
 #ifdef Bran_R8
     // R8获取传感器数据
-    //    driverTempHumi->update_data(tempValue,humiValue);
+
+    //获取第二个传感器值
+    get_secondSensorTemp(tempRowSecond);
 
     int temperature, humidity, rawTemp, rawHumi;
     int status_charging_on, status_CPU_load,status_CPU_f,status_CPU_load_CPU_f, status_LCD_bri;
     short err = sht_measure_blocking_read_compensated_every_1_seconds(&temperature, &humidity, &rawTemp, &rawHumi,
                                                                       &status_charging_on, &status_CPU_load, &status_CPU_f, &status_CPU_load_CPU_f, &status_LCD_bri);
+
 
     if (err == STATUS_OK)
     {
@@ -162,7 +167,7 @@ void DataTempHumi::slot_update_data()
     dataHUMI.value = humiValue;
 
     //发送原始值
-    emit signal_update_rawData(rawTempValue, rawHumiValue);
+    emit signal_update_rawData(rawTempValue, rawHumiValue, tempRowSecond);
     // 发送更新数据信号
     emit signal_update_data(dataTEMP);
     emit signal_update_data(dataHUMI);
@@ -219,6 +224,37 @@ void DataTempHumi::slot_update_data()
         }
     }
 }
+
+
+/*******************************************************************************
+* Author        :   虎正玺@2017-08
+* Function Name :   get_secondSensorTemp
+* Description   :   获取第二个传感器的温度值
+* Input         :   None
+* Output        :   None
+* Return        :   None
+*******************************************************************************/
+void DataTempHumi::get_secondSensorTemp(float &temp)
+{
+    if(!existsSecondSensor)
+    {
+        temp = ERROR_DATA;
+        return ;
+    }
+
+    // IMPLEMENT
+    FILE  *stream;
+    char  buf[126];
+
+    // 温度值
+    stream = popen("cat /sys/devices/platform/sun5i-i2c.2/i2c-2/2-004a/sts30_temp_input", "r");
+    fread(buf, sizeof(char), sizeof(buf),  stream);
+    temp = atoi(buf) / 1000.0;
+
+    pclose(stream);
+}
+
+
 
 /*******************************************************************************
 * Function Name  :  slot_set_dataDaily
