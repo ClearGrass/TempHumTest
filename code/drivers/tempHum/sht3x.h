@@ -168,7 +168,8 @@ extern "C" {
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw);
+int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
+                                                             int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri);
 
 
 /**
@@ -185,7 +186,8 @@ int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperatur
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw);
+int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
+                                            int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri);
 
 #ifdef __cplusplus
 }
