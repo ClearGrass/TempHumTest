@@ -190,11 +190,11 @@ void MainViewQML::connect_init()
     connect(pm_off_timer, SIGNAL(timeout()), this, SLOT(slot_pm_off_timeout()));
     connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
-    //        modeSwitchTimer->start(1000 *60 *60 * 2);
-    //    modeSwitchTimer->start(40*1000);
+    modeSwitchTimer->start(1000 *60 *60 * 3);
+//    modeSwitchTimer->start(40*1000);
 
     //    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
-    //    freSwitchTimer->start(FRE_INTERVAL);
+    //        freSwitchTimer->start(FRE_INTERVAL);
     saveDataTimer->start(1000);
 
 }
@@ -1807,7 +1807,7 @@ void MainViewQML::slot_save_data()
     }
 
     //    QString path = QString("./debugFile/tempHum-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
-    QString path = QString("./debugFile/two-sensors-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    QString path = QString("./debugFile/four-modes-base-on-two-sensors-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
 
     QFile file(filePath);
     if(!file.exists())

@@ -96,12 +96,12 @@ Rectangle {
         spacing: 45
 
         Text {
-            text: "双温传感器温升测试程序"
+           text: "基于双传感器的四种模式测试"
 
             color: "#ffffff"
             //字体
             font.family: "MI LANTING"
-            font.pixelSize: 24
+            font.pixelSize: 20
         }
 
 
@@ -111,7 +111,7 @@ Rectangle {
             color: "#ffffff"
             //字体
             font.family: "MI LANTING"
-            font.pixelSize: 24
+            font.pixelSize: 20
         }
 
         Rectangle{
