@@ -50,7 +50,7 @@ SysControl::SysControl()
 *******************************************************************************/
 void SysControl::run()
 {
-//    sysDevice->start();
+    //    sysDevice->start();
     sysBattery->start();
     sysTime->start();
     sysGravity->start();
@@ -135,7 +135,7 @@ void SysControl::connect_init()
 
 
     connect(sysButton, SIGNAL(signal_button_singleClick()), this, SLOT(slot_button_singleClick()));
-//    connect(sysButton, SIGNAL(signal_button_doubleClick()), this, SLOT(slot_button_doubleClick()));
+    //    connect(sysButton, SIGNAL(signal_button_doubleClick()), this, SLOT(slot_button_doubleClick()));
     connect(sysButton, SIGNAL(signal_button_longPress()), this, SLOT(slot_button_longPress()));
 
 
@@ -297,8 +297,8 @@ InfoBattery SysControl::get_battery()
 void SysControl::slot_test_net()
 {
     emit signal_net_connected();
-//    emit signal_change_direction(VERTICAL);
-//    sysLanguage->language_init(LANG_TW);
+    //    emit signal_change_direction(VERTICAL);
+    //    sysLanguage->language_init(LANG_TW);
 }
 
 /*******************************************************************************
@@ -597,6 +597,14 @@ void SysControl::slot_screenOff()
     {
         // 发送灭屏信号
         emit signal_screen_off();
+    }
+}
+
+void SysControl::slot_screenOn()
+{
+    if(!isScreenOn)
+    {
+        emit signal_screen_on();
     }
 }
 

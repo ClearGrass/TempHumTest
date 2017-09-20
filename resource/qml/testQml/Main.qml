@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-           text: "基于双传感器的四种模式测试"
+           text: "wifi test"
 
             color: "#ffffff"
             //字体

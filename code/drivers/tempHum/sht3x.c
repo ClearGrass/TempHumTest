@@ -236,7 +236,6 @@ int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_
     get_status_charging_on(&t1[2]);     get_status_CPU_load_CPU_f(&t1[3],status_CPU_load, status_CPU_f); get_status_LCD_bri(&t1[4]);
     *temperature_raw = ((21875 * t1[0]) >> 13) - 45000;
     *humidity_raw = ((12500 * t1[1]) >> 13);
-    *humidity_raw = ((12500 * t1[1]) >> 13);
     *status_charging_on    = t1[2];
     *status_CPU_load_CPU_f = t1[3];
     *status_LCD_bri = t1[4];

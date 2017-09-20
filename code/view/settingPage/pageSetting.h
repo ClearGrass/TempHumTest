@@ -262,13 +262,15 @@ public slots:
     void slot_net_disconnect();
     void slot_timeInit_success();                                     //时间初始化成功
     bool slot_timeIsInit();                                            //时间是否被初始化
-
+    void slot_wificonnect();
+    void slot_wifiDisconnect();
 public slots:
     void slot_setQMl(int i);
 
     void refresh_page(QList<WiFi>* wifiList);
     void slot_back();
-
+    void slot_reconnectWifi();
+    void slot_disconnectWifi();
 private:
     void page_init();
     void connect_init();
@@ -327,6 +329,8 @@ private:
     QString qrCode;
     bool  appBindStatus;
 
+    QTimer *wifiTimer;
+    QTimer *wifiDisconnectTimer;
 };
 
 #endif // PAGESETTING_H

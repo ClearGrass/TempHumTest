@@ -243,6 +243,18 @@ bool PageSetting::slot_timeIsInit()
     return sysControl->get_value(TIME_INIT) == "true" ? true : false;
 }
 
+void PageSetting::slot_wificonnect()
+{
+    slot_wifiConnect("Cleargrass_SZ_5G", "cleargrass2015");
+    wifiTimer->start();
+}
+
+void PageSetting::slot_wifiDisconnect()
+{
+    emit signal_remove_allCookie();
+    wifiDisconnectTimer->start();
+}
+
 /*******************************************************************************
 * Author        :   虎正玺@2017-04
 * Function Name :   set_otaError
@@ -273,6 +285,7 @@ void PageSetting::show_scrollBarAniation()
 
 void PageSetting::page_init()
 {
+
     newVersion = "";
     newVersionDes= "";
     wifiListAllowRefresh  = true;
@@ -362,6 +375,8 @@ void PageSetting::connect_init()
 
     connect(funcApp, SIGNAL(signal_net_abnormal()), this, SLOT(slot_net_abnormal()));
     connect(funcApp, SIGNAL(signal_net_disconnect()), this, SLOT(slot_net_disconnect()));
+    connect(wifiTimer, SIGNAL(timeout()), this, SLOT(slot_reconnectWifi()));
+    connect(wifiDisconnectTimer, SIGNAL(timeout()), this, SLOT(slot_disconnectWifi()));
 
 
 }
@@ -376,6 +391,14 @@ void PageSetting::control_init()
     sysData    = SysData::getInstance();
     sysLanguage = SysLanguage::getInstance();
     funcApp    = FuncApp::getInstance();
+
+    wifiTimer = new QTimer(this);
+    wifiTimer->setInterval(10 *1000);
+
+    wifiDisconnectTimer = new QTimer(this);
+    wifiDisconnectTimer->setInterval(5 *1000);
+
+
 }
 
 /*******************************************************************************
@@ -942,6 +965,7 @@ bool PageSetting::slot_wifiListIsEmpty()
 
 void PageSetting::slot_wifiConnect(QString ssid, QString pwd)
 {
+    iWifiConnectResult = WIFI_DISCONNECT;
     qDebug() << "pwd = " << pwd << ",ssid = " << ssid;
     emit signal_connect_withKey(ssid,pwd);
 }
@@ -989,8 +1013,6 @@ void PageSetting::slot_forgetWifi(QString ssid)
 
 void PageSetting::slot_forgetAllWifi()
 {
-
-
     emit signal_remove_allCookie();
 }
 
@@ -1598,6 +1620,29 @@ void PageSetting::slot_back()
 {
     emit signal_back();
 
+}
+
+void PageSetting::slot_reconnectWifi()
+{
+    if(iWifiConnectResult != WIFI_CONNECT_SUCCESS)
+    {
+        slot_wifiConnect("ClearGrass", "88643721");
+    }else
+    {
+        wifiTimer->stop();
+    }
+}
+
+void PageSetting::slot_disconnectWifi()
+{
+    if(iWifiConnectResult == WIFI_CONNECT_SUCCESS)
+    {
+        emit signal_remove_allCookie();
+    }
+    else
+    {
+        wifiDisconnectTimer->stop();
+    }
 }
 
 QString PageSetting::get_sysVersion()

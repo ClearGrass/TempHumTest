@@ -61,7 +61,9 @@ signals:
     void signal_offInterval_charging(IntervalType);
     void signal_offInterval_discharging(IntervalType);
     void signal_user_operations();
-
+public slots:
+    void slot_screenOff();
+    void slot_screenOn();
 protected slots:
     void slot_set_lightValue(int);
     void slot_set_lightMode(bool);
@@ -80,7 +82,7 @@ protected slots:
     void slot_button_doubleClick();
     void slot_button_singleClick();
     void slot_button_longPress();
-    void slot_screenOff();
+
 
     void slot_device_powerOff();                                        // 关机
     void slot_device_reboot();

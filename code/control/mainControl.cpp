@@ -117,6 +117,9 @@ void MainControl::widget_init()
 
 
     connect(mainViewQml,SIGNAL(signal_jumpOptionPage()),this,SLOT(slot_jump_pageSetting()));
+    connect(mainViewQml, SIGNAL(signal_wificonnect()), pageSetting, SLOT(slot_wificonnect()));
+    connect(mainViewQml,SIGNAL(signal_wifiDisconnect()),pageSetting, SLOT(slot_wifiDisconnect()) );
+
     connect(pageSetting,SIGNAL(signal_jumpMainPage()),this,SLOT(slot_jump_pageMain()));
     connect(mainViewQml, SIGNAL(signal_jumpWiFiPage()), pageSetting, SLOT(slot_showWifiPage()));
     connect(mainViewQml, SIGNAL(signal_jumpAppPage()), pageSetting, SLOT(slot_showMiAppPage()));

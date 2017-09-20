@@ -34,7 +34,7 @@
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
 #define FRE_INTERVAL                 (10 * 1000)
-#define VERSION_NO                   "two-sensors_1"
+#define VERSION_NO                   "wifi_and_screen_test"
 
 #include "driverWiFi.h"
 
@@ -156,6 +156,8 @@ public slots:
     void slot_setInterval(int interval);
     void slot_pm_off_timeout();
     void slot_pm_on_timeout();
+    void slot_setWifiOff(bool on);
+
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 signals:
@@ -231,6 +233,8 @@ signals:
     void signal_cpuLoad();
     void signal_cpuNoLoad();
     void signal_autoLightChanged();
+    void signal_wificonnect();
+    void signal_wifiDisconnect();
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
 protected slots:
