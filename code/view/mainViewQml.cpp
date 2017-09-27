@@ -1796,10 +1796,10 @@ void MainViewQML::slot_save_data()
     if(num< 100)
         num++;
 
-//    if(modeIndex == 0 && num == 2)
-//    {
-//        slot_setWifiOff(false);
-//    }
+    if(num == 2)
+    {
+        slot_setWifiOff(true);
+    }
     if(modeIndex == 0 && num == 5)
     {
         //        pm_off_timer->start();

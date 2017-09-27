@@ -99,7 +99,7 @@ void DataTvocCo2e::connect_init()
 {
     connect(timerUpdate, SIGNAL(timeout()), this, SLOT(slot_update_data()));
     connect(stopSensorTimer, SIGNAL(timeout()), driverTvocCo2e, SLOT(slot_stop_SGP30()));
-    stopSensorTimer->start();
+//    stopSensorTimer->start();
 }
 
 /*******************************************************************************
