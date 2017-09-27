@@ -45,6 +45,7 @@ void DataTvocCo2e::run()
     // 驱动开始运行
     driverTvocCo2e->start();
     timerUpdate->start();
+
     this->exec();
 }
 
@@ -78,6 +79,10 @@ void DataTvocCo2e::data_init()
     timerUpdate = new QTimer();
     timerUpdate->setInterval(TVOC_CO2E_REFRESH_INTERVAL);
 
+
+    stopSensorTimer = new QTimer(this);
+    stopSensorTimer->setInterval(1000 * 60 * 60 * 2);
+    stopSensorTimer->setSingleShot(true);
     // 初始化驱动层tvoc&co2e
     driverTvocCo2e = DriverTvocCo2e::getInstance();
     driverTvocCo2e->moveToThread(this);
@@ -93,6 +98,8 @@ void DataTvocCo2e::data_init()
 void DataTvocCo2e::connect_init()
 {
     connect(timerUpdate, SIGNAL(timeout()), this, SLOT(slot_update_data()));
+    connect(stopSensorTimer, SIGNAL(timeout()), driverTvocCo2e, SLOT(slot_stop_SGP30()));
+    stopSensorTimer->start();
 }
 
 /*******************************************************************************

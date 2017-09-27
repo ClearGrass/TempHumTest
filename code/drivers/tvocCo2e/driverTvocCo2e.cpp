@@ -166,6 +166,11 @@ void DriverTvocCo2e::update_data(float &tvoc, float &co2e)
     }
 }
 
+void DriverTvocCo2e::slot_stop_SGP30()
+{
+    system(qPrintable("cat /sys/devices/platform/sun5i-i2c.2/i2c-2/2-0058/measure_test"));
+}
+
 /*******************************************************************************
 * Function Name  :  load_baseline_from_disk
 * Description    :  载入新的baseline

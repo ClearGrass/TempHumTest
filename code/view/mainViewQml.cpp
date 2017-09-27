@@ -190,7 +190,7 @@ void MainViewQML::connect_init()
     connect(pm_off_timer, SIGNAL(timeout()), this, SLOT(slot_pm_off_timeout()));
     connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
-    modeSwitchTimer->start(1000 *60 *60 * 2);
+//    modeSwitchTimer->start(1000 *60 *60 * 2);
     //    modeSwitchTimer->start(1000 *60 * 5);
 
     //    modeSwitchTimer->start(40*1000);
@@ -1796,10 +1796,10 @@ void MainViewQML::slot_save_data()
     if(num< 100)
         num++;
 
-    if(modeIndex == 0 && num == 2)
-    {
-        slot_setWifiOff(false);
-    }
+//    if(modeIndex == 0 && num == 2)
+//    {
+//        slot_setWifiOff(false);
+//    }
     if(modeIndex == 0 && num == 5)
     {
         //        pm_off_timer->start();

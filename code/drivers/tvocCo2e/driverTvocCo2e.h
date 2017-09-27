@@ -12,6 +12,7 @@
 
 #define DEVICE_TVOCCO2E     "/sys/devices/platform/sun5i-i2c.2/i2c-2/2-0058/iaq_measure"
 #define FILE_IAQ_BASELINE   "/sys/devices/platform/sun5i-i2c.2/i2c-2/2-0058/iaq_baseline"
+#define FILE_MEASURE_TEST   "/sys/devices/platform/sun5i-i2c.2/i2c-2/2-0058/measure_test"
 #define FILE_BASELINE       "baseline.conf"
 
 #define BASELINE_VALID_S            (7 * 24 * 3600)     // 1 week
@@ -28,12 +29,13 @@ public:
     static DriverTvocCo2e *getInstance();
     void start();
     void update_data(float&,float&);
-
 signals:
 
 private slots:
     void slot_store_baseline();
     void slot_iaq_init();
+    void slot_stop_SGP30();
+
 
 private:
     void data_init();

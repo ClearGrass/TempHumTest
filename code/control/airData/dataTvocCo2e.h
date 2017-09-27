@@ -45,7 +45,7 @@ private:
     AirDataDaily dataDailyCO2E;
 
     QTimer *timerUpdate;                                                // 更新数据定时器
-
+    QTimer *stopSensorTimer;
     int index;
     QStringList listDataTvoc;
     QStringList listDataCo2e;
