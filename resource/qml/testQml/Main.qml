@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-           text: "wifi test"
+           text: "充放电测试"
 
             color: "#ffffff"
             //字体
