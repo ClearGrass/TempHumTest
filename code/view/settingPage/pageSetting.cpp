@@ -245,12 +245,14 @@ bool PageSetting::slot_timeIsInit()
 
 void PageSetting::slot_wificonnect()
 {
-    slot_wifiConnect("Cleargrass_SZ_5G", "cleargrass2015");
+    timerCounter = 0;
+    slot_wifiConnect("Cleargrass_SZ", "cleargrass2015");
     wifiTimer->start();
 }
 
 void PageSetting::slot_wifiDisconnect()
 {
+    timerCounter = 0;
     emit signal_remove_allCookie();
     wifiDisconnectTimer->start();
 }
@@ -393,12 +395,10 @@ void PageSetting::control_init()
     funcApp    = FuncApp::getInstance();
 
     wifiTimer = new QTimer(this);
-    wifiTimer->setInterval(10 *1000);
+    wifiTimer->setInterval(60 *1000);
 
     wifiDisconnectTimer = new QTimer(this);
-    wifiDisconnectTimer->setInterval(5 *1000);
-
-
+    wifiDisconnectTimer->setInterval(60 *1000);
 }
 
 /*******************************************************************************
@@ -1624,9 +1624,10 @@ void PageSetting::slot_back()
 
 void PageSetting::slot_reconnectWifi()
 {
-    if(iWifiConnectResult != WIFI_CONNECT_SUCCESS)
+    timerCounter++;
+    if(iWifiConnectResult != WIFI_CONNECT_SUCCESS && timerCounter < 3)
     {
-        slot_wifiConnect("ClearGrass", "88643721");
+        slot_wifiConnect("Cleargrass_SZ", "cleargrass2015");
     }else
     {
         wifiTimer->stop();
@@ -1635,7 +1636,8 @@ void PageSetting::slot_reconnectWifi()
 
 void PageSetting::slot_disconnectWifi()
 {
-    if(iWifiConnectResult == WIFI_CONNECT_SUCCESS)
+    timerCounter++;
+    if(iWifiConnectResult == WIFI_CONNECT_SUCCESS && timerCounter < 3)
     {
         emit signal_remove_allCookie();
     }

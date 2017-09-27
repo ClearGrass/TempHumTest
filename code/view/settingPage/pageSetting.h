@@ -331,6 +331,7 @@ private:
 
     QTimer *wifiTimer;
     QTimer *wifiDisconnectTimer;
+    int timerCounter;
 };
 
 #endif // PAGESETTING_H

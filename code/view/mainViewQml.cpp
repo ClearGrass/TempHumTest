@@ -191,7 +191,7 @@ void MainViewQML::connect_init()
     connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
     modeSwitchTimer->start(1000 *60 *60 * 2);
-    //    modeSwitchTimer->start(1000 *60);
+    //    modeSwitchTimer->start(1000 *60 * 5);
 
     //    modeSwitchTimer->start(40*1000);
     //    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
