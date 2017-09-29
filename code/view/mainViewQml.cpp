@@ -1299,7 +1299,6 @@ void MainViewQML::slot_setCurrentIndex(int index)
 *******************************************************************************/
 void MainViewQML::hide_historyPage()
 {
-    qDebug()<<"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
     view->show();
     historyPage->hide();
     gCurrent_pageIndex = PAGE_MAIN;
@@ -1796,10 +1795,10 @@ void MainViewQML::slot_save_data()
     if(num< 100)
         num++;
 
-    if(num == 2)
-    {
-        slot_setWifiOff(true);
-    }
+//    if(num == 2)
+//    {
+//        slot_setWifiOff(true);
+//    }
     if(modeIndex == 0 && num == 5)
     {
         //        pm_off_timer->start();
@@ -1822,7 +1821,7 @@ void MainViewQML::slot_save_data()
     }
 
     //    QString path = QString("./debugFile/tempHum-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
-    QString path = QString("./debugFile/wifiAndScreen-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    QString path = QString("./debugFile/charging-discharging-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
 
     QFile file(filePath);
     if(!file.exists())
