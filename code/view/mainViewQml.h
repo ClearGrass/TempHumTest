@@ -34,7 +34,7 @@
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
 #define FRE_INTERVAL                 (10 * 1000)
-#define VERSION_NO                   "charging_discharging_test_2"
+#define VERSION_NO                   "four-modes-test"
 
 #include "driverWiFi.h"
 
