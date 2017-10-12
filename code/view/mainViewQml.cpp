@@ -192,7 +192,6 @@ void MainViewQML::connect_init()
     connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
     modeSwitchTimer->start(1000 *60 *60 * 2);
-    //    modeSwitchTimer->start(1000 *60 );
 
     //    modeSwitchTimer->start(40*1000);
     //    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
@@ -1058,6 +1057,12 @@ QString MainViewQML::slot_getTempValue()
     return  QString::number(fTempValue, 'f',2);
 }
 
+QString MainViewQML::slot_getCG_temp()
+{
+    return  QString::number(fcg_temp, 'f',2);
+
+}
+
 /*******************************************************************************
 * Author        :   虎正玺@2016-10-28
 * Function Name :   slot_getHumValue
@@ -1728,7 +1733,6 @@ void MainViewQML::slot_modeSwitch()
         //            slot_pmOff();
         modeSwitchTimer->stop();
         saveDataTimer->stop();
-
     }
     switch (modeIndex) {
     //基态
@@ -1822,7 +1826,7 @@ void MainViewQML::slot_save_data()
     }
 
     //    QString path = QString("./debugFile/tempHum-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
-    QString path = QString("./debugFile/four-modes-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    QString path = QString("./debugFile/seven-modes-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
 
     QFile file(filePath);
     if(!file.exists())

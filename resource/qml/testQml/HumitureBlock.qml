@@ -87,6 +87,23 @@ Item {
         }
 
     }
+    Text {
+        id:cgTempText
+        color: "#ffffff"
+        //字体
+        font.family: fontName
+        font.pixelSize: fontSize
+        font.bold: true
+        anchors{
+            top: itemTemp.bottom
+            topMargin: -5
+            left: itemTemp.left
+            leftMargin: 19
+
+        }
+
+    }
+
 
     Item{
         id:itemHum
@@ -255,6 +272,7 @@ Item {
             tempText.text =  deal_with(MainViewProperty.slot_getTempValue()) + "℃"
             rawtempText.text =  deal_with(MainViewProperty.slot_getRawTempValue()) + "℃"
             rawrhText.text = deal_with(MainViewProperty.slot_getSecondTempValue()) + "℃"
+            cgTempText.text = "CG_temp " + MainViewProperty.slot_getCG_temp() + "℃"
 
         }
         onSignal_tVOCValueChanged:

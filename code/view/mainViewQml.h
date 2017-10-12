@@ -99,6 +99,7 @@ public slots:
     void slot_update_battery(InfoBattery);
 
     QString slot_getTempValue();                                        //获取温度值 精确到小数点后两位
+    QString slot_getCG_temp();
     QString slot_getHumValue();                                         //获取湿度值，精确到小数点后两位
     QString slot_getRawTempValue();
     QString slot_getSecondTempValue();
