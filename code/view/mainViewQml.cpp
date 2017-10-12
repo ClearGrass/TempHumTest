@@ -75,6 +75,10 @@ void MainViewQML::init()
     pmUpdateTimer = new QTimer();
 
     pmUpdateTimer->setInterval(6000);
+
+    falgModelist.append("Basic_mode_and_wifi_off");
+    falgModelist.append("Basic mode");
+    falgModelist.append("Basic_mode_and_screen_off");
     falgModelist.append("Basic mode");
     falgModelist.append("High CPU Freq mode");
     falgModelist.append("LCD max brightness mode");
@@ -1714,9 +1718,8 @@ QString MainViewQML::slot_getBaseLine()
 void MainViewQML::slot_modeSwitch()
 {
     modeIndex++;
-    if(modeIndex > 3)
+    if(modeIndex > 6)
     {
-
         emit signal_testFinished();
         slot_setCpuUsage0();
         slot_set120M();
@@ -1730,23 +1733,38 @@ void MainViewQML::slot_modeSwitch()
     switch (modeIndex) {
     //基态
     case 0:
-        //        sysControl->slot_screenOn();
-        //        slot_setWifiOff(false);
+        sysControl->slot_screenOn();
+        slot_setWifiOff(false);
         break;
-    case 1://CPU高频
+    case 1:
+    case 3:
+        sysControl->slot_screenOn();
+        slot_setWifiOff(true);
+        break;
+    case 2:
+        sysControl->slot_screenOff();
+        slot_setWifiOff(true);
+        break;
+    case 4://CPU高频
         slot_setLightValue(0);
         slot_set1G();
         slot_setCpuUsage0();
+        sysControl->slot_screenOn();
+        slot_setWifiOff(true);
         break;
-    case 2://亮度最高
+    case 5://亮度最高
         slot_setLightValue(100);
         slot_setCpuUsage0();
         slot_set1G();
+        sysControl->slot_screenOn();
+        slot_setWifiOff(true);
         break;
-    case 3://CPU满载
+    case 6://CPU满载
+        sysControl->slot_screenOn();
         slot_setLightValue(100);
         slot_set1G();
         slot_setCpuUseage100();
+        slot_setWifiOff(true);
         break;
     default:
         break;
@@ -1777,23 +1795,23 @@ void MainViewQML::slot_save_data()
     if(num< 100)
         num++;
 
-    if(num == 2)
+    if(modeIndex == 0 && num == 2)
     {
-        slot_setWifiOff(true);
+        slot_setWifiOff(false);
     }
 
-    //    if(modeIndex == 0 && num == 5)
-    //    {
-    //        pm_off_timer->start();
-    //        emit signal_change_fre(false);
-    //    }
+    if(modeIndex == 0 && num == 5)
+    {
+        //        pm_off_timer->start();
+        emit signal_change_fre(false);
+    }
     if(modeIndex == 0 && num < 5)
     {
         return ;
     }
-    if(modeIndex > 3)
+    if(modeIndex > 6)
     {
-        modeIndex  = 3 ;
+        modeIndex  = 6 ;
         //        return ;
     }
     QDir *debug = new QDir;

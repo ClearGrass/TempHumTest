@@ -35,7 +35,7 @@
 #define TAP_INTERVAL                 (5 * 1000)
 #define FRE_INTERVAL                 (10 * 1000)
 
-#define VERSION_NO                   "charging_discharging_test_3"
+#define VERSION_NO                   "seven_modes test2"
 
 
 #include "driverWiFi.h"
