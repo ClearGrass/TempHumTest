@@ -34,7 +34,7 @@
 #define POWERON_CONFIRM_INTERVER     (60 * 1000 * 30)
 #define TAP_INTERVAL                 (5 * 1000)
 #define FRE_INTERVAL                 (10 * 1000)
-#define VERSION_NO                   "charging_discharging_test_2"
+#define VERSION_NO                   "charging_discharging_test_3"
 
 #include "driverWiFi.h"
 
@@ -250,7 +250,7 @@ protected slots:
     void slot_sampling_weather();                                          //开始获取天气数据
     void slot_updateAppBindstat(int);
     void slot_save_data();
-    void slot_updataRawData(float temp, float hum, float secondTemp);
+    void slot_updataRawData(float temp, float hum, float secondTemp, float cg_temp);
     void slot_updateTempFlag(int charging_on, int cpu_load,int cpu_f,int cpu_load_CPU_f, int LCD_bri);
 private:
     void init(void);
@@ -276,6 +276,7 @@ private:
     float fHumValue;
     float fPm5Value;
     float fRawTempValue;
+    float fcg_temp;
     float fRawHumValue;
     float fRawSecondValue;
     float fPm10Value;

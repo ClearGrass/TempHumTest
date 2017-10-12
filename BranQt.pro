@@ -150,7 +150,10 @@ SOURCES += \
     code/drivers/tempHum/sht_compensation_configuration.c \
     code/sysOCC.cpp \
     code/sysOCC1.cpp \
-    code/sysOCC2.cpp
+    code/sysOCC2.cpp \
+    code/drivers/tempHum/BranSampleNode.cpp \
+    code/drivers/tempHum/TempFixPart.cpp \
+    code/drivers/tempHum/TempHumFixEngine.cpp
 	
 HEADERS  += \
     code/view/historyPage/colorGenerator.h \
@@ -255,7 +258,11 @@ HEADERS  += \
     code/drivers/tempHum/sht_compensation_configuration.h \
     code/sysOCC.h \
     code/sysOCC1.h \
-    code/sysOCC2.h
+    code/sysOCC2.h \
+    code/drivers/tempHum/BranSampleNode.h \
+    code/drivers/tempHum/EngineCommon.h \
+    code/drivers/tempHum/TempFixPart.h \
+    code/drivers/tempHum/TempHumFixEngine.h
 
 
 

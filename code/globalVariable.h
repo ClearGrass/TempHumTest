@@ -27,6 +27,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 extern  PageType gCurrent_pageIndex;
+extern  LogInfo g_loginfo;
 
 #endif /* __GLOBALVARIABLE_H */
 

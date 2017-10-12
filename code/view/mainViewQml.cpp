@@ -152,7 +152,7 @@ void MainViewQML::connect_init()
     connect(dataAirControl, SIGNAL(signal_sampling_start(time_t)), this, SLOT(slot_updatePmData_lastTime(time_t)));
     connect(dataAirControl, SIGNAL(signal_sampling_off()), this, SLOT(slot_finishPmRefresh()));
     connect(dataAirControl, SIGNAL(signal_update_data(AirData)), this, SLOT(slot_update_airData(AirData)));
-    connect(dataAirControl, SIGNAL(signal_update_rawData(float,float, float )), this, SLOT(slot_updataRawData(float, float, float )));
+    connect(dataAirControl, SIGNAL(signal_update_rawData(float,float, float , float)), this, SLOT(slot_updataRawData(float, float, float, float)));
     connect(dataAirControl, SIGNAL(signal_update_tempFlag(int,int,int, int, int)), this, SLOT(slot_updateTempFlag(int,int,int, int, int)));
     connect(this, SIGNAL(signal_getPmData()), dataAirControl, SLOT(slot_sampling_pm25()));
     connect(pmUpdateTimer, SIGNAL(timeout()), this, SLOT(slot_pmLastUpdateTime()));
@@ -1800,11 +1800,11 @@ void MainViewQML::slot_save_data()
     {
         slot_setWifiOff(true);
     }
-    if(modeIndex == 0 && num == 5)
-    {
+//    if(modeIndex == 0 && num == 5)
+//    {
         //        pm_off_timer->start();
-        emit signal_change_fre(false);
-    }
+//        emit signal_change_fre(false);
+//    }
     if(modeIndex == 0 && num < 5)
     {
         return ;
@@ -1830,26 +1830,47 @@ void MainViewQML::slot_save_data()
         filePath = path;
     }
     QFile file1(filePath);
+    g_loginfo.currentMA = battery.current;
+    g_loginfo.voltage = battery.voltage;
+    g_loginfo.screenOn = sysControl->is_ScreenOn();
+    g_loginfo.wifi_status = wifi.status;
+    g_loginfo.light = lightValue;
+    g_loginfo.charging = slot_getBatteryStatusIsCharging();
+    g_loginfo.cpu_fre = qRound(fre);
+    g_loginfo.status_chargingOn = status_charging_on;
+    g_loginfo.status_cpuLoad = status_CPU_load;
+    g_loginfo.status_cpuLoadF = status_CPU_load_CPU_f;
+    g_loginfo.status_LCDBrightness = status_LCD_bri;
+    g_loginfo.status_cpuF = status_CPU_f;
+
+    g_loginfo.sensirion_hum = get_humValue();
+    g_loginfo.sensirion_temp = slot_getTempValue().toFloat();
+    g_loginfo.temp_raw = slot_getRawTempValue().toFloat();
+    g_loginfo.hum_raw = slot_getRawHumValue().toFloat();
+    g_loginfo.second_temp_raw =slot_getSecondTempValue().toFloat();
+    QString str = QString("humraw = %1,temp_raw = %2").arg(g_loginfo.hum_raw ).arg(g_loginfo.temp_raw);
+    system(qPrintable(QString("echo %1 >> /usr/bin/qtapp/test.log").arg(str)));
+
     if(file1.open(QIODevice::ReadWrite | QIODevice::Append))
     {
         QTextStream in(&file1);
         if(file1.size() == 0)
         {
             in << QString("Current Version:%1\n").arg(slot_get_version_system());
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26\n").arg("Flag")
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27\n").arg("Flag")
                 .arg("status_charging_on").arg("status_CPU_load").arg("status_CPU_f").arg("status_CPU_load_CPU_f").arg("status_LCD_bri")
                 .arg("Date Time").arg("pm2.5 sensor is On").arg("Pm2.5")
                 .arg("Temperature").arg("Raw Temperature").arg("Sencond Sensor Temp").arg("Humidity (%)").arg("Raw Humidity (%)")
                 .arg("Baseline"). arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light")
-                .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status").arg("Screen On");
+                .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status").arg("Screen On").arg("CG_temp");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26\n").arg(falgModelist[modeIndex])
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27\n").arg(falgModelist[modeIndex])
                 .arg(status_charging_on).arg(status_CPU_load).arg(status_CPU_f).arg(status_CPU_load_CPU_f).arg(status_LCD_bri)
                 .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(fPmValue)
                 .arg(slot_getTempValue()).arg(slot_getRawTempValue()).arg(slot_getSecondTempValue()).arg(get_humValue()).arg(slot_getRawHumValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue)
                 .arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.voltage).arg(battery.current).arg(slot_getBatteryCapacity())
-                .arg(get_wifiStatus()).arg(sysControl->is_ScreenOn());
+                .arg(get_wifiStatus()).arg(sysControl->is_ScreenOn()).arg(fcg_temp);
         in<<line;
         file1.close();
     }
@@ -1860,8 +1881,9 @@ void MainViewQML::slot_save_data()
 
 }
 
-void MainViewQML::slot_updataRawData(float temp, float hum, float secondTemp)
+void MainViewQML::slot_updataRawData(float temp, float hum, float secondTemp, float cg_temp)
 {
+    fcg_temp = cg_temp;
     fRawTempValue = temp;
     fRawHumValue = hum;
     fRawSecondValue = secondTemp;

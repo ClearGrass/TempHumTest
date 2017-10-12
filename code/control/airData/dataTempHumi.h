@@ -6,7 +6,8 @@
 #include "driverTempHum.h"
 #include "dataAirDefine.h"
 #include "globalVariable.h"
-
+#include "BranSampleNode.h"
+#include "TempHumFixEngine.h"
 
 /*******************************************************************************
 * Description   :   温湿度数据类，包含”传感器取值“/“数据库交互”/”服务器交互“/”前台页面交互“，
@@ -22,7 +23,7 @@ public:
 signals:
     void signal_update_data(AirData);
     void signal_update_dataDaily(AirDataDaily);
-    void signal_update_rawData(float rawTemp, float rawhum, float rawsecondTemp);           //原始值
+    void signal_update_rawData(float rawTemp, float rawhum, float rawsecondTemp, float cg_temp);           //原始值
     void signal_update_tempFlag(int status_charging_on, int status_CPU_load,int status_CPU_f,int status_CPU_load_CPU_f, int status_LCD_bri);
 protected slots:
     void slot_update_data();                                            // 刷新数值
@@ -68,7 +69,8 @@ private:
     };
     static FreeInstance free;
     bool existsSecondSensor;
-
+    BranSampleNode bran_node;
+    TempHumFixEngine tempHumEngine;
 };
 
 #endif // DATATEMPHUMI_H

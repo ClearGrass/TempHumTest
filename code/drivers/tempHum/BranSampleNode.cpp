@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+LogInfo g_loginfo;
 time_t strTime2unix(const char timeStamp[])
 {
     struct tm tm;

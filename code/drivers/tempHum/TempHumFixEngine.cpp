@@ -3,7 +3,7 @@
 //
 
 #include "TempHumFixEngine.h"
-#include "LogControl.h"
+//#include "LogControl.h"
 
 #define CONST_TEMP_DIFF (0.3)
 #define CONST_CHARGING_MA (428)
@@ -59,29 +59,17 @@ TempHumFixEngine::~TempHumFixEngine()
 
 float TempHumFixEngine::fixTemp(const BranSampleNode& node)
 {
-    QString time = QDateTime::currentDateTime().toString("hh:mm:ss:zzz");
 
     float resultTemp = node.m_TempRaw;
     resultTemp -= m_BasicPart->adjust(1);
-    if(g_tempSaveLog)
-        logText += QString("[%1]ClearGrass温补信息：m_BasicPart,resultTemp = %2\n").arg(time).arg(resultTemp);
+
     resultTemp -= m_WifiPart->adjust((node.m_WiFiStatus == 1 ||node.m_WiFiStatus== 2) ? 0 : 1);
-    if(g_tempSaveLog)
-        logText += QString("[%1]ClearGrass温补信息：m_WifiPart,resultTemp = %2\n").arg(time).arg(resultTemp);
     resultTemp -= m_ScreenOffPart->adjust(node.m_ScreenOn == 0 ? 1 : 0);
-    if(g_tempSaveLog)
-        logText += QString("[%1]ClearGrass温补信息：m_ScreenOffPart,resultTemp = %2\n").arg(time).arg(resultTemp);
     resultTemp -= m_HighCpuFreqPart->adjust(node.m_CPUFreq == 1 ? 1 : 0);
-    if(g_tempSaveLog)
-        logText += QString("[%1]ClearGrass温补信息：m_HighCpuFreqPart,resultTemp = %2\n").arg(time).arg(resultTemp);
     resultTemp -= m_BrightnessPart->adjust(node.m_LCDBrightness);
-    if(g_tempSaveLog)
-        logText += QString("[%1]ClearGrass温补信息：m_BrightnessPart,resultTemp = %2\n").arg(time).arg(resultTemp);
     if(node.m_CPUFreq == 1)
     {
         resultTemp -= m_CpuLoadPart->adjust(node.m_CpuLoad);
-        if(g_tempSaveLog)
-            logText += QString("[%1]ClearGrass温补信息：m_CpuLoadPart,resultTemp = %2\n").arg(time).arg(resultTemp);
     }
     else
     {
@@ -89,8 +77,6 @@ float TempHumFixEngine::fixTemp(const BranSampleNode& node)
 
     }
     resultTemp -= m_BatteryPart->adjust(node.m_Charging ? 0 : 1);
-    if(g_tempSaveLog)
-        logText +=QString("[%1]ClearGrass温补信息：m_BatteryPart,resultTemp = %2\n").arg(time).arg(resultTemp);
     if(node.m_CurrentMA > m_HighestChargingMA)
         m_HighestChargingMA = node.m_CurrentMA;
     int ma = node.m_CurrentMA * CONST_CHARGING_MA / m_HighestChargingMA;
@@ -98,19 +84,13 @@ float TempHumFixEngine::fixTemp(const BranSampleNode& node)
         resultTemp -= m_ChargingPart->adjust(ma * ma);
     else
         resultTemp -= m_ChargingPart->adjust(0);
-    if(g_tempSaveLog)
-        logText +=QString("[%1]ClearGrass温补信息：m_ChargingPart,m_CurrentMA = %2， resultTemp = %3\n").arg(time).arg(node.m_CurrentMA).arg(resultTemp);
 
     if(m_WarmStartPart != NULL)
     {
         resultTemp -= m_WarmStartPart->adjust(0);
-        if(g_tempSaveLog)
-            logText +=QString("[%1]ClearGrass温补信息：m_WarmStartPart,resultTemp = %2\n").arg(time).arg(resultTemp);
     }
     //    resultTemp -= m_TempAlmostFullPart->adjust(node.m_Charging.find("Discharging") == string::npos && node.m_Capacity >= 97 && node.m_Capacity != 100 ? 1 : 0);
     resultTemp += CONST_TEMP_DIFF;
-    if(g_tempSaveLog)
-        logText +=QString("[%1]ClearGrass温补信息：resultTemp = %2\n\n\n").arg(time).arg(resultTemp);
     return resultTemp;
 
 

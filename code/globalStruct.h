@@ -15,10 +15,82 @@
 /* Includes ------------------------------------------------------------------*/
 #include "globalDefine.h"
 #include <QList>
-
+#include <QString>
 /* Private define ------------------------------------------------------------*/
 
 #define     ERROR_DATA                  9999                            // PM2.5错误数据
+
+typedef struct _LogInfo
+{
+    int status_chargingOn;
+    int status_cpuLoad;
+    int status_cpuF;
+    int status_cpuLoadF;
+    int status_LCDBrightness;
+    QString sDatetime;
+    bool pm25Running;
+
+    float tVOC;             //tVOC值
+    float CO2e;             //二氧化碳值
+    QString baseline;       //baseline
+    float   cleargrass_temp;           //青萍热启动校准后的温度值
+    float   cleargrass_hum;            //青萍热启动校准后的湿度值
+    float   sensirion_temp;           //sensirion校准后的温度值
+    float   sensirion_hum;            //sensirion校准后的湿度值
+
+    float  cg_temp_add;               //青萍校准最终值
+    float   temp_raw;       //温度原始值
+    float   second_temp_raw;    //第二个温度传感器值
+    float   hum_raw;        //湿度原始值
+    int     pm25;           //pm2.5值
+    float   cpu_load;       //cpu占有率
+    float   cpu_fre;        //cpu频率 单位G
+    float    capacity;       //电量
+    bool    charging;       //是否充电
+    int     light;          //亮度值
+    QString cityID;        //城市id
+    QString deviceID;      //城市id
+    int     wifi_status;   //Wi-Fi状态
+
+    bool screenOn;
+    int currentMA;
+    int voltage;
+
+    _LogInfo()
+    {
+        this->tVOC = ERROR_DATA;
+        this->CO2e = ERROR_DATA;
+        this->baseline = "000000";
+        this->cleargrass_temp =ERROR_DATA;
+        this->cleargrass_hum = ERROR_DATA;
+        this->sensirion_hum = ERROR_DATA;
+        this->sensirion_temp = ERROR_DATA;
+        this->temp_raw = ERROR_DATA;
+        this->hum_raw = ERROR_DATA;
+        this->pm25 = ERROR_DATA;
+        this->cpu_load = -1;
+        this->cpu_fre = -1;
+        this->capacity = -1;
+        this->light = -1;
+        this->deviceID = "";
+        this->cityID = "";
+        this->wifi_status = 0;
+        this->screenOn = 1;
+        this->currentMA = 0;
+        this->voltage = 0;
+
+        this->status_chargingOn = 0;
+        this->status_cpuLoad = 0;
+        this->status_cpuF = 0;
+        this->status_cpuLoadF = 0;
+        this->status_LCDBrightness = 0;
+        this->sDatetime = "";
+        this->pm25Running = false;
+
+    }
+
+}LogInfo;
+
 
 enum PageType
 {

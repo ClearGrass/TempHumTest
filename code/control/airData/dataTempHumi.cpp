@@ -108,8 +108,7 @@ void DataTempHumi::slot_update_data()
 {
     float tempValue, rawTempValue;
     float humiValue, rawHumiValue;
-    float tempRowSecond;
-    static int i;
+    float tempRowSecond,clearGrass_temp;
 #ifdef Bran_R8
     // R8获取传感器数据
 
@@ -128,13 +127,14 @@ void DataTempHumi::slot_update_data()
         humiValue    = (float)humidity / 1000.0;
         rawTempValue = (float)rawTemp / 1000.0;
         rawHumiValue = (float)rawHumi / 1000.0;
-        if (i++ >= 10)
-        {
-            i = 0;
-            qDebug("--------------------------------------------temperature:    %f degC, humidity:    %f  \n", tempValue, humiValue);
-            qDebug("--------------------------------------------rawTemperature: %f degC, rawhumidity: %f  \n", rawTempValue, rawHumiValue);
-            qDebug("---------------------------------------------status_charging_on:%f, status_CPU_load:%f, status_LCD_bri:%f\n",status_charging_on, status_CPU_load, status_LCD_bri );
-        }
+
+        bran_node.init();
+        clearGrass_temp = tempHumEngine.fixTemp(bran_node);
+
+
+//        if(tempValue != rawTempValue)
+//            humiValue = (humiValue - rawHumiValue) * (clearGrass_temp - rawTempValue) / (tempValue - rawTempValue) + rawHumiValue;
+
     }
     else
     {
@@ -142,6 +142,8 @@ void DataTempHumi::slot_update_data()
         humiValue = ERROR_DATA;
         qDebug("error reading measurement\n");
     }
+
+
     emit signal_update_tempFlag(status_charging_on, status_CPU_load,status_CPU_f,status_CPU_load_CPU_f, status_LCD_bri);
 
 #else
@@ -167,7 +169,7 @@ void DataTempHumi::slot_update_data()
     dataHUMI.value = humiValue;
 
     //发送原始值
-    emit signal_update_rawData(rawTempValue, rawHumiValue, tempRowSecond);
+    emit signal_update_rawData(rawTempValue, rawHumiValue, tempRowSecond, clearGrass_temp);
     // 发送更新数据信号
     emit signal_update_data(dataTEMP);
     emit signal_update_data(dataHUMI);

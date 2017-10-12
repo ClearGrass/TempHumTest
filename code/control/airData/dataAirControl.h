@@ -39,7 +39,7 @@ signals:
     void signal_battery_charging(bool);
     void signal_intervalPM25_charging(IntervalType);
     void signal_intervalPM25_discharging(IntervalType);
-    void signal_update_rawData(float temp, float hum, float secondTemp);
+    void signal_update_rawData(float temp, float hum, float secondTemp, float cg_temp);
     void signal_update_tempFlag(int status_charging_on, int status_CPU_load,int status_CPU_f,int status_CPU_load_CPU_f, int status_LCD_bri);
 
 private slots:
@@ -62,7 +62,7 @@ private slots:
     void slot_battery_charging(bool);
     void slot_intervalPM25_charging(IntervalType);
     void slot_intervalPM25_discharging(IntervalType);
-    void slot_updateRaw(float temp, float hum, float secondTemp);
+    void slot_updateRaw(float temp, float hum, float secondTemp, float ct_temp);
 
 private:
     explicit DataAirControl();

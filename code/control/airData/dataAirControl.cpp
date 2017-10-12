@@ -114,7 +114,7 @@ void DataAirControl::connect_init()
 
     connect(dataPm25, SIGNAL(signal_update_dataDaily(AirDataDaily)), this, SLOT(slot_update_dataDaily(AirDataDaily)));
     connect(dataTempHumi, SIGNAL(signal_update_dataDaily(AirDataDaily)), this, SLOT(slot_update_dataDaily(AirDataDaily)));
-    connect(dataTempHumi, SIGNAL(signal_update_rawData(float, float, float)), this, SLOT(slot_updateRaw(float,float, float)));
+    connect(dataTempHumi, SIGNAL(signal_update_rawData(float, float, float, float)), this, SLOT(slot_updateRaw(float,float, float,float)));
     connect(dataTempHumi, SIGNAL(signal_update_tempFlag(int,int,int,int,int)), this, SIGNAL(signal_update_tempFlag(int,int,int, int, int)));
 
     connect(dataTvocCo2e, SIGNAL(signal_update_dataDaily(AirDataDaily)), this, SLOT(slot_update_dataDaily(AirDataDaily)));
@@ -546,9 +546,9 @@ void DataAirControl::slot_intervalPM25_discharging(IntervalType interval)
     emit signal_intervalPM25_discharging(interval);
 }
 
-void DataAirControl::slot_updateRaw(float temp, float hum, float secondTemp)
+void DataAirControl::slot_updateRaw(float temp, float hum, float secondTemp, float ct_temp)
 {
-    emit signal_update_rawData(temp, hum, secondTemp);
+    emit signal_update_rawData(temp, hum, secondTemp, ct_temp);
 }
 
 /*******************************************************************************
