@@ -1,0 +1,11 @@
+Current Version:wifi_and_screen_test/999.0/unknown
+Flag, status_charging_on, status_CPU_load, status_CPU_f, status_CPU_load_CPU_f, status_LCD_bri, Date Time, pm2.5 sensor is On, Pm2.5, Temperature, Raw Temperature, Sencond Sensor Temp, Humidity (%), Raw Humidity (%), Baseline, tVOC, CO2e, CPU Frequency, CPU Usage (%), Light, Charging, Voltage (uV), Current (mA), Capacity (%), Wi-Fi Status, Screen On
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-43, Off, -1, 27.00, 0.00, 0.00, 32, 0.00, 0x, 0.09, 800, 1.008G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-44, Off, -1, 27.00, 0.00, 0.00, 32, 0.00, 0x, 0.11, 740, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-45, Off, -1, 27.00, 0.00, 0.00, 32, 0.00, 0x, 0.12, 720, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-46, Off, -1, 26.00, 0.00, 0.00, 33, 0.00, 0x, 0.13, 830, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-47, Off, -1, 26.00, 0.00, 0.00, 34, 0.00, 0x, 0.15, 850, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-48, Off, -1, 26.00, 0.00, 0.00, 35, 0.00, 0x, 0.2, 890, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-49, Off, -1, 26.00, 0.00, 0.00, 35, 0.00, 0x, 0.21, 980, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-50, Off, -1, 27.00, 0.00, 0.00, 35, 0.00, 0x, 0.23, 1204, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
+Basic_mode_and_wifi_off, 0, 0, 0, 0, 0, 2017-09-19-21-28-51, Off, -1, 27.00, 0.00, 0.00, 35, 0.00, 0x, 0.28, 1474, 0G, 0, 0, Charging, 0, 2.70394e-06, 100, Disconnect, 1
