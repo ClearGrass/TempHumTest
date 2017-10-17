@@ -96,7 +96,7 @@ Rectangle {
         spacing: 45
 
         Text {
-           text: "七种模式测试"
+           text: "六种模式测试"
 
             color: "#ffffff"
             //字体
