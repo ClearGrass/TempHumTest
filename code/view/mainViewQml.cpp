@@ -76,11 +76,10 @@ void MainViewQML::init()
 
     pmUpdateTimer->setInterval(6000);
 
-    falgModelist.append("High_CPU_Freq_and_wifi_off");
-    falgModelist.append("High_CPU_Freq_mode");
-    falgModelist.append("High_CPU_Freq_and_screen_off");
-    falgModelist.append("High_CPU_Freq");
-    falgModelist.append("LCD max brightness mode");
+    falgModelist.append("Basic");
+    falgModelist.append("Screen On");
+    falgModelist.append("Wifi On");
+    falgModelist.append("LCD max brightness");
     falgModelist.append("CPU max load");
     modeIndex = 0;
     modeSwitchTimer  = new QTimer();
@@ -191,8 +190,7 @@ void MainViewQML::connect_init()
     connect(pm_on_timer, SIGNAL(timeout()), this,SLOT(slot_pm_on_timeout()));
     //两个小时
     modeSwitchTimer->start(1000 *60 *60 * 2);
-
-    //    modeSwitchTimer->start(40*1000);
+    //    modeSwitchTimer->start(60*1000);
     //    QTimer::singleShot(1000 * 60 * 60 *2, this, SLOT(slot_pmOn()));
     //        freSwitchTimer->start(FRE_INTERVAL);
     saveDataTimer->start(1000);
@@ -905,7 +903,7 @@ int MainViewQML::slot_getWifiIntensity()
         break;
     case CONNECTTING:
         iWifiIntensity = -2;
-        wifiStatus = "Disconnect";
+        wifiStatus = "CONNECTTING";
 
         break;
     case UNUSEABLE:
@@ -1722,7 +1720,7 @@ QString MainViewQML::slot_getBaseLine()
 void MainViewQML::slot_modeSwitch()
 {
     modeIndex++;
-    if(modeIndex > 5)
+    if(modeIndex > 4)
     {
         emit signal_testFinished();
         slot_setCpuUsage0();
@@ -1736,27 +1734,29 @@ void MainViewQML::slot_modeSwitch()
     switch (modeIndex) {
     //基态
     case 0:
-        sysControl->slot_screenOn();
+        sysControl->slot_screenOff();
+
         slot_setWifiOff(false);
         break;
     case 1:
-    case 3:
+        slot_setLightValue(0);
+        slot_setCpuUsage0();
+        sysControl->slot_screenOn();
+        slot_setWifiOff(false);
+        break;
+    case 2:
         slot_setLightValue(0);
         slot_setCpuUsage0();
         sysControl->slot_screenOn();
         slot_setWifiOff(true);
         break;
-    case 2:
-        sysControl->slot_screenOff();
-        slot_setWifiOff(true);
-        break;
-    case 4://亮度最高
+    case 3://亮度最高
         slot_setLightValue(100);
         slot_setCpuUsage0();
         sysControl->slot_screenOn();
         slot_setWifiOff(true);
         break;
-    case 5://CPU满载
+    case 4://CPU满载
         sysControl->slot_screenOn();
         slot_setLightValue(100);
         slot_setCpuUseage100();
@@ -1765,7 +1765,7 @@ void MainViewQML::slot_modeSwitch()
     default:
         break;
     }
-    emit signal_autoLightChanged();
+    //    emit signal_autoLightChanged();
 }
 
 void MainViewQML::slot_switchFre()
@@ -1791,23 +1791,19 @@ void MainViewQML::slot_save_data()
     if(num< 100)
         num++;
 
-    if(modeIndex == 0 && num == 2)
+    if(modeIndex == 0 && num == 10)
     {
         slot_setWifiOff(false);
+        sysControl->slot_screenOff();
     }
 
-    //    if(modeIndex == 0 && num == 5)
-    //    {
-    //        pm_off_timer->start();
-    //        emit signal_change_fre(false);
-    //    }
-    if(modeIndex == 0 && num < 5)
+    if(modeIndex == 0 && num < 15)
     {
         return ;
     }
-    if(modeIndex > 5)
+    if(modeIndex > 4)
     {
-        modeIndex  = 5 ;
+        modeIndex  = 4 ;
         return ;
     }
     QDir *debug = new QDir;
@@ -1818,7 +1814,7 @@ void MainViewQML::slot_save_data()
     }
 
     //    QString path = QString("./debugFile/tempHum-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
-    QString path = QString("./debugFile/six-modes-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+    QString path = QString("./debugFile/five-modes-test-%1.csv").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
 
     QFile file(filePath);
     if(!file.exists())

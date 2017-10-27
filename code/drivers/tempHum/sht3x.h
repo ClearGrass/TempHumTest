@@ -168,8 +168,8 @@ extern "C" {
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
-                                                             int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri);
+int8_t sht_measure_blocking_read_compensated_every_1_seconds(float *temperature_ambient, float *humidity_ambient, float *temperature_raw, float *humidity_raw,
+                                                             float *status_charging_on, float *status_CPU_load,float *status_WIFI_f, float *status_CPU_load_CPU_f, float *status_LCD_bri);
 
 
 /**
@@ -186,9 +186,12 @@ int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperatur
  *                             humidity should be stored (value multiplied by 1000)
  * @return                     0 if the command was successful, else an error code.
  */
-int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
-                                            int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri);
+int8_t sht_read_compensated_every_1_seconds(float *temperature_ambient, float *humidity_ambient, float *temperature_raw, float *humidity_raw,
+                                            float *status_charging_on, float *status_CPU_load,float *status_WIFI_f, float *status_CPU_load_CPU_f, float *status_LCD_bri);
 
+
+
+void sht_compensate_every_1_seconds(float temperature_sht, float humidity_sht, float status_WIFI_f, float status_LCD_f, float status_CPU_usage, float status_charging_f, float *temperature_ambient, float *humidity_ambient);
 #ifdef __cplusplus
 }
 #endif

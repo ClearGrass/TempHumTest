@@ -56,7 +56,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-
 /**
  * \file
  *
@@ -210,63 +209,105 @@ static const int32_t c2[35] = {73727, 523813, 1879048192, 221308, -264241152, 52
 static const int16_t c1[26] = {1000, 25000, 500, -256, 10139, -18344, 9525, -24647, 12797, 30177,
                                -8696, -21841, -20282, -4288, 18432, 18372, -15091, -14261, -15108, -2114,
                                -5310, -10203, -4931, -1042, 6554, 16384};
-static const int8_t c0[12] = {19, 14, 5, 1, 6, -12, -17, -41, -14, -18,
-                              -45, 8};
-static int64_t v[18] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 0, 0};
+static const float c0[107] = {1.0000000000, 0.9894115925, -0.0050286897, 0.0035573428, -0.0025373292, -0.0176862087, 0.0666943341, 0.0039762715, 1.0015621185, 0.0051123165,
+                              0.0029432077, -0.0077405563, 0.0301103573, 0.0095754825, 0.0040270253, 0.9699417353, -0.0042977994, 0.0504533462, 0.0276855268, -0.0050600190,
+                              -0.0024013105, 0.0074735954, 0.9989154935, 0.0005009650, 0.0315656438, 0.9986017346, -0.0010051042, 0.0000788704, -0.0001593348, 0.0017001175,
+                              -0.0009503227, 0.0000117839, 0.9998781085, 0.0005055637, 0.0004446321, 0.0009435145, -0.0005258211, 0.0013020372, 0.0005841971, 0.9974586964,
+                              -0.0013308909, 0.0010007482, 0.0021077823, -0.0007078543, -0.0005487924, 0.0005360773, 0.9997127056, 0.0011542848, 0.0000020970, 0.9956094623,
+                              -0.0017681960, 0.0295550581, 0.0082308045, 1.0032920837, 0.0121799996, -0.1430058628, -0.1127503887, -0.1328477114, -0.1286462694, 0.0005608799,
+                              -0.0000264320, -0.0011427251, -0.0016119533, -0.0923265517, -0.0380489007, -0.0034561816, -0.0000020776, -0.0000029368, -0.0031953431, -0.0207886845,
+                              0.5549640656, 0.0024739224, 0.0023754274, 3.1968047619, 8.4792108536, 16.5520019531, 7.9284338951, 7.9480309486, 0.5159306526, 0.6685907841,
+                              0.3333463967, 0.0619914420, -0.1749899834, 0.8352339268, 0.2925345600, 1.8776977062, 0.2246724516, -0.0592944771, 0.3155021071, 2.1917438507,
+                              -0.0131601393, 0.0676164255, 0.0438348800, 0.3333333433, 0.0563751422, -0.2896538973, -0.1877789795, 4.2837800980, -1.4279266596, -0.0031994930,
+                              0.0164389051, 0.0106571354, 0.2681199908, 0.0810400024, 59.1073341370, 256.0000000000, 100.0000000000};
+static float v[26] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                      0, 0, 0, 0, 0, 0};
 static int32_t t1[5] = {0, 0, 0, 0, 0};
 static uint8_t t0[8] = {54, 130, 0, 0, 0, 0, 0, 0};
 
-int8_t sht_measure_blocking_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
-                                                             int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri) {
+int8_t sht_measure_blocking_read_compensated_every_1_seconds(float *temperature_ambient, float *humidity_ambient, float *temperature_raw, float *humidity_raw,
+                                                             float *status_charging_on, float *status_CPU_load,float *status_WIFI_f, float *status_CPU_load_CPU_f, float *status_LCD_bri) {
     int8_t ret = sht_measure();
     if (ret == STATUS_OK) {
         sensirion_sleep_usec(MEASUREMENT_DURATION_USEC);
-        ret = sht_read_compensated_every_1_seconds(temperature_ambient, humidity_ambient,temperature_raw,humidity_raw,status_charging_on,status_CPU_load,status_CPU_f,status_CPU_load_CPU_f,status_LCD_bri);
+        ret = sht_read_compensated_every_1_seconds(temperature_ambient, humidity_ambient,temperature_raw,humidity_raw,status_charging_on,status_CPU_load,status_WIFI_f,status_CPU_load_CPU_f,status_LCD_bri);
     }
     return ret;
 }
 
-int8_t sht_read_compensated_every_1_seconds(int32_t *temperature_ambient, int32_t *humidity_ambient, int32_t *temperature_raw, int32_t *humidity_raw,
-                                            int32_t *status_charging_on, int32_t *status_CPU_load,int32_t *status_CPU_f, int32_t *status_CPU_load_CPU_f, int32_t *status_LCD_bri) {
+int8_t sht_read_compensated_every_1_seconds(float *temperature_ambient, float *humidity_ambient, float *temperature_raw, float *humidity_raw,
+                                            float *status_charging_on, float *status_CPU_load,float *status_WIFI_f, float *status_CPU_load_CPU_f, float *status_LCD_bri) {
     int8_t ret; uint8_t i, j, k;
     ret = sht_common_read_ticks(SHT3X_ADDRESS, &t1[0], &t1[1]);
-    ret |= sensirion_i2c_write(SHT3X_ADDRESS, t0, 2); sensirion_sleep_usec(c1[2]);
+    ret |= sensirion_i2c_write(SHT3X_ADDRESS, t0, 2);
+    sensirion_sleep_usec(c1[2]);
     ret |= sensirion_i2c_read(SHT3X_ADDRESS, t0+2, 6);
-    get_status_charging_on(&t1[2]);     get_status_CPU_load_CPU_f(&t1[3],status_CPU_load, status_CPU_f); get_status_LCD_bri(&t1[4]);
-    *temperature_raw = ((21875 * t1[0]) >> 13) - 45000;
-    *humidity_raw = ((12500 * t1[1]) >> 13);
-    *status_charging_on    = t1[2];
-    *status_CPU_load_CPU_f = t1[3];
-    *status_LCD_bri = t1[4];
-    v[1]=(int64_t)((((uint32_t)t0[2])<<24)|(((uint32_t)t0[3])<<16)|(((uint32_t)t0[5])<<8)|((uint32_t)t0[6]));
-    v[2]=(int64_t)t1[0]; v[3]=(int64_t)t1[1]; v[4]=(int64_t)t1[2]; v[5]=(int64_t)t1[3]; v[6]=(int64_t)t1[4];
-    if(v[0]==0) {
-        v[0]=c0[3];
-        v[12]=((c2[0])>>c0[2]);
-        v[13]=((c2[17]*v[8])>>c0[0])+((c2[18]*v[9])>>c0[0])+((c2[19]*v[10])>>c0[0])+((c1[10]*v[11])>>c0[0])+((c2[20]*v[2])>>c0[0])+((c1[11]*v[4])>>c0[0])+((c2[21]*v[5])>>c0[0])+((c1[12]*v[6])>>c0[0])+((c1[13])>>c0[2])+((c2[22])>>c0[2]);
-        v[14]=((c2[23]*v[7])>>c0[0])+((c2[24]*v[8])>>c0[0])+((c2[25]*v[9])>>c0[0])+((c2[26]*v[10])>>c0[0])+((c2[27]*v[11])>>c0[0])+((c1[14]*v[1])>>c0[0])+((c2[28]*v[4])>>c0[0])+((c2[29]*v[5])>>c0[0])+((c2[30]*v[6])>>c0[0])+((c1[15])>>c0[2])+((c2[31])>>c0[2]);
-        v[15]=((c1[16]*v[8])>>c0[0])+((c1[17]*v[9])>>c0[0])+((c1[18]*v[10])>>c0[0])+((c1[19]*v[11])>>c0[0])+((c2[32]*v[2])>>c0[0])+((c1[20]*v[4])>>c0[0])+((c1[21]*v[5])>>c0[0])+((c1[22]*v[6])>>c0[0])+((c1[23])>>c0[2])+((c2[33])>>c0[2]);
-        v[16]=c1[24]; for(i=0;i<c0[11];i++) {v[16]=v[16]+v[16]-((((v[16]*v[16])>>c0[0])*v[15])>>c0[1]);}
-        v[17]=c1[25]+((v[14]*v[16])>>(c0[0]+c0[11])); for(j=0;j<c0[11];j++) {v[17]=((v[17]*v[17])>>c0[1]);} v[17]=((v[17]*v[3])>>c0[1]); if(v[17]>c2[34]) v[17]=c2[34];
-    } else {
-        int64_t vp[18]; for(k=0;k<18;k++) {vp[k]=v[k];}
-        v[7]=((c0[4]*v[1])>>c0[0])+((c1[3])>>c0[2]);
-        v[8]=((c2[1]*vp[8])>>c0[0])+((c0[5]*vp[9])>>c0[0])+((c0[6]*vp[10])>>c0[0])+((c0[7]*vp[11])>>c0[0])+((c2[2]*vp[12])>>c0[0])+((c2[3]*v[6])>>c0[0])+((c1[4])>>c0[2])+((c2[4])>>c0[2]);
-        v[9]=((c0[5]*vp[8])>>c0[0])+((c2[5]*vp[9])>>c0[0])+((c0[8]*vp[10])>>c0[0])+((c0[9]*vp[11])>>c0[0])+((c2[2]*vp[12])>>c0[0])+((c2[6]*v[4])>>c0[0])+((c2[7]*v[5])>>c0[0])+((c1[5]*v[6])>>c0[0])+((c1[6])>>c0[2])+((c2[4])>>c0[2]);
-        v[10]=((c0[6]*vp[8])>>c0[0])+((c0[8]*vp[9])>>c0[0])+((c2[8]*vp[10])>>c0[0])+((c0[10]*vp[11])>>c0[0])+((c2[9]*vp[12])>>c0[0])+((c2[10]*v[5])>>c0[0])+((c1[7]*v[6])>>c0[0])+((c1[8])>>c0[2])+((c2[11])>>c0[2]);
-        v[11]=((c0[7]*vp[8])>>c0[0])+((c0[9]*vp[9])>>c0[0])+((c0[10]*vp[10])>>c0[0])+((c2[12]*vp[11])>>c0[0])+((c2[9]*vp[12])>>c0[0])+((c2[13]*v[4])>>c0[0])+((c2[14]*v[5])>>c0[0])+((c2[15]*v[6])>>c0[0])+((c1[9])>>c0[2])+((c2[11])>>c0[2]);
-        v[12]=((c0[11]*vp[7])>>c0[0])+((c2[16])>>c0[2]);
-        v[13]=((c2[17]*v[8])>>c0[0])+((c2[18]*v[9])>>c0[0])+((c2[19]*v[10])>>c0[0])+((c1[10]*v[11])>>c0[0])+((c2[20]*v[2])>>c0[0])+((c1[11]*v[4])>>c0[0])+((c2[21]*v[5])>>c0[0])+((c1[12]*v[6])>>c0[0])+((c1[13])>>c0[2])+((c2[22])>>c0[2]);
-        v[14]=((c2[23]*v[7])>>c0[0])+((c2[24]*v[8])>>c0[0])+((c2[25]*v[9])>>c0[0])+((c2[26]*v[10])>>c0[0])+((c2[27]*v[11])>>c0[0])+((c1[14]*v[1])>>c0[0])+((c2[28]*v[4])>>c0[0])+((c2[29]*v[5])>>c0[0])+((c2[30]*v[6])>>c0[0])+((c1[15])>>c0[2])+((c2[31])>>c0[2]);
-        v[15]=((c1[16]*v[8])>>c0[0])+((c1[17]*v[9])>>c0[0])+((c1[18]*v[10])>>c0[0])+((c1[19]*v[11])>>c0[0])+((c2[32]*v[2])>>c0[0])+((c1[20]*v[4])>>c0[0])+((c1[21]*v[5])>>c0[0])+((c1[22]*v[6])>>c0[0])+((c1[23])>>c0[2])+((c2[33])>>c0[2]);
-        v[16]=c1[24]; for(i=0;i<c0[11];i++) {v[16]=v[16]+v[16]-((((v[16]*v[16])>>c0[0])*v[15])>>c0[1]);}
-        v[17]=c1[25]+((v[14]*v[16])>>(c0[0]+c0[11])); for(j=0;j<c0[11];j++) {v[17]=((v[17]*v[17])>>c0[1]);} v[17]=((v[17]*v[3])>>c0[1]); if(v[17]>c2[34]) v[17]=c2[34];
-    }
-    *temperature_ambient = (int32_t)((c1[0]*v[13])>>c0[1]);
-    *humidity_ambient = (int32_t)((c1[1]*v[17])>>c0[1]);
+    *temperature_raw = (((21875 * t1[0]) >> 13) - 45000)/1000.0;
+    *humidity_raw = ((12500 * t1[1]) >> 13) / 1000.0;
+    get_status_charging_on(status_charging_on);
+    get_status_LCD_bri(status_LCD_bri);
+    get_status_CPU_load(status_CPU_load);
+    *status_CPU_load_CPU_f = -1;
+
+    sht_compensate_every_1_seconds(*temperature_raw, *humidity_raw, *status_WIFI_f, *status_LCD_bri, *status_CPU_load, *status_charging_on, temperature_ambient, humidity_ambient);
+
     return ret;
 }
+
+
+void sht_compensate_every_1_seconds(float temperature_sht, float humidity_sht, float status_WIFI_f, float status_LCD_f, float status_CPU_usage, float status_charging_f, float *temperature_ambient, float *humidity_ambient) {
+    uint8_t j, k;
+
+
+    v[1]=temperature_sht; v[2]=humidity_sht; v[3]=status_WIFI_f; v[4]=status_LCD_f; v[5]=status_CPU_usage; v[6]=status_charging_f;
+    if(v[0]==0) {
+        v[0]=c0[0];
+        v[17]=c0[0]*v[1]+c0[65]*v[3]+c0[66]*v[4]+c0[67]*v[5]+c0[68]*v[6]+c0[69];
+        v[19]=c0[75]*v[17];
+        v[20]=c0[76]*v[17];
+        v[21]=c0[77]*v[17];
+        v[22]=c0[90]*v[19]+c0[91]*v[20]+c0[92]*v[21]+c0[93]*v[17];
+        v[23]=c0[94]*v[19]+c0[95]*v[20]+c0[96]*v[21]+c0[97]*v[1]+c0[98]*v[17];
+        v[24]=c0[99]*v[19]+c0[100]*v[20]+c0[101]*v[21]+c0[102]*v[1]+c0[103]*v[17]+c0[104];
+        v[25]=c0[0]+(v[23]/v[24])/c0[105]; for(j=0;j<8;j++) {v[25]=v[25]*v[25];} v[25]=v[25]*v[2]; if(v[25]>c0[106]) v[25]=c0[106];
+    } else {
+        float vp[26]; int k; for(k=0;k<26;k++) {vp[k]=v[k];}
+        v[7]=c0[1]*vp[7]+c0[2]*vp[8]+c0[3]*vp[9]+c0[4]*vp[10]+c0[5]*v[3]+c0[6];
+        v[8]=c0[7]*vp[7]+c0[8]*vp[8]+c0[9]*vp[9]+c0[10]*vp[10]+c0[11]*v[3]+c0[12];
+        v[9]=c0[13]*vp[7]+c0[14]*vp[8]+c0[15]*vp[9]+c0[16]*vp[10]+c0[17]*v[3]+c0[18];
+        v[10]=c0[19]*vp[7]+c0[20]*vp[8]+c0[21]*vp[9]+c0[22]*vp[10]+c0[23]*v[3]+c0[24];
+        v[11]=c0[25]*vp[11]+c0[26]*vp[12]+c0[27]*vp[13]+c0[28]*vp[14]+c0[29]*v[4]+c0[30]*v[5];
+        v[12]=c0[31]*vp[11]+c0[32]*vp[12]+c0[33]*vp[13]+c0[34]*vp[14]+c0[35]*v[4]+c0[36]*v[5];
+        v[13]=c0[37]*vp[11]+c0[38]*vp[12]+c0[39]*vp[13]+c0[40]*vp[14]+c0[41]*v[4]+c0[42]*v[5];
+        v[14]=c0[43]*vp[11]+c0[44]*vp[12]+c0[45]*vp[13]+c0[46]*vp[14]+c0[47]*v[4]+c0[48]*v[5];
+        v[15]=c0[49]*vp[15]+c0[50]*vp[16]+c0[51]*v[6];
+        v[16]=c0[52]*vp[15]+c0[53]*vp[16]+c0[54]*v[6];
+        v[17]=c0[55]*v[7]+c0[56]*v[8]+c0[57]*v[9]+c0[58]*v[10]+c0[59]*v[11]+c0[60]*v[12]+c0[61]*v[13]+c0[62]*v[14]+c0[63]*v[15]+c0[64]*v[16]+c0[0]*v[1]+c0[65]*v[3]+c0[66]*v[4]+c0[67]*v[5]+c0[68]*v[6]+c0[69];
+        v[18]=c0[55]*v[7]+c0[56]*v[8]+c0[57]*v[9]+c0[58]*v[10]+c0[59]*v[11]+c0[60]*v[12]+c0[61]*v[13]+c0[62]*v[14]+c0[63]*v[15]+c0[64]*v[16]+c0[70]*v[3]+c0[71]*v[4]+c0[72]*v[5]+c0[73]*v[6]+c0[74]; if(v[18]<0) {v[18]=0;}
+        v[19]=c0[78]*vp[19]+c0[79]*vp[20]+c0[80]*vp[21]+c0[81]*v[17];
+        v[20]=c0[82]*vp[19]+c0[83]*vp[20]+c0[84]*vp[21]+c0[85]*v[17];
+        v[21]=c0[86]*vp[19]+c0[87]*vp[20]+c0[88]*vp[21]+c0[89]*v[17];
+        v[22]=c0[90]*v[19]+c0[91]*v[20]+c0[92]*v[21]+c0[93]*v[17];
+        v[23]=c0[94]*v[19]+c0[95]*v[20]+c0[96]*v[21]+c0[97]*v[1]+c0[98]*v[17];
+        v[24]=c0[99]*v[19]+c0[100]*v[20]+c0[101]*v[21]+c0[102]*v[1]+c0[103]*v[17]+c0[104];
+        v[25]=c0[0]+(v[23]/v[24])/c0[105]; for(j=0;j<8;j++) {v[25]=v[25]*v[25];} v[25]=v[25]*v[2]; if(v[25]>c0[106]) v[25]=c0[106];
+    }
+    *temperature_ambient = v[22];
+    *humidity_ambient = v[25];
+
+//    printf("temperature_sht= %f\r\n", temperature_sht);
+//    printf("humidity_sht= %f\r\n", humidity_sht);
+//    printf("status_WIFI_f= %f\r\n", status_WIFI_f);
+//    printf("status_LCD_f= %f\r\n", status_LCD_f);
+//    printf("status_CPU_usage= %f\r\n", status_CPU_usage);
+//    printf("status_charging_f= %f\r\n", status_charging_f);
+//    printf("temperature_ambient= %f\r\n", *temperature_ambient);
+//    printf("humidity_ambient= %f\r\n", *humidity_ambient);
+
+
+}
+
 
 #endif
 

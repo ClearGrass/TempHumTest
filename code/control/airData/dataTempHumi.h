@@ -8,7 +8,7 @@
 #include "globalVariable.h"
 #include "BranSampleNode.h"
 #include "TempHumFixEngine.h"
-
+#include "sysControl.h"
 /*******************************************************************************
 * Description   :   温湿度数据类，包含”传感器取值“/“数据库交互”/”服务器交互“/”前台页面交互“，
 *                   继承QThread 独立线程
@@ -19,7 +19,7 @@ class DataTempHumi : public QThread
     Q_OBJECT
 public:
     static DataTempHumi *getInstance();                                 // 获取温湿度单例
-
+    float wifi_on;
 signals:
     void signal_update_data(AirData);
     void signal_update_dataDaily(AirDataDaily);
@@ -45,6 +45,7 @@ private:
 
     AirDataDaily dataDailyHUMI;
     AirDataDaily dataDailyTEMP;
+    SysControl  *sysControl;
 
     float maxTemp;
     float minTemp;

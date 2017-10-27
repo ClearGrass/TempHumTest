@@ -73,7 +73,7 @@ extern "C" {
 #if USE_SENSIRION_STDINT_TYPES
 typedef long long int int64_t;
 //typedef long int32_t;
-typedef unsigned long uint32_t;
+//typedef unsigned long uint32_t;
 typedef short int16_t;
 typedef unsigned short uint16_t;
 //typedef char int8_t;
@@ -111,7 +111,7 @@ short sensirion_i2c_read(uint8_t address, uint8_t* data, uint16_t count);
 
 short sensirion_i2c_write(uint8_t address, const uint8_t* data, uint16_t count);
 
-void sensirion_sleep_usec(uint32_t useconds);
+void sensirion_sleep_usec(int useconds);
 
 #ifdef __cplusplus
 }

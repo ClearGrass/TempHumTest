@@ -70,13 +70,13 @@ extern "C" {
  * Version: cleargrass-iaq-project-name-bran_v5
  */
 
-void get_status_charging_on(int32_t *status_charging_on);
+void get_status_charging_on(float *status_charging_on);
 
 void get_status_CPU_load_CPU_f(int32_t *status_CPU_load_CPU_f, int32_t *status_CPU_load, int32_t *status_CPU_f);
 
-void get_status_LCD_bri(int32_t *status_LCD_bri);
+void get_status_LCD_bri(float *status_LCD_bri);
 
-void get_status_CPU_load(int *status_CPU_load);
+void get_status_CPU_load(float *status_CPU_load);
 
 void get_status_CPU_f(int *status_CPU_f);
 

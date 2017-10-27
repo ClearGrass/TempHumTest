@@ -67,11 +67,11 @@
  * status_charging_on must be in between 0...1000, i.e. status_charging_on must have 0 as minimum value and 1000 as maximum value.
  * Hint from technical support: Current status of device. status_charging_on=0 if device runs on battery, status_charging_on=1000 if device is charging.
 **/
-void get_status_charging_on(int32_t *status_charging_on){
+void get_status_charging_on(float *status_charging_on){
     // IMPLEMENT
     FILE  *stream;
     char  buf[4096];;
-    int current_now;
+    float current_now;
     static int stamp = 0;
 
     stamp++;
@@ -79,14 +79,14 @@ void get_status_charging_on(int32_t *status_charging_on){
     // 获取cpu主频
     stream = popen("cat /sys/class/power_supply/battery/current_now", "r");
     fread(buf, sizeof(char), sizeof(buf),  stream);
-    current_now = atoi(buf) / 1000;
+    current_now = atof(buf) / 1000.0;
 
     *status_charging_on = current_now;
-    if(*status_charging_on > 160)
+    if(*status_charging_on > 100)
     {
-        *status_charging_on = 1000;
+        *status_charging_on = 1;
     }
-    else if(*status_charging_on <= 160)
+    else if(*status_charging_on <= 100)
     {
         *status_charging_on = 0;
     }
@@ -118,11 +118,11 @@ void get_status_CPU_load_CPU_f(int32_t *status_CPU_load_CPU_f,int32_t *status_CP
  * status_LCD_bri must be in between 0...1000, i.e. status_LCD_bri must have 0 as minimum value and 1000 as maximum value.
  * Hint from technical support: LCD_bri=1000 is 100% brightness (max); LCD_bri= 500 is 50% brightness; LCD_bri=0 is 0% brightness;
 **/
-void get_status_LCD_bri(int32_t *status_LCD_bri){
+void get_status_LCD_bri(float *status_LCD_bri){
     // IMPLEMENT
     FILE  *stream;
     char  buf[4096];;
-    int light;
+    float light;
     static int stamp = 0;
 
     stamp++;
@@ -130,7 +130,7 @@ void get_status_LCD_bri(int32_t *status_LCD_bri){
     // 获取cpu主频
     stream = popen("cat /usr/bin/qtapp/light", "r");
     fread(buf, sizeof(char), sizeof(buf),  stream);
-    light = atoi(buf);
+    light = atof(buf);
 
     *status_LCD_bri = light;
     if(*status_LCD_bri > 1000)
@@ -150,7 +150,7 @@ void get_status_LCD_bri(int32_t *status_LCD_bri){
  * status_CPU_load must be in between 0...1000, i.e. status_CPU_load must have 0 as minimum value and 1000 as maximum value.
  * Hint from technical support: CPU_load =1000 is 100% load; CPU_load=500 is 50% ; CPU_load=0 is 0%
 **/
-void get_status_CPU_load(int *status_CPU_load){
+void get_status_CPU_load(float *status_CPU_load){
     // IMPLEMENT
     FILE  *stream;
     char  buf[4096];

@@ -67,6 +67,8 @@ void DataTempHumi::run()
 *******************************************************************************/
 void DataTempHumi::data_init()
 {
+    sysControl      = SysControl::getInstance();
+
     dataTEMP.init(TEMP);
     dataHUMI.init(HUMI);
 
@@ -115,18 +117,21 @@ void DataTempHumi::slot_update_data()
     //获取第二个传感器值
     get_secondSensorTemp(tempRowSecond);
 
-    int temperature, humidity, rawTemp, rawHumi;
-    int status_charging_on, status_CPU_load,status_CPU_f,status_CPU_load_CPU_f, status_LCD_bri;
+    float temperature, humidity, rawTemp, rawHumi;
+    float status_charging_on, status_CPU_load,status_WIFI_f,status_CPU_load_CPU_f, status_LCD_bri;
+     WiFiStatus wifi_status =  sysControl->get_currentWiFi().status;
+
+    status_WIFI_f = (wifi_status == CONNECTED || wifi_status == CONNECTTING ) ? 1 : 0 ;
     short err = sht_measure_blocking_read_compensated_every_1_seconds(&temperature, &humidity, &rawTemp, &rawHumi,
-                                                                      &status_charging_on, &status_CPU_load, &status_CPU_f, &status_CPU_load_CPU_f, &status_LCD_bri);
+                                                                      &status_charging_on, &status_CPU_load, &status_WIFI_f, &status_CPU_load_CPU_f, &status_LCD_bri);
 
 
     if (err == STATUS_OK)
     {
-        tempValue    = (float)temperature / 1000.0;
-        humiValue    = (float)humidity / 1000.0;
-        rawTempValue = (float)rawTemp / 1000.0;
-        rawHumiValue = (float)rawHumi / 1000.0;
+        tempValue    = temperature ;
+        humiValue    = humidity ;
+        rawTempValue = rawTemp ;
+        rawHumiValue = rawHumi ;
 
         bran_node.init();
         clearGrass_temp = tempHumEngine.fixTemp(bran_node);
@@ -144,7 +149,7 @@ void DataTempHumi::slot_update_data()
     }
 
 
-    emit signal_update_tempFlag(status_charging_on, status_CPU_load,status_CPU_f,status_CPU_load_CPU_f, status_LCD_bri);
+    emit signal_update_tempFlag(status_charging_on, status_CPU_load,1,status_CPU_load_CPU_f, status_LCD_bri);
 
 #else
     // PC测试获取模拟数据

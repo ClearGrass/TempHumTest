@@ -247,6 +247,7 @@ void PageSetting::slot_wificonnect()
 {
     timerCounter = 0;
     slot_wifiConnect("Cleargrass_SZ", "cleargrass2015");
+//    slot_wifiConnect("ClearGrass", "88643721");
 
     wifiTimer->start();
 }
@@ -1629,6 +1630,7 @@ void PageSetting::slot_reconnectWifi()
     if(iWifiConnectResult != WIFI_CONNECT_SUCCESS && timerCounter < 3)
     {
         slot_wifiConnect("Cleargrass_SZ", "cleargrass2015");
+//        slot_wifiConnect("ClearGrass", "88643721");
 
     }else
     {
