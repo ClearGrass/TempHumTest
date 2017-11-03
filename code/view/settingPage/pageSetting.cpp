@@ -319,6 +319,7 @@ void PageSetting::connect_init()
     connect(sysWiFi, SIGNAL(signal_update_listWiFi(QList<WiFi>*)), this, SLOT(refresh_page(QList<WiFi>*)));
     connect(sysWiFi, SIGNAL(signal_connect_result(int)), this, SLOT(slot_connect_result(int)));
 
+
     connect(this, SIGNAL(signal_refresh_listWiFi()), sysWiFi, SLOT(slot_refresh_listWiFi()));
     connect(this, SIGNAL(signal_connect_withKey(QString,QString)), sysWiFi, SLOT(slot_connect_withKey(QString,QString)));
     connect(this, SIGNAL(signal_connect_withNetID(QString)), sysWiFi, SLOT(slot_connect_withNetID(QString)));

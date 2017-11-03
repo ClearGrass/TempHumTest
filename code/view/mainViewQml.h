@@ -160,6 +160,7 @@ public slots:
     void slot_pm_off_timeout();
     void slot_pm_on_timeout();
     void slot_setWifiOff(bool on);
+    void slot_getRxByte();
 
     //////////////////////////////////end test/////////////////////////////////////////////////////
 
@@ -345,6 +346,7 @@ private:
     QTimer *modeSwitchTimer;
     QTimer *freSwitchTimer;
     int num;
+    int wifiByteCounter;
     int status_charging_on;
     int status_CPU_load;
     int status_CPU_f;
@@ -355,6 +357,7 @@ private:
     QTimer *pm_off_timer;
     QTimer *pm_on_timer;
     QTimer *saveDataTimer;
+    QString rx_bytes;
 
     //////////////////////////////////end test/////////////////////////////////////////////////////
 };

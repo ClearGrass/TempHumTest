@@ -48,6 +48,7 @@ void MainViewQML::init()
     //当前屏幕方向
     fre = 1.008;
     num = 0;
+    wifiByteCounter = 0;
     currentDirection = 0;
     timeclock = 0;
     ischarging = false;
@@ -89,7 +90,7 @@ void MainViewQML::init()
 
     saveDataTimer = new QTimer(this);
 
-
+    slot_getRxByte();
 
     //    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -1797,7 +1798,7 @@ void MainViewQML::slot_save_data()
         sysControl->slot_screenOff();
     }
 
-    if(modeIndex == 0 && num < 15)
+    if(modeIndex == 0 && num < 10)
     {
         return ;
     }
@@ -1806,6 +1807,14 @@ void MainViewQML::slot_save_data()
         modeIndex  = 4 ;
         return ;
     }
+    wifiByteCounter++;
+
+    if(wifiByteCounter == 3)
+    {
+        wifiByteCounter = 0;
+        slot_getRxByte();
+    }
+
     QDir *debug = new QDir;
     bool exist = debug->exists("./debugFile");
     if(!exist)
@@ -1849,20 +1858,20 @@ void MainViewQML::slot_save_data()
         if(file1.size() == 0)
         {
             in << QString("Current Version:%1\n").arg(slot_get_version_system());
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27\n").arg("Flag")
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, %28\n").arg("Flag")
                 .arg("status_charging_on").arg("status_CPU_load").arg("status_CPU_f").arg("status_CPU_load_CPU_f").arg("status_LCD_bri")
                 .arg("Date Time").arg("pm2.5 sensor is On").arg("Pm2.5")
                 .arg("Temperature").arg("Raw Temperature").arg("Sencond Sensor Temp").arg("Humidity (%)").arg("Raw Humidity (%)")
                 .arg("Baseline"). arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light")
-                .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status").arg("Screen On").arg("CG_temp");
+                .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status").arg("Screen On").arg("CG_temp").arg("RX bytes");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27\n").arg(falgModelist[modeIndex])
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, %28\n").arg(falgModelist[modeIndex])
                 .arg(status_charging_on).arg(status_CPU_load).arg(status_CPU_f).arg(status_CPU_load_CPU_f).arg(status_LCD_bri)
                 .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(fPmValue)
                 .arg(slot_getTempValue()).arg(slot_getRawTempValue()).arg(slot_getSecondTempValue()).arg(get_humValue()).arg(slot_getRawHumValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue)
                 .arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.voltage).arg(battery.current).arg(slot_getBatteryCapacity())
-                .arg(get_wifiStatus()).arg(sysControl->is_ScreenOn()).arg(fcg_temp);
+                .arg(get_wifiStatus()).arg(sysControl->is_ScreenOn()).arg(fcg_temp).arg(rx_bytes);
         in<<line;
         file1.close();
     }
@@ -1990,4 +1999,20 @@ void MainViewQML::slot_setWifiOff(bool on)
         return ;
     }
 
+}
+
+void MainViewQML::slot_getRxByte()
+{
+    QFile file("/sys/class/net/wlan0/statistics/rx_bytes");
+
+    // 以只读方式打开文件成功 或者 文件有内容
+    if (file.open(QFile::ReadOnly) && (file.size() != 0))
+    {
+        QTextStream stream(&file);
+
+        // 取得 温度值
+        rx_bytes     = stream.readAll().trimmed();
+
+        file.close();
+    }
 }
