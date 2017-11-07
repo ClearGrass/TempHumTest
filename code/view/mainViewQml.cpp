@@ -1858,20 +1858,20 @@ void MainViewQML::slot_save_data()
         if(file1.size() == 0)
         {
             in << QString("Current Version:%1\n").arg(slot_get_version_system());
-            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, %28\n").arg("Flag")
+            in<<QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, %28, %29\n").arg("Flag")
                 .arg("status_charging_on").arg("status_CPU_load").arg("status_CPU_f").arg("status_CPU_load_CPU_f").arg("status_LCD_bri")
                 .arg("Date Time").arg("pm2.5 sensor is On").arg("Pm2.5")
                 .arg("Temperature").arg("Raw Temperature").arg("Sencond Sensor Temp").arg("Humidity (%)").arg("Raw Humidity (%)")
                 .arg("Baseline"). arg("tVOC").arg("CO2e").arg("CPU Frequency").arg("CPU Usage (%)").arg("Light")
-                .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status").arg("Screen On").arg("CG_temp").arg("RX bytes");
+                .arg("Charging").arg("Voltage (uV)").arg("Current (mA)").arg("Capacity (%)").arg("Wi-Fi Status").arg("Screen On").arg("CG_temp").arg("RX bytes").arg("third sensor");
         }
-        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, %28\n").arg(falgModelist[modeIndex])
+        QString line = QString("%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, %21, %22, %23, %24, %25, %26, %27, %28, %29\n").arg(falgModelist[modeIndex])
                 .arg(status_charging_on).arg(status_CPU_load).arg(status_CPU_f).arg(status_CPU_load_CPU_f).arg(status_LCD_bri)
                 .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss")).arg(pm25IsOn ? "On" : "Off").arg(fPmValue)
                 .arg(slot_getTempValue()).arg(slot_getRawTempValue()).arg(slot_getSecondTempValue()).arg(get_humValue()).arg(slot_getRawHumValue())
                 .arg(slot_getBaseLine()).arg(ftVOCValue).arg(fCO2eValue).arg(QString("%1G").arg(fre)).arg(usage).arg(lightValue)
                 .arg(slot_getBatteryStatusIsCharging() ? "Charging" : "Discharging").arg(battery.voltage).arg(battery.current).arg(slot_getBatteryCapacity())
-                .arg(get_wifiStatus()).arg(sysControl->is_ScreenOn()).arg(fcg_temp).arg(rx_bytes);
+                .arg(get_wifiStatus()).arg(sysControl->is_ScreenOn()).arg(fcg_temp).arg(rx_bytes).arg(get_thirdSensorValue());
         in<<line;
         file1.close();
     }
@@ -1962,6 +1962,33 @@ QString MainViewQML::get_os_version()
         result = "unknown";
     }
     return result;
+}
+
+float MainViewQML::get_thirdSensorValue()
+{
+    QString strFile;
+    float temp = 0;
+    QFile file("sys/devices/platform/sun5i-i2c.2/i2c-2/2-004b/sts30_temp_input");
+
+    if(!file.exists())
+    {
+        return ERROR_DATA;
+    }
+    // 以只读方式打开文件成功 或者 文件有内容
+    if (file.open(QFile::ReadOnly) && (file.size() != 0))
+    {
+        QTextStream stream(&file);
+
+        // 取得 剩余电量
+        strFile  = stream.readAll().trimmed();
+        temp = strFile.toFloat();
+        file.close();
+    }
+    else
+    {
+        temp = ERROR_DATA;
+    }
+    return temp;
 }
 
 

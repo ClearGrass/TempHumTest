@@ -270,6 +270,7 @@ private:
     QString get_wifiStatus();
     void read_baseline();
     QString get_os_version();
+    float get_thirdSensorValue();
 private:
     HistoryPage *historyPage;                                           //历史页面实例
 
